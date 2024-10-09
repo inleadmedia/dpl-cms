@@ -38,7 +38,7 @@ final class LibraryStaffAccessControlHandler extends EntityAccessControlHandler 
    * {@inheritdoc}
    */
   protected function checkCreateAccess(AccountInterface $account, array $context, $entity_bundle = NULL): AccessResult {
-    return AccessResult::allowedIfHasPermissions($account, ['create eonext_library_staff', 'administer eonext_library_staff'], 'OR');
+    return AccessResult::allowedIfHasPermissions($account, ['edit eonext_library_staff', 'administer eonext_library_staff'], 'OR');
   }
 
 }
