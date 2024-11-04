@@ -1,4 +1,4 @@
 core:
   css:
     theme:
-      css/style.css: {}
+      css/style.min.css: {}

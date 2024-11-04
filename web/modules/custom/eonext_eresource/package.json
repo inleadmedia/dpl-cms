@@ -4,7 +4,7 @@
   "description": "Style for eresources",
   "scripts": {
     "start": "node app.js",
-    "scss": "node-sass scss/style.scss -o css/"
+    "scss": "node-sass scss/style.scss css/style.min.css --output-style compressed"
   },
   "dependencies": {
     "globule": "^1.3.4",

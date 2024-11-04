@@ -111,7 +111,7 @@
     max-width: 150px;
     float: right;
 
-    a{
+    a {
       margin-bottom: 40px;
       display: block;
       width: 100%;
@@ -121,7 +121,6 @@
 
 #main-content {
   font-family: 'Noto Sans';
-
 
   div:nth-of-type(2) > .node--type-e_resource.node--view-mode-teaser > div::after {
     content: "";
@@ -200,7 +199,7 @@
     position: relative;
   }
 
-  .custom-link.er.field.field--label-hidden.field--name-field-e-resource-link.field--type-link.field__items > div:nth-of-type(1) > a {
+  .er.field.field--label-hidden.field--name-field-e-resource-link.field--type-link.field__items > div:nth-of-type(1) > a {
     display: none;
   }
 
@@ -221,7 +220,8 @@
   }
 
   .links.inline a,
-  .custom-link a {
+  .field--name-field-e-resource-link.er a,
+  .right .field__item.od a {
     background: black;
     color: white;
     position: relative;
