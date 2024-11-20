@@ -9,6 +9,17 @@ use Drupal\views\Views;
  */
 
 /**
+ * Implements hook_theme().
+ */
+function eonext_staff_theme($existing, $type, $theme, $path) {
+  return [
+    'paragraph__eonext_library_staff' => [
+      'variables' => [],
+    ],
+  ];
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  *
  * The staff paragraphs is an empty paragraph, so set its
@@ -24,18 +35,8 @@ function eonext_staff_preprocess_paragraph__eonext_library_staff(array &$variabl
   $view->setDisplay('block_1');
   $view->execute();
   $view_render = $view->render();
+  $view_render['#attached']['library'][] = 'eonext_staff/general';
 
-  $variables['content'] = [
-    '#type' => 'html_tag',
-    '#tag' => 'div',
-    '#attributes' => [
-      'class' => ['eonext-library-staff'],
-    ],
-    '#value' => \Drupal::service('renderer')->render($view_render),
-    '#attached' => [
-      'library' => [
-        'eonext_staff/general',
-      ],
-    ],
-  ];
+  $variables['header'] = t('Library staff', [], ['context' => 'eonext']);
+  $variables['staff'] = \Drupal::service('renderer')->render($view_render);
 }

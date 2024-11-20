@@ -9,7 +9,7 @@
   box-sizing: border-box;
 }
 
-.eonext-library-staff header h2 {
+.eonext-library-staff h2 {
   font-family: "Lora",serif;
   font-style: normal;
   font-weight: 400;
@@ -32,10 +32,17 @@
 .eonext-library-staff .item-list ul {
   display: flex;
   gap: 30px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-around;
 }
 
 .eonext-library-staff .item-list ul li {
-  width: 30%;
+  flex: 0 0 30%;
+}
+
+.eonext-library-staff .item-list ul li .views-field-field-forename {
+  padding-right: 5px;
 }
 
 .eonext-library-staff .item-list ul li .views-field-field-forename,
