@@ -4,11 +4,23 @@
 # #-#-#-#-#  da.config.po (PROJECT VERSION)  #-#-#-#-#
 # da translation of DPL CMS
 #
+#, fuzzy
 msgid ""
 msgstr ""
+"#-#-#-#-#  da.po (PROJECT VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2024-10-21 11:08+0200\n"
-"PO-Revision-Date: 2024-10-21 11:08+0200\n"
+"POT-Creation-Date: 2024-11-19 18:18+0100\n"
+"PO-Revision-Date: 2024-11-19 18:18+0100\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"#-#-#-#-#  da.config.po (PROJECT VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2024-11-19 18:19+0100\n"
+"PO-Revision-Date: 2024-11-19 18:19+0100\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -273,6 +285,42 @@ msgid ""
 "structure and cannot be edited."
 msgstr ""
 "Denne side findes allerede findes i indholdsstrukturen og kan ikke redigeres."
+
+msgctxt "Unilogin configuration"
+msgid "Unilogin configuration"
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "UniLogin API endpoint URL."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "The UniLogin API endpoint url."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "UniLogin API wellknown endpoint URL"
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "The UniLogin API wellknown endpoint url."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "UniLogin API client ID."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "The UniLogin API client ID."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "UniLogin API client secret."
+msgstr ""
+
+msgctxt "Unilogin configuration"
+msgid "The UniLogin API client secret."
+msgstr ""
 
 msgctxt "DPL admin UX"
 msgid "Event"
@@ -779,13 +827,15 @@ msgstr "Biblioteket er lukket"
 
 msgctxt "Opening Hours"
 msgid "Are you sure you want to delete all \"@term_label\" opening hours?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette alle \"@term_label\" åbningstider?"
 
 msgctxt "Opening Hours"
 msgid ""
 "@term_label is associated with @count opening hours. Deleting @term_label "
 "will also delete these opening hours. Are you sure you want to continue?"
 msgstr ""
+"@term_label anvendes ved @count åbningstider. Hvis du sletter @term_label "
+"sletter du også disse åbningstider. Vil du fortsætte?"
 
 msgctxt "Opening Hours sidebar"
 msgid "Opening hours"
@@ -910,6 +960,10 @@ msgstr "Skøn-/faglitteratur"
 msgctxt "Search Result"
 msgid "Fictional characters"
 msgstr "Fiktive personer"
+
+msgctxt "Search Result"
+msgid "Game platform"
+msgstr ""
 
 msgctxt "Search Result"
 msgid "Genre and form"
@@ -1193,19 +1247,19 @@ msgstr "Tilbage til avanceret søgning"
 
 msgctxt "advanced search"
 msgid "location"
-msgstr ""
+msgstr "Opstilling"
 
 msgctxt "advanced search"
 msgid "Add a comma separated list for multiple locations"
-msgstr ""
+msgstr "Sæt komma mellem opstillinger for at filtrere på flere"
 
 msgctxt "advanced search"
 msgid "sublocation"
-msgstr ""
+msgstr "Delopstilling"
 
 msgctxt "advanced search"
 msgid "Add a comma separated list for multiple sublocations"
-msgstr ""
+msgstr "Sæt komma mellem delopstillinger for at filtrere på flere"
 
 msgctxt "Work Page"
 msgid "Already reserved"
@@ -1974,7 +2028,7 @@ msgid ""
 "possibility to delete a selected reservation, or multiple selected "
 "reservations"
 msgstr ""
-"Denne knap åbner en pop-up som gær det muligt at slette en eller flere "
+"Denne knap åbner en pop-up som gør det muligt at slette en eller flere "
 "reserveringer"
 
 msgctxt "Global"
@@ -3356,7 +3410,7 @@ msgstr "Total @total"
 
 msgctxt "Fees list"
 msgid "Turned in @date"
-msgstr "Afleveret @date"
+msgstr "Mellemværende oprettet @date"
 
 msgctxt "Fees list"
 msgid "Unsettled debt - paid on site"
@@ -3425,7 +3479,7 @@ msgstr "Annulleret"
 
 msgctxt "dpl_event"
 msgid "Occurred"
-msgstr ""
+msgstr "Er afholdt"
 
 msgid "Expired"
 msgstr "Udløbet"
@@ -3559,7 +3613,7 @@ msgid "Current collation"
 msgstr "Nuværende kollation"
 
 msgid "Expected charset"
-msgstr ""
+msgstr "Expected charset"
 
 msgid "Expected collation"
 msgstr "Forventet kollation"
@@ -3665,7 +3719,7 @@ msgstr "Indlæser ..."
 
 msgctxt "Material search"
 msgid "Total amount of results"
-msgstr ""
+msgstr "Søgeresultat"
 
 msgctxt "Material search"
 msgid "Select work with the title @title"
@@ -3681,7 +3735,7 @@ msgstr "Link"
 
 msgctxt "Material search"
 msgid "This material needs to be updated."
-msgstr ""
+msgstr "Dette materiale skal opdateres"
 
 msgctxt "Material search"
 msgid ""
@@ -3690,12 +3744,18 @@ msgid ""
 "title or link underneath to find and update the material and its type, or "
 "replace / delete it."
 msgstr ""
+"Den valgte materialetype er ikke længere tilgængelig. <br> Derfor virker "
+"linket ikke <br> Brug titlen eller linket nedenfor for at finde og opdatere "
+"materialet og materialetypen ELLER udskifte / slette det. "
 
 msgctxt "Material search"
 msgid ""
 "The material that was previously selected is no longer available in the "
 "system. Either delete this entry or search for a new material to replace it."
 msgstr ""
+"Det materiale, der tidligere er forsøgt fremfundet er ikke længere "
+"tilgængeligt. Enten skal man slette denne indførsel eller søge et nyt "
+"materiale, som kan erstatte det oprindelige.\n"
 
 msgctxt "Material search"
 msgid "Error retrieving saved data. Inputs not found."
@@ -3729,6 +3789,15 @@ msgstr "Materialetype"
 
 msgid "Select the material type."
 msgstr "Vælg materialetype"
+
+msgid "List of DPL-Go Unilogin configuration."
+msgstr ""
+
+msgid "DPL Configuration."
+msgstr ""
+
+msgid "DPL Configuration"
+msgstr ""
 
 msgctxt "DPL admin UX"
 msgid ""
@@ -4054,6 +4123,9 @@ msgstr "VærkID-søgning efter materiale"
 msgid "Work id with type"
 msgstr "VærkID med type"
 
+msgid "DPL configuration schema extensions for GraphQL Compose."
+msgstr ""
+
 msgid "dpl_campaign"
 msgstr "dpl_campaign"
 
@@ -4220,6 +4292,21 @@ msgstr "Brødkrummer"
 
 msgid "Breadcrumbs and automatic URL aliases, based on content structure."
 msgstr "Brødkrummer og automatiske URL-aliasser, baseret på indholdsstruktur."
+
+msgid "DPL UniLogin"
+msgstr ""
+
+msgid "Module containing unilogin configuration"
+msgstr ""
+
+msgid "UniLogin configuration"
+msgstr ""
+
+msgid "Change UniLogin configuration"
+msgstr ""
+
+msgid "Unilogin configuration"
+msgstr ""
 
 msgid "DPL related content - test suite"
 msgstr "DPL relateret indhold - test suite"
@@ -4518,6 +4605,12 @@ msgstr "Arrangement"
 msgid "Custom handling related to events."
 msgstr "Indstillinger for arrangementer"
 
+msgid "DPL Consumers"
+msgstr ""
+
+msgid "Module for adding consumers to DPL CMS"
+msgstr ""
+
 msgid "Footer Settings"
 msgstr "Footerindstillinger"
 
@@ -4547,6 +4640,12 @@ msgstr "FBI integration"
 
 msgid "Integration with with FBI API, https://fbi-api.dbc.dk/."
 msgstr "Integration til FBI API, https://fbi-api.dbc.dk/."
+
+msgid "DPL GraphQL"
+msgstr ""
+
+msgid "Module used for handling graphql functionality."
+msgstr ""
 
 msgid "DPL Cache settings"
 msgstr "DPL cache-indstillinger"
@@ -4636,15 +4735,6 @@ msgstr "Faktureringsinformation"
 msgid "The street is \"@street\" and the country code is @country_code."
 msgstr "Gaden er @street og landekoden er @country_code."
 
-msgid "Save settings"
-msgstr "Gem indstillinger"
-
-msgid "Save"
-msgstr "Gem"
-
-msgid "County"
-msgstr "Amt"
-
 msgctxt "Address label"
 msgid "First name"
 msgstr "Fornavn"
@@ -4658,8 +4748,8 @@ msgid "Last name"
 msgstr "Efternavn"
 
 msgctxt "Address label"
-msgid "Company"
-msgstr "Firma"
+msgid "Organization"
+msgstr ""
 
 msgctxt "Address label"
 msgid "Address line 1"
@@ -4668,6 +4758,10 @@ msgstr "Adresse linje 1"
 msgctxt "Address label"
 msgid "Address line 2"
 msgstr "Adresse linje 2"
+
+msgctxt "Address label"
+msgid "Address line 3"
+msgstr ""
 
 msgctxt "Address label"
 msgid "Postal code"
@@ -4679,7 +4773,7 @@ msgstr "Postnummer"
 
 msgctxt "Address label"
 msgid "Dependent locality (e.g. Neighbourhood)"
-msgstr ""
+msgstr "Dependent locality (e.g. Neighbourhood)"
 
 msgctxt "Address label"
 msgid "Locality (e.g. City)"
@@ -4698,6 +4792,10 @@ msgid "Street address line 2"
 msgstr "Gadenavn linie 2"
 
 msgctxt "Address label"
+msgid "Street address line 3"
+msgstr ""
+
+msgctxt "Address label"
 msgid "Cedex"
 msgstr "Cedex"
 
@@ -4707,7 +4805,7 @@ msgstr "Område"
 
 msgctxt "Address label"
 msgid "Canton"
-msgstr ""
+msgstr "Canton"
 
 msgctxt "Address label"
 msgid "County"
@@ -4722,20 +4820,16 @@ msgid "District"
 msgstr "Kommune"
 
 msgctxt "Address label"
-msgid "Do si"
+msgid "Do/Si"
 msgstr ""
 
 msgctxt "Address label"
 msgid "Emirate"
-msgstr ""
+msgstr "Emirate"
 
 msgctxt "Address label"
 msgid "Island"
 msgstr "Ø"
-
-msgctxt "Address label"
-msgid "Oblast"
-msgstr ""
 
 msgctxt "Address label"
 msgid "Parish"
@@ -4743,11 +4837,15 @@ msgstr "Sogn"
 
 msgctxt "Address label"
 msgid "Prefecture"
-msgstr ""
+msgstr "Prefecture"
 
 msgctxt "Address label"
 msgid "Province"
 msgstr "Provins"
+
+msgctxt "Address label"
+msgid "Region"
+msgstr ""
 
 msgctxt "Address label"
 msgid "State"
@@ -4766,12 +4864,16 @@ msgid "Suburb"
 msgstr "Forstad"
 
 msgctxt "Address label"
+msgid "Town/City"
+msgstr ""
+
+msgctxt "Address label"
 msgid "Neighborhood"
 msgstr "Nabolag"
 
 msgctxt "Address label"
-msgid "Village township"
-msgstr "Bydel"
+msgid "Village/Township"
+msgstr ""
 
 msgctxt "Address label"
 msgid "Townland"
@@ -4779,7 +4881,7 @@ msgstr "Byområde"
 
 msgctxt "Address label"
 msgid "Eircode"
-msgstr ""
+msgstr "Eircode"
 
 msgctxt "Address label"
 msgid "Pin code"
@@ -4849,6 +4951,8 @@ msgstr "Lokalitet (by)"
 
 msgid "The dependent locality (i.e. neighbourhood)"
 msgstr ""
+"\n"
+"The dependent locality (i.e. neighbourhood)"
 
 msgid "The postal code"
 msgstr "Postnummeret"
@@ -4862,6 +4966,9 @@ msgstr "Adresselinje 1"
 msgid "The second line of the address block"
 msgstr "Adresselinje 2"
 
+msgid "The third line of the address block"
+msgstr ""
+
 msgid "The organization"
 msgstr "Organisationen"
 
@@ -4869,7 +4976,7 @@ msgid "The given name"
 msgstr "Det givne navn"
 
 msgid "The additional name"
-msgstr ""
+msgstr "The additional name"
 
 msgid "The family name"
 msgstr "Familienavnet"
@@ -4884,7 +4991,7 @@ msgid "- No override -"
 msgstr "- Ingen tilsidesættelse -"
 
 msgid "Field overrides"
-msgstr ""
+msgstr "Field overrides"
 
 msgid ""
 "Use field overrides to override the country-specific address format, forcing "
@@ -4920,6 +5027,21 @@ msgstr "Felt til zone-etiket: @status"
 
 msgid "Shown"
 msgstr "Vist"
+
+msgid "Wrapper type"
+msgstr ""
+
+msgid "Wrapper type: @wrapper_type"
+msgstr "Wrapper type: @wrapper_type"
+
+msgid "Container (invisible)"
+msgstr ""
+
+msgid "Details (collapsible)"
+msgstr ""
+
+msgid "Fieldset (non-collapsible)"
+msgstr ""
 
 msgid "Display the subdivision name instead of the subdivision code"
 msgstr "Vis underafdelingsnavnet i stedet for underafdelingskoden"
@@ -5027,16 +5149,18 @@ msgid "exposed: country set via exposed filter"
 msgstr "Udsat: land indstillet via udsat filter"
 
 msgid "exposed: fixed country: @country"
-msgstr ""
+msgstr "exposed: fixed country: @country"
 
 msgid "fixed country: @country"
 msgstr ""
+"\n"
+"fixed country: @country"
 
 msgid "broken configuration"
 msgstr "brudt konfiguration"
 
-msgid "Updated the names and subdivisions of each address."
-msgstr "Opdaterede navnene og underafdelingerne på hver adresse."
+msgid "Address"
+msgstr "Adresse"
 
 msgid "Plain"
 msgstr "Enkel"
@@ -5047,11 +5171,47 @@ msgstr "Default"
 msgid "An entity field containing a country"
 msgstr "Et felt der indeholder et land"
 
-msgid "Address"
-msgstr "Adresse"
-
 msgid "An entity field containing a postal address"
 msgstr "Et felt der indeholder en postadresse"
+
+msgid "Langcode"
+msgstr "Langcode"
+
+msgid "Administrative area"
+msgstr ""
+
+msgid "Locality"
+msgstr "Lokalitet"
+
+msgid "Dependent locality"
+msgstr ""
+
+msgid "Postal code"
+msgstr "Postnummer"
+
+msgid "Sorting code"
+msgstr ""
+
+msgid "Address line 1"
+msgstr ""
+
+msgid "Address line 2"
+msgstr ""
+
+msgid "Address line 3"
+msgstr ""
+
+msgid "Organization"
+msgstr "Organisation"
+
+msgid "Given name"
+msgstr "Fornavn"
+
+msgid "Additional name"
+msgstr ""
+
+msgid "Family name"
+msgstr "Efternavn"
 
 msgid "Zone"
 msgstr "Zone"
@@ -5320,6 +5480,8 @@ msgid ""
 "The sub‐admin can access a target user provided they have access to all of "
 "that user's roles."
 msgstr ""
+"The sub‐admin can access a target user provided they have access to all of "
+"that user's roles."
 
 msgid "Roles"
 msgstr "Roles"
@@ -5412,7 +5574,7 @@ msgid "Only display results after the user has selected a filter option."
 msgstr "Vis kun resultater efter brugeren har valgt en filtermulighed."
 
 msgid "Enable secondary exposed form options"
-msgstr ""
+msgstr "Enable secondary exposed form options"
 
 msgid ""
 "Allows you to specify some exposed form elements as being secondary options "
@@ -5466,7 +5628,7 @@ msgid "Select a format for the exposed sort options."
 msgstr "Vælg et format for de eksponerede sorteringsmuligheder."
 
 msgid "Exposed Pager Settings"
-msgstr ""
+msgstr "Exposed Pager Settings"
 
 msgid ""
 "This section lets you select additional options for exposed pagers. Some "
@@ -5748,6 +5910,7 @@ msgstr ""
 msgid ""
 "Whether to slide handle smoothly when user click outside handle on the bar."
 msgstr ""
+"Whether to slide handle smoothly when user click outside handle on the bar."
 
 msgid "Animation speed in milliseconds"
 msgstr "Animationshastighed i millisekunder"
@@ -5775,7 +5938,7 @@ msgid ""
 msgstr "Trinindstillingen for %name må ikke have mere end 5 decimaler."
 
 msgid "The slider range must be evenly divisible by the step option."
-msgstr ""
+msgstr "The slider range must be evenly divisible by the step option."
 
 msgid ""
 "Better Exposed Filters (BEF) modifies the use of Views by replacing the "
@@ -5833,6 +5996,8 @@ msgid ""
 "Tokens are allowed in this field. Replacement options can be found in the "
 "\"Global replacement patterns\" section, below."
 msgstr ""
+"Tokens are allowed in this field. Replacement options can be found in the "
+"\"Global replacement patterns\" section, below."
 
 msgid "Global replacement patterns (for description field only)"
 msgstr "Globale erstatningsmønstre (kun for beskrivelsesfeltet)"
@@ -5845,6 +6010,8 @@ msgstr "Better Exposed Filters"
 
 msgid "Provides additional options for exposed form elements."
 msgstr ""
+"\n"
+"Provides additional options for exposed form elements."
 
 msgid "Radio Buttons"
 msgstr "Radioknapper"
@@ -5932,6 +6099,9 @@ msgstr "Bryd lås"
 
 msgid "This content is now locked by you against simultaneous editing."
 msgstr "Dette indhold er nu låst af dig mod medredigering."
+
+msgid "Save"
+msgstr "Gem"
 
 msgid ""
 "This content translation is now locked against simultaneous editing. This "
@@ -6029,7 +6199,7 @@ msgstr ""
 "låst indhold."
 
 msgid "Entity type protected"
-msgstr ""
+msgstr "Entity type protected"
 
 msgid "All"
 msgstr "All"
@@ -6111,7 +6281,7 @@ msgid "Lock owner"
 msgstr "Lock owner"
 
 msgid "The user locking the node."
-msgstr ""
+msgstr "The user locking the node."
 
 msgid "Lock Date/Time"
 msgstr "Lock Date/Time"
@@ -6129,7 +6299,7 @@ msgid "Lock Form Operation"
 msgstr "Lås formularoperation"
 
 msgid "Form operation of the lock"
-msgstr ""
+msgstr "Form operation of the lock"
 
 msgid "Is Locked"
 msgstr "Er låst"
@@ -6181,7 +6351,7 @@ msgid "Settings"
 msgstr "Indstillinger"
 
 msgid "Prefetch cache test"
-msgstr ""
+msgstr "Prefetch cache test"
 
 msgid "Content Lock"
 msgstr "Indholdslås"
@@ -6351,7 +6521,7 @@ msgid "The time that the current revision was created."
 msgstr "Tidspunktet hvor den aktuelle version blev opdateret."
 
 msgid "Revision author ID"
-msgstr ""
+msgstr "Revision author ID"
 
 msgid "The user ID of the author of the current revision."
 msgstr "Bruger-IDet på forfatteren af den aktuelle version."
@@ -6630,7 +6800,7 @@ msgid "Date range"
 msgstr "Datointerval"
 
 msgid "Date range formatter"
-msgstr ""
+msgstr "Date range formatter"
 
 msgid "Formats date ranges."
 msgstr "Formaterer datointervaller."
@@ -6653,6 +6823,7 @@ msgstr "Eksporterer en enhed og alle dens refererede enheder."
 msgid ""
 "Folder to export to, entities are grouped by entity type into directories."
 msgstr ""
+"Folder to export to, entities are grouped by entity type into directories."
 
 msgid "Exports all the content defined in a module info file."
 msgstr "Eksporterer alt indhold defineret i en modul-infomationsfil"
@@ -6725,15 +6896,24 @@ msgstr "References"
 msgid "Reference another entity."
 msgstr "Referér en anden enhed."
 
+msgid "Save settings"
+msgstr "Gem indstillinger"
+
+msgctxt "Entity type group"
+msgid "Content"
+msgstr "Indhold"
+
+msgid "Continue"
+msgstr "Fortsæt"
+
 msgid "Save and continue"
 msgstr "Gem og fortsæt"
 
 msgid "Save field settings"
 msgstr "Gem feltindstillinger"
 
-msgctxt "Entity type group"
-msgid "Content"
-msgstr "Indhold"
+msgid "Update settings"
+msgstr "Opdatér indstillinger"
 
 msgid "Saved %name configuration"
 msgstr "Gemt %name konfiguration"
@@ -6874,7 +7054,7 @@ msgid "Dynamic Reference"
 msgstr "Dynamisk reference"
 
 msgid "Entity Test Provider"
-msgstr ""
+msgstr "Entity Test Provider"
 
 msgid "Display the ID of the referenced entities."
 msgstr "Vis ID for de refererede entiteter."
@@ -6904,11 +7084,11 @@ msgid "An autocomplete text field."
 msgstr "Et tekstfelt med autofuldførelse."
 
 msgid "Dynamic Entity Reference Field Diff"
-msgstr ""
+msgstr "Dynamic Entity Reference Field Diff"
 
 msgctxt "Validation"
 msgid "Dynamic Entity Reference valid reference"
-msgstr ""
+msgstr "Dynamic Entity Reference valid reference"
 
 msgid ""
 "Provides an entity reference field that can reference multiple entity types."
@@ -6916,7 +7096,7 @@ msgstr ""
 "Leverer et enheds reference felt, der kan referere til flere enhedstyper."
 
 msgid "Dynamic Entity Reference Entity Test"
-msgstr ""
+msgstr "Dynamic Entity Reference Entity Test"
 
 msgid ""
 "Provides base fields for dynamic_entity_reference tests of entity_test "
@@ -6926,7 +7106,7 @@ msgstr ""
 "enhedstypen."
 
 msgid "Dynamic Entity Reference Entity Provider"
-msgstr ""
+msgstr "Dynamic Entity Reference Entity Provider"
 
 msgid "A provider of an entity type."
 msgstr "En udbyder af en enhedstype."
@@ -7059,6 +7239,20 @@ msgid ""
 "        (in the left-most column). See the clone form (by cloning an entity) "
 "for more information."
 msgstr ""
+"For each type of child entity (the entity that's referenced by the entity "
+"being\n"
+"        cloned), please set your cloning preferences. This will affect the "
+"clone form presented to users when they\n"
+"        clone entities. Default behaviour for whether or not the child "
+"entities should be cloned is specified in\n"
+"        the left-most column.  To prevent users from altering behaviour for "
+"each type when they're actually cloning\n"
+"        (but still allowing them to see what will happen), use the middle "
+"column. The right-most column can be used\n"
+"        to hide the form options from users completely. This will run the "
+"clone operation with the defaults set here\n"
+"        (in the left-most column). See the clone form (by cloning an entity) "
+"for more information."
 
 msgid "Checkboxes default value"
 msgstr "Standardværdi for afkrydsningsfelter"
@@ -7112,6 +7306,10 @@ msgid ""
 "entity\n"
 "        type is a referenced item in a field by another entity."
 msgstr ""
+"Enable the cloning functionalities for each entity type. For non-enabled\n"
+"        entity types, the cloning will be restricted, even when the given "
+"entity\n"
+"        type is a referenced item in a field by another entity."
 
 msgid "Enabled"
 msgstr "Aktiveret"
@@ -7162,13 +7360,13 @@ msgid "Entity clone settings"
 msgstr "Indstillinger for enhedsklon"
 
 msgid "Entity clone cloneable entities"
-msgstr ""
+msgstr "Entity clone cloneable entities"
 
 msgid "Entity clone settings."
 msgstr "Enhedsklon indstillinger."
 
 msgid "Entity clone cloneable entities setting."
-msgstr ""
+msgstr "Entity clone cloneable entities setting."
 
 msgid "Entity Clone"
 msgstr "Enhedsklon"
@@ -7186,7 +7384,7 @@ msgid "Allow this content type to define Entity Clone templates"
 msgstr "Tillad dette indhold at blive gemt som skabelon"
 
 msgid "Entity Clone Content"
-msgstr ""
+msgstr "Entity Clone Content"
 
 msgid "Enable Entity Clone Template"
 msgstr "Tillad oprettelse af skabeloner"
@@ -7313,22 +7511,19 @@ msgid "The ID of the parent entity of which this entity is referenced."
 msgstr "ID'et for den overordnede enhed, som denne enhed refererer til."
 
 msgid "Parent type"
-msgstr ""
+msgstr "Forældretype"
 
 msgid "The entity parent type to which this entity is referenced."
 msgstr "Den overordnede type for enheden, som denne enhed refererer til."
 
 msgid "Parent field name"
-msgstr ""
+msgstr "Navn på forældrefelt"
 
 msgid "The entity parent field name to which this entity is referenced."
 msgstr "Det overordnede feltnavn for enheden, som denne enhed refererer til."
 
 msgid "Entity test composite"
-msgstr ""
-
-msgid "Delete orphaned composite revisions"
-msgstr ""
+msgstr "Entity test composite"
 
 msgid ""
 "Checked @entity_type revisions for orphans: @current of @total in @interval "
@@ -7369,9 +7564,15 @@ msgid ""
 "If there are no revisions left, the entity will be deleted as long as it is "
 "not used."
 msgstr ""
+"Delete orphaned composite entities revisions that are no longer referenced. "
+"If there are no revisions left, the entity will be deleted as long as it is "
+"not used."
 
 msgid "Select the entity types to check for orphans"
 msgstr "Vælg de enhedstyper, der skal kontrolleres for forældreløse"
+
+msgid "Delete orphaned composite revisions"
+msgstr "Delete orphaned composite revisions"
 
 msgid "Choose the entity type to clear"
 msgstr "Vælg enhedstypen, der skal ryddes"
@@ -7443,17 +7644,17 @@ msgid "Display the label of the referenced entity revisions."
 msgstr "Vis etiketten af de refererede enhedsrevisioner."
 
 msgid "Entity reference revisions"
-msgstr ""
+msgstr "Entity reference revisions"
 
 msgid "An entity field containing an entity reference to a specific revision."
 msgstr ""
 "En enhedsfelt, der indeholder en enhedsreference til en specifik revision."
 
 msgid "Field Diff for Paragraphs"
-msgstr ""
+msgstr "Field Diff for Paragraphs"
 
 msgid "Entity Revision"
-msgstr ""
+msgstr "Entity Revision"
 
 msgid ""
 "All kind of entities with revision information, e.g. nodes, comments or "
@@ -7469,38 +7670,39 @@ msgid "Displays the fields with an optional template."
 msgstr "Viser felterne med en valgfri skabelon."
 
 msgid "Entity Reference Revisions list"
-msgstr ""
+msgstr "Entity Reference Revisions list"
 
 msgid "Returns results as a PHP array of labels and rendered rows."
 msgstr "Returnerer resultater som en PHP-array af labels og renderede rækker."
 
 msgid "Entity Reference Revisions"
-msgstr ""
+msgstr "Entity Reference Revisions"
 
 msgid "Entity Reference Revisions Source"
-msgstr ""
+msgstr "Entity Reference Revisions Source"
 
 msgid "Selects referenceable entities for an entity reference revisions field."
 msgstr ""
+"Selects referenceable entities for an entity reference revisions field."
 
 msgid "Adds a Entity Reference field type with revision support."
 msgstr "Tilføjer en Entity Reference felttype med versionsstøtte."
 
 msgid "ERR Composite relationship test"
-msgstr ""
+msgstr "ERR Composite relationship test"
 
 msgid "Entity with parent type and ID."
 msgstr "Enhed med overordnet type og ID."
 
 msgid "Entity Host Base Field ERR"
-msgstr ""
+msgstr "Entity Host Base Field ERR"
 
 msgid ""
 "Entity host with base field definition using entity_reference_revisions."
 msgstr ""
 
 msgid "Delete orphaned composite entities"
-msgstr ""
+msgstr "Delete orphaned composite entities"
 
 msgid ""
 "Delete revisions of entities that are no longer used in Entity Reference "
@@ -8199,6 +8401,9 @@ msgstr ""
 msgid "Test Node"
 msgstr "Test Node"
 
+msgid "Source image with fid=%fid not confirmed as valid."
+msgstr ""
+
 msgid "Focal Point Preview Image"
 msgstr "Fokuspunkt forhåndsvisningsbillede"
 
@@ -8226,6 +8431,10 @@ msgstr ""
 
 msgid "Images preview"
 msgstr "Forhåndsvisning af billeder"
+
+msgid ""
+"Source image with fid=%fid not confirmed as valid while checking access."
+msgstr ""
 
 msgid "Display preview link"
 msgstr "Vis forhåndsvisningslink"
@@ -8263,6 +8472,9 @@ msgstr ""
 "Angiv fokus for dette billede i formen \"leftoffset,topoffset\" hvor "
 "forskydningerne er i procent. Eksempel: 25,75"
 
+msgid "File not found."
+msgstr ""
+
 msgid "Image (Focal Point)"
 msgstr "Billede (Fokuspunkt)"
 
@@ -8271,6 +8483,12 @@ msgstr "Fokuspunkt skalér og beskæring"
 
 msgid "Scales and crops image while keeping its focal point close to centered."
 msgstr "Skalerer og beskærer billedet, mens fokuspunktet holdes tæt på midten."
+
+msgid "Focal Point Crop by Width"
+msgstr ""
+
+msgid "Crops image while keeping its focal point and the original height."
+msgstr ""
 
 msgid "Focal Point Crop"
 msgstr "Fokuspunkt beskæring"
@@ -8298,7 +8516,7 @@ msgid "Back to Administration"
 msgstr "Tilbage til Administration"
 
 msgid "Gin"
-msgstr ""
+msgstr "Gin"
 
 msgid ""
 "The Gin Toolbar module works with <a href=\"https://www.drupal.org/project/"
@@ -8315,10 +8533,10 @@ msgstr ""
 "kompatibelt med <a href=\"@href\" target=\"_blank\"> Gin Admin</a>."
 
 msgid "Gin Toolbar"
-msgstr ""
+msgstr "Gin Toolbar"
 
 msgid "Gin Toolbar for Gin Theme"
-msgstr ""
+msgstr "Gin Toolbar for Gin Theme"
 
 msgid "You must specify name of the job."
 msgstr "Du skal angive navnet på jobbet."
@@ -8427,7 +8645,7 @@ msgid "Job Scheduler Waiting"
 msgstr "Scheduler ventende job"
 
 msgid "Enables jobs with workers that wait indefinitely for jobs."
-msgstr ""
+msgstr "Enables jobs with workers that wait indefinitely for jobs."
 
 msgid "Job Scheduler"
 msgstr "Planlægger kørsel af jobs."
@@ -8443,9 +8661,6 @@ msgstr "Sprogneutrale URL-aliasser"
 
 msgid "Use the same URL aliases regardless of language."
 msgstr "Brug de samme URL-aliaser uanset sprog."
-
-msgid "Confirm"
-msgstr "Bekræft"
 
 msgid "Dummy setting"
 msgstr "Dummy indstilling"
@@ -8466,7 +8681,7 @@ msgid "Available tokens"
 msgstr "Tilgængelige symboler"
 
 msgid "Matchers"
-msgstr ""
+msgstr "Matchers"
 
 msgid "No matchers added."
 msgstr "Ingen matchere tilføjet."
@@ -8705,6 +8920,15 @@ msgstr "Vis thumbnail"
 msgid "Thumbnail image style"
 msgstr "Thumbnail billedstil"
 
+msgid "External URL @url"
+msgstr "Ekstern URL @url"
+
+msgid "External URL"
+msgstr ""
+
+msgid "Adds https:// to URL."
+msgstr ""
+
 msgid "Include unpublished: @include_unpublished"
 msgstr "Inkluder upubliceret: @include_unpublished"
 
@@ -8814,6 +9038,9 @@ msgstr "E-mail"
 
 msgid "Taxonomy term"
 msgstr "Taxonomy term"
+
+msgid "External"
+msgstr "Eksterne"
 
 msgid "Content"
 msgstr "Content"
@@ -9171,7 +9398,7 @@ msgstr ""
 "Standardindstillingen er \":default\"."
 
 msgid "Entity type / Group Mapping"
-msgstr ""
+msgstr "Entity type / Group Mapping"
 
 msgid ""
 "Identify which metatag groups should be available on which entity type / "
@@ -9349,10 +9576,10 @@ msgid "- None -"
 msgstr "- Ingen -"
 
 msgid "No Referrer"
-msgstr ""
+msgstr "No Referrer"
 
 msgid "No Referrer When Downgrade"
-msgstr ""
+msgstr "No Referrer When Downgrade"
 
 msgid "Origin"
 msgstr "Oprindelse"
@@ -9367,7 +9594,7 @@ msgid "Strict Origin"
 msgstr "Streng oprindelse"
 
 msgid "Strict Origin When Cross-Origin"
-msgstr ""
+msgstr "Strict Origin When Cross-Origin"
 
 msgid "Unsafe URL"
 msgstr "Usikker URL"
@@ -9486,7 +9713,7 @@ msgid "The <a href=\"@module\">Schema.org Metatag</a> module is installed."
 msgstr "<a href=\"@module\">Schema.org Metatag</a> modulet er installeret."
 
 msgid "Token Or"
-msgstr ""
+msgstr "Token Or"
 
 msgid ""
 "The <a href=\"@module\">Token OR module</a> is suggested for when the basic "
@@ -9542,7 +9769,7 @@ msgid "App Card"
 msgstr "API Version"
 
 msgid "Player Card"
-msgstr ""
+msgstr "Player Card"
 
 msgid "Access %tag in %group"
 msgstr "Adgang %tag i %group"
@@ -10125,7 +10352,7 @@ msgid "Actor's role"
 msgstr "Aktørens rolle"
 
 msgid "The roles of the actor(s)."
-msgstr ""
+msgstr "The roles of the actor(s)."
 
 msgid "Email address"
 msgstr "E-mail-adresse"
@@ -10218,6 +10445,8 @@ msgid ""
 "The height of the above video(s). Note: if both the unsecured and secured "
 "videos are provided, they should both be the same size."
 msgstr ""
+"The height of the above video(s). Note: if both the unsecured and secured "
+"videos are provided, they should both be the same size."
 
 msgid "Username"
 msgstr "Username"
@@ -10246,9 +10475,6 @@ msgstr "Video varighed (sekunder)"
 
 msgid "The length of the video in seconds"
 msgstr "Længden på videoen i sekunder"
-
-msgid "Locality"
-msgstr "Lokalitet"
 
 msgid "Open Graph"
 msgstr "Open Graph"
@@ -10353,7 +10579,7 @@ msgstr ""
 "på en Creator bruges til at angive enheden."
 
 msgid "Date"
-msgstr "Date"
+msgstr "Dato"
 
 msgid ""
 "A point or period of time associated with an event in the lifecycle of the "
@@ -10388,6 +10614,10 @@ msgid ""
 "describe the file format, physical medium, or dimensions of the resource, "
 "use the Format element."
 msgstr ""
+"The nature or genre of the resource. Recommended best practice is to use a "
+"controlled vocabulary such as the DCMI Type Vocabulary [DCMITYPE]. To "
+"describe the file format, physical medium, or dimensions of the resource, "
+"use the Format element."
 
 msgid "Rights"
 msgstr "Rettigheder"
@@ -10454,7 +10684,7 @@ msgstr ""
 "metatags fra <a href=':link'>Dublin Core Metadata Institute</a>"
 
 msgid "Pocket"
-msgstr ""
+msgstr "Pocket"
 
 msgid ""
 "A string provided by <a href=':pocket'>Pocket</a>, full details are "
@@ -10583,7 +10813,7 @@ msgid "Id"
 msgstr "Id"
 
 msgid "The Canonical Pinterest object to pin."
-msgstr ""
+msgstr "The Canonical Pinterest object to pin."
 
 msgid "No search"
 msgstr "Ingen søgning"
@@ -10647,7 +10877,7 @@ msgid "The URL to a logo file that is 310px by 150px."
 msgstr "URL'en til en logofil, der er 310px af 150px."
 
 msgid "Web app capable?"
-msgstr ""
+msgstr "Web app capable?"
 
 msgid ""
 "If set to 'yes', the application will run in full-screen mode; the default "
@@ -10657,7 +10887,7 @@ msgstr ""
 "standardadfærden er at bruge Safari til at vise webindhold."
 
 msgid "Handheld-Friendly"
-msgstr ""
+msgstr "Handheld-Friendly"
 
 msgid ""
 "Some older mobile browsers will expect this meta tag to be set to 'true' to "
@@ -10684,6 +10914,7 @@ msgstr "X-UA-Compatible"
 msgid ""
 "Indicates to IE which rendering engine should be used for the current page."
 msgstr ""
+"Indicates to IE which rendering engine should be used for the current page."
 
 msgid "MSApplication - Task"
 msgstr "MSApplication - Opgave"
@@ -10727,7 +10958,7 @@ msgid "MSApplication - Tile image"
 msgstr "MSApplication - Flisebillede"
 
 msgid "The URL to an image to use as the background for the live tile."
-msgstr ""
+msgstr "URL'en til et billede, der skal bruges som baggrund."
 
 msgid "MSApplication - Notification"
 msgstr "MSApplication - Notifikation"
@@ -10847,7 +11078,7 @@ msgid "MSApplication - Tile color"
 msgstr "MSApplication - Flisefarve"
 
 msgid "The HTML color to use as the background color for the live tile."
-msgstr ""
+msgstr "Angiver hvilken HTML farve, der skal bruges som baggrund."
 
 msgid "MSApplication - Window"
 msgstr "MSApplication - Vindue"
@@ -10914,6 +11145,8 @@ msgid ""
 "The default name displayed with the pinned sites tile (or icon). Set the "
 "content attribute to the desired name."
 msgstr ""
+"Standardnavnet vises ved feltet eller ikonet. Indstil indholdsattributten "
+"til det ønskede navn."
 
 msgid "MSApplication - Allow domain API calls"
 msgstr "MSApplication - Tillad domæne API-opkald"
@@ -10948,7 +11181,7 @@ msgstr ""
 "til hjemmeskærm\"."
 
 msgid "Handheld URL"
-msgstr ""
+msgstr "Manuel vedligeholdt URL"
 
 msgid ""
 "Provides an absolute URL to a specially formatted version of the current "
@@ -11494,7 +11727,7 @@ msgid "Date of copyright."
 msgstr "Copyrightdato"
 
 msgid "Conforms To"
-msgstr ""
+msgstr "Conforms To"
 
 msgid "An established standard to which the described resource conforms."
 msgstr "En etableret standard, som den beskrevne ressource overholder."
@@ -11527,7 +11760,7 @@ msgstr ""
 "beskrevne ressource."
 
 msgid "Accrual Policy"
-msgstr ""
+msgstr "Accrual Policy"
 
 msgid "The policy governing the addition of items to a collection."
 msgstr "Den politik, der styrer tilføjelsen af genstande til en samling."
@@ -11590,7 +11823,7 @@ msgstr ""
 "eksisterende beskrevne ressource, men i et andet format."
 
 msgid "Accrual Method"
-msgstr ""
+msgstr "Accrual Method"
 
 msgid "The method by which items are added to a collection."
 msgstr "Metoden, der bruges til at tilføje elementer til en samling."
@@ -11613,7 +11846,7 @@ msgid "Spatial characteristics of the resource."
 msgstr "Ressourcens rummelige egenskaber."
 
 msgid "Accrual Periodicity"
-msgstr ""
+msgstr "Accrual Periodicity"
 
 msgid "The frequency with which items are added to a collection."
 msgstr "Den hyppighed, hvormed elementer tilføjes til en samling."
@@ -11988,7 +12221,7 @@ msgstr ""
 "skemanavnet)."
 
 msgid "Twitter card type"
-msgstr ""
+msgstr "Twitter card type"
 
 msgid ""
 "Notes:<ul><li>no other fields are required for a Summary card</li><li>Media "
@@ -12159,7 +12392,7 @@ msgid "Facebook Pages"
 msgstr "Facebook Pages"
 
 msgid "Facebook Instant Articles claim URL token."
-msgstr ""
+msgstr "Facebook Instant Articles claim URL token."
 
 msgid "Facebook Application ID"
 msgstr "Facebook Applikations ID"
@@ -12396,19 +12629,19 @@ msgid "Add remove button for multi showing fields."
 msgstr "Tilføj \"fjern\"-knap for felter med multivisning."
 
 msgid "Multiple one"
-msgstr ""
+msgstr "Multiple one"
 
 msgid "Textfield one"
 msgstr "Tekstfelt et"
 
 msgid "Multiple two"
-msgstr ""
+msgstr "Multiple two"
 
 msgid "Texfield two"
 msgstr "Tekstfelt to"
 
 msgid "Foo"
-msgstr ""
+msgstr "Foo – metasyntaktisk variabel"
 
 msgid "Bar"
 msgstr "Bar"
@@ -12420,7 +12653,7 @@ msgid "Add more complexity"
 msgstr "Tilføj mere kompleksitet"
 
 msgid "Inner foo"
-msgstr ""
+msgstr "Inner foo"
 
 msgid "Values"
 msgstr "Værdier"
@@ -12455,6 +12688,7 @@ msgstr "Flerværdi form-element"
 msgid ""
 "Provides a multi-value form element that wraps any number of form elements."
 msgstr ""
+"Provides a multi-value form element that wraps any number of form elements."
 
 msgid "Multi-value form element test"
 msgstr "Flerværdi form-element test"
@@ -12511,6 +12745,8 @@ msgid ""
 "Easily add an own provider by using the provided Generic client, or use a "
 "custom provider client plugin."
 msgstr ""
+"Easily add an own provider by using the provided Generic client, or use a "
+"custom provider client plugin."
 
 msgid "Synchronize user properties/fields with OpenID Connect claims"
 msgstr "Synkroniser brugeregenskaber/-felter med OpenID Connect påstande"
@@ -12581,14 +12817,8 @@ msgstr "En anden bruger er allerede forbundet til denne @provider konto."
 msgid "Full name"
 msgstr "Fulde navn"
 
-msgid "Given name"
-msgstr "Fornavn"
-
 msgid "Given name(s) or first name(s)"
 msgstr "Fornavn(e) eller fornavn(e)"
-
-msgid "Family name"
-msgstr "Efternavn"
 
 msgid "Surname(s) or last name(s)"
 msgstr "Familienavn(e) eller efternavn(e)"
@@ -12787,7 +13017,7 @@ msgid "Authorization endpoint"
 msgstr "Autorisationsendpoint"
 
 msgid "Token endpoint"
-msgstr ""
+msgstr "Token endpoint"
 
 msgid "UserInfo endpoint"
 msgstr "UserInfo slutpunkt"
@@ -12876,7 +13106,7 @@ msgid "Display Paragraphs as list"
 msgstr "Vis Paragraphs som liste"
 
 msgid "Display Paragraphs as tiles"
-msgstr ""
+msgstr "Display Paragraphs as tiles"
 
 msgctxt "Paragraphs EE Sets: categories"
 msgid "Paragraphs Sets"
@@ -12998,6 +13228,14 @@ msgstr "Indeholder forskellige forbedringer til Paragraphs UI."
 
 msgid "Create and manage Paragraphs categories."
 msgstr "Opret og administrer Paragraphs kategorier."
+
+msgid "Show collapse all button"
+msgstr ""
+
+msgid ""
+"Disable the collapse all button when using inline entity forms in your "
+"paragraph types."
+msgstr ""
 
 msgid "Enable confirmation on paragraphs remove"
 msgstr "Aktiver bekræftelse ved fjernelse af paragraphs"
@@ -14612,20 +14850,14 @@ msgstr ""
 msgid "Event Series Minimum Time"
 msgstr "Minimumstid"
 
-msgid ""
-"Enter the earliest an event can start, in h:ia format. For example 08:00am."
+msgid "Enter the earliest an event can start."
 msgstr ""
-"Indtast arrangementets starttidspunkt, i h:ia format. For eksempel kl. "
-"08:00am."
 
 msgid "Event Series Maximum Time"
 msgstr "Maximumstid"
 
-msgid ""
-"Enter the latest an event can start, in h:ia format. For example 11:45pm."
+msgid "Enter the latest an event can start."
 msgstr ""
-"Indtast det seneste tidspunkt, hvor arrangementet starter, i h:ia format. "
-"For eksempel kl. 11:45pm."
 
 msgid "Event Series Date Format"
 msgstr "Arrangementseries datoformat"
@@ -15438,13 +15670,13 @@ msgid "Recurring Events Views"
 msgstr "Visning af tilbagevendende arrangementer"
 
 msgid "Swaps all recurring events list builders for views"
-msgstr ""
+msgstr "Swaps all recurring events list builders for views"
 
 msgid "Group recurring events"
 msgstr "Gruppér tilbagevendende arrangementer"
 
 msgid "Enables Group functionality for the Recurring events module"
-msgstr ""
+msgstr "Enables Group functionality for the Recurring events module"
 
 msgid "Add existing events"
 msgstr "Tilføj eksisterende arrangementer"
@@ -15480,7 +15712,7 @@ msgid "Registrant types"
 msgstr "Deltagertyper"
 
 msgid "Orphaned Event Registrants"
-msgstr ""
+msgstr "Orphaned Event Registrants"
 
 msgid "Recurring Events Registration"
 msgstr "Tilmelding af tilbagevendende begivenheder"
@@ -15502,7 +15734,7 @@ msgid "Configure Registrant Types"
 msgstr "Konfigurer deltagertyper"
 
 msgid "Delete orphaned event registrants"
-msgstr ""
+msgstr "Delete orphaned event registrants"
 
 msgid "Add iCalendar property mapping"
 msgstr "Tilføj iCalendar-egenskabstilknytning"
