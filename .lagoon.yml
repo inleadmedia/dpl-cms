@@ -109,6 +109,9 @@ tasks:
 
             drush user:create patron --password="$PR_DRUPAL_PWD"
             drush user:role:add 'patron' patron
+
+            drush user:create graphql_consumer --password="$PR_DRUPAL_PWD"
+            drush user:role:add 'graphql_consumer' graphql_consumer
           else
             echo "Test users already exist. Skipping creation..."
           fi
@@ -148,7 +151,7 @@ environments:
         schedule: "M/30 * * * *"
         command: drush dpl_po:import-remote-config-po da https://danskernesdigitalebibliotek.github.io/dpl-cms/translations/da.config.po
         service: cli
-  pr-1219:
+  pr-1501:
     cronjobs:
       - name: drush cron
         schedule: "M/15 * * * *"
