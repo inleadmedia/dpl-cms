@@ -21,6 +21,8 @@ third_party_settings:
     unpublish_revision: false
   flat_taxonomy:
     flat: 1
+_core:
+  default_config_hash: gEReFUwaLbUH3-fpBPU0rX9uh35jlxFW7Wvojy51H4g
 name: 'E-resource availability'
 vid: e_resource_availability
 description: null

@@ -4,6 +4,8 @@ status: true
 dependencies:
   module:
     - taxonomy
+_core:
+  default_config_hash: HXh4v73xz7AwcmMGBrqadFezTH_jHwWxnbQL7sEaFBk
 id: e_resource_terms_path
 label: 'E-resource terms path'
 type: 'canonical_entities:taxonomy_term'

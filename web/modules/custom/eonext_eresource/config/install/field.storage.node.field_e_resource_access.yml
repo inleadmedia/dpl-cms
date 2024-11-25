@@ -5,6 +5,8 @@ dependencies:
   module:
     - node
     - taxonomy
+_core:
+  default_config_hash: Iu8LXeIkXzf317_pMXo0N3HHoBJvREmVDGJ3kvFpgQs
 id: node.field_e_resource_access
 field_name: field_e_resource_access
 entity_type: node

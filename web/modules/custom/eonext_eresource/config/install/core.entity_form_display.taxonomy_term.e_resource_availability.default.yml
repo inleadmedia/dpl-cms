@@ -7,6 +7,8 @@ dependencies:
   module:
     - path
     - text
+_core:
+  default_config_hash: '-1dFx0hZTv6CR-rpVGkMmhwIbC3UVyWxbECeEX1zlnY'
 id: taxonomy_term.e_resource_availability.default
 targetEntityType: taxonomy_term
 bundle: e_resource_availability

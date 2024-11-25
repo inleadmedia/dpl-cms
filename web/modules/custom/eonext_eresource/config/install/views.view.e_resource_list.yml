@@ -15,6 +15,8 @@ dependencies:
     - taxonomy
     - text
     - user
+_core:
+  default_config_hash: hXjw3PBL0VQqfDt-mwF4EC-IBOibJbc7ssSpFDtzi5s
 id: e_resource_list
 label: 'E-resource list'
 module: views

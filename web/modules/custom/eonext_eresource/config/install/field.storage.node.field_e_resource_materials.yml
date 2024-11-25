@@ -6,6 +6,8 @@ dependencies:
     - entity_reference_revisions
     - node
     - paragraphs
+_core:
+  default_config_hash: sLiHoc5CAcjHZN4ODHBX_ug61yBxMDj_lE029O62mTM
 id: node.field_e_resource_materials
 field_name: field_e_resource_materials
 entity_type: node

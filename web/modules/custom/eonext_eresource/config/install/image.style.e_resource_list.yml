@@ -2,6 +2,8 @@ uuid: d7072541-7969-4f65-b2f5-f52b19a6ca5c
 langcode: en
 status: true
 dependencies: {  }
+_core:
+  default_config_hash: HQiV2RzYGeJr3yva1cUqhJfpwa0wv9yLIUkrYFc2bO8
 name: e_resource_list
 label: 'E-resource list'
 effects:
