@@ -101,7 +101,7 @@ class AlphabeticalFilter extends FilterPluginBase {
     }
 
     $index = array_unique($index);
-    \Safe\natsort($index);
+    natsort($index);
 
     return $index;
   }
