@@ -19,7 +19,7 @@ $config['system.site']['uuid'] = '13ef1a53-dfb4-4c82-9b64-44586a366729';
 
 // Hardcode the site mail as we don't want to allow changing it in the UI.
 // The email needs to match what is setup in Azure Communication Services.
-$config['system.site']['mail'] = 'mail@folkebibliotekernescms.dk';
+# $config['system.site']['mail'] = 'mail@folkebibliotekernescms.dk';
 
 // Configure logging using the project name and environment from the Lagoon
 // environment.
@@ -60,7 +60,7 @@ $settings['config_sync_directory'] = '../config/sync';
 $config['dpl_react_apps.settings']['services'] = [
   'cover' => ['base_url' => 'https://cover.dandigbib.org'],
   // @todo This should be updated to use the correct URL when available.
-  'fbi' => ['base_url' => 'https://temp.fbi-api.dbc.dk/[profile]/graphql'],
+  'fbi' => ['base_url' => 'https://fbi-api.dbc.dk/[profile]/graphql'],
   'material-list' => ['base_url' => 'https://prod.materiallist.dandigbib.org'],
 ];
 
