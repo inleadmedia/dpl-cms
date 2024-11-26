@@ -9,6 +9,8 @@ dependencies:
     - paragraphs.paragraphs_type.material_grid_manual
   module:
     - entity_reference_revisions
+_core:
+  default_config_hash: QwvJpMpv1TqrtJp4L5JzZ2ymam2oXw3DoWj8THgzc4U
 id: node.e_resource.field_e_resource_materials
 field_name: field_e_resource_materials
 entity_type: node

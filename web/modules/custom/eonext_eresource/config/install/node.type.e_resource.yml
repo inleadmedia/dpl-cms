@@ -26,6 +26,8 @@ third_party_settings:
     unpublish_enable: true
     unpublish_required: false
     unpublish_revision: false
+_core:
+  default_config_hash: OvfX_P0fYVv_irlE45ilI8NIHlfietVyYE-UfwOLG_o
 name: E-resource
 type: e_resource
 description: null

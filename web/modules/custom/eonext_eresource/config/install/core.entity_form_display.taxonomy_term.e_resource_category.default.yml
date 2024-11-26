@@ -8,6 +8,8 @@ dependencies:
   module:
     - path
     - text
+_core:
+  default_config_hash: tSoWJ9wZ5XQVX_9pUYMox_lwn58A9sHRrNuH-02FdoE
 id: taxonomy_term.e_resource_category.default
 targetEntityType: taxonomy_term
 bundle: e_resource_category

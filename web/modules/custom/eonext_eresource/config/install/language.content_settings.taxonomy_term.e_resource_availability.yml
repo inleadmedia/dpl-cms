@@ -4,6 +4,8 @@ status: true
 dependencies:
   config:
     - taxonomy.vocabulary.e_resource_availability
+_core:
+  default_config_hash: BEa79TMGFhpSgn4ZhXrC30K9aC3qqHXKwz3LN_MH8ro
 id: taxonomy_term.e_resource_availability
 target_entity_type_id: taxonomy_term
 target_bundle: e_resource_availability

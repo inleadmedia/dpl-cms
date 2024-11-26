@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.field_e_resource_title_image
     - media.type.image
     - node.type.e_resource
+_core:
+  default_config_hash: OFAe4T21_hivdgQe3TYsr6PRA47vPCk_Jty6qX-BrHI
 id: node.e_resource.field_e_resource_title_image
 field_name: field_e_resource_title_image
 entity_type: node

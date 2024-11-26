@@ -5,6 +5,8 @@ dependencies:
   module:
     - link
     - node
+_core:
+  default_config_hash: j0_5Z2Tx3htPOwwAkymu4AWIcNv9YeaYt9M6LG-DzFY
 id: node.field_e_resource_link
 field_name: field_e_resource_link
 entity_type: node
