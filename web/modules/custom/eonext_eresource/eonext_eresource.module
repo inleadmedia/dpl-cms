@@ -41,15 +41,96 @@ function eonext_eresource_theme(): array {
       'render element' => 'element',
       'base hook' => 'node',
     ],
-    'field__node__title__e_resource' => [
-      'render element' => 'item',
-      'base hook' => 'field',
-    ],
-
     'field__node__e_resource' => [
       'render element' => 'item',
       'base hook' => 'field',
-    ]
+    ],
+    'views_view_fields__e_resource_list__block' => [
+      'variables' => [
+        'view' => NULL,
+        'row' => NULL,
+        'options' => NULL,
+      ],
+    ],
+    'views_view_unformatted__e_resource_list' => [
+      'base hook' => 'views_view_unformatted',
+    ],
+    'views_view_field__field_e_resource_link' => [
+      'base hook' => 'views_view_field',
+    ],
+  ];
+}
+
+function eonext_eresource_theme_suggestions_views_view_field_alter(array &$suggestions, array $variables): void {
+  $suggestions[] = 'views_view_field__' . $variables['field']->field;
+}
+
+function eonext_eresource_theme_suggestions_views_view_unformatted_alter(array &$suggestions, array $variables): void {
+  $suggestions[] = 'views_view_unformatted__' . $variables['view']->id();
+}
+
+function template_preprocess_views_view_field__field_e_resource_link(array &$variables): void {
+  $row = $variables['row'];
+  $field_name = $variables['field']->field;
+
+  $items = [];
+  foreach ($variables['row']->_entity->get($field_name) as $item) {
+    $url = \Drupal\Core\Url::fromUri($item->uri);
+    $link = \Drupal\Core\Link::fromTextAndUrl(t('See online'), $url)->toRenderable();
+    $link['#attributes'] = [
+      'class' => [
+        'link-tag',
+      ],
+      'target' => '_blank',
+      'title' => $item->title,
+    ];
+
+    $items[] = $link;
+  }
+
+  $variables['items'] = $items;
+}
+
+function template_preprocess_views_view_fields__e_resource_list__block(array &$variables): void {
+  template_preprocess_views_view_fields($variables);
+
+  foreach ($variables['fields'] as $field_name => $field) {
+    $variables[$field_name] = [
+      '#type' => 'html_tag',
+      '#tag' => $field->wrapper_element,
+      '#attributes' => $field->wrapper_attributes->toArray(),
+      'child' => [
+        '#type' => 'html_tag',
+        '#tag' => $field->element_type,
+        '#attributes' => $field->element_attributes->toArray(),
+        '#value' => $field->content,
+      ]
+    ];
+  }
+
+  $node_link = $variables['row']->_entity->toLink()->toRenderable();
+  $node_link['#title'] = t('See more');
+  $node_link['#attributes']['class'][] = 'link-tag';
+
+  $variables['see_more'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'div',
+    '#attributes' => [
+      'class' => [
+        'views-field',
+        'views-field-see-more'
+      ],
+    ],
+    'child' => [
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => [
+        'class' => [
+          'field-content',
+        ],
+      ],
+      'child' => $node_link,
+    ],
   ];
 }
 
