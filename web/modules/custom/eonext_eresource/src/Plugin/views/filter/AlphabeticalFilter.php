@@ -125,8 +125,8 @@ class AlphabeticalFilter extends FilterPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags(): array {
-    return Cache::mergeTags(['node_list:e_resource'], parent::getCacheTags());
-  }
+//  public function getCacheTags(): array {
+//    return Cache::mergeTags(['node_list:e_resource'], parent::getCacheTags());
+//  }
 
 }

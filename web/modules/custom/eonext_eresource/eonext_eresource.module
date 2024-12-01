@@ -5,10 +5,13 @@
  * E-Resource logic.
  */
 
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+
 /**
  * Implements hook_views_data_alter().
  *
- * @param array<mixed> $data
+ * @param array $data
  *   Existing implementations.
  */
 function eonext_eresource_views_data_alter(array &$data): void {
@@ -33,10 +36,6 @@ function eonext_eresource_theme(): array {
       'render element' => 'element',
       'base hook' => 'taxonomy_term',
     ],
-    'node__e_resource__teaser' => [
-      'render element' => 'element',
-      'base hook' => 'node',
-    ],
     'node__e_resource__full' => [
       'render element' => 'element',
       'base hook' => 'node',
@@ -52,6 +51,13 @@ function eonext_eresource_theme(): array {
         'options' => NULL,
       ],
     ],
+    'views_view_fields__e_resource_list__eresource_category' => [
+      'variables' => [
+        'view' => NULL,
+        'row' => NULL,
+        'options' => NULL,
+      ],
+    ],
     'views_view_unformatted__e_resource_list' => [
       'base hook' => 'views_view_unformatted',
     ],
@@ -61,12 +67,28 @@ function eonext_eresource_theme(): array {
   ];
 }
 
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ *   Array of theme hook suggestions to alter.
+ * @param array $variables
+ *   Theme hook variables.
+ */
 function eonext_eresource_theme_suggestions_views_view_field_alter(array &$suggestions, array $variables): void {
   $suggestions[] = 'views_view_field__' . $variables['field']->field;
 }
 
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ *
+ * @param array $suggestions
+ *   Array of theme hook suggestions to alter.
+ * @param array $variables
+ *   Theme hook variables.
+ */
 function eonext_eresource_theme_suggestions_views_view_unformatted_alter(array &$suggestions, array $variables): void {
-  $suggestions[] = 'views_view_unformatted__' . $variables['view']->id();
+  $suggestions[] = 'views_view_unformatted__' . $variables['view']->id() . '__' . $variables['view']->current_display;
 }
 
 function template_preprocess_views_view_field__field_e_resource_link(array &$variables): void {
@@ -75,8 +97,8 @@ function template_preprocess_views_view_field__field_e_resource_link(array &$var
 
   $items = [];
   foreach ($variables['row']->_entity->get($field_name) as $item) {
-    $url = \Drupal\Core\Url::fromUri($item->uri);
-    $link = \Drupal\Core\Link::fromTextAndUrl(t('See online'), $url)->toRenderable();
+    $url = Url::fromUri($item->uri);
+    $link = Link::fromTextAndUrl(t('See online'), $url)->toRenderable();
     $link['#attributes'] = [
       'class' => [
         'link-tag',
@@ -91,6 +113,44 @@ function template_preprocess_views_view_field__field_e_resource_link(array &$var
   $variables['items'] = $items;
 }
 
+/**
+ * Implements template_preprocess_HOOK().
+ *
+ * Preprocess view display for e-resource category.
+ *
+ * This, essentially, does nothing, but we need to override this, otherwise
+ * the preprocess for the block display will take over.
+ *
+ * The default preprocesses functions are as following and are invoked top to
+ * bottom:
+ *   0 => 'views_view_fields__e_resource_list__eresource_category',
+ *   1 => 'views_view_fields__eresource_category',
+ *   2 => 'views_view_fields__e_resource_list__block',
+ *   3 => 'views_view_fields__block',
+ *   4 => 'views_view_fields__e_resource_list',
+ *   5 => 'views_view_fields',
+ *
+ * @see eonext_eresource_theme()
+ * @see template_preprocess_views_view_fields__e_resource_list__block()
+ *
+ * @param array $variables
+ *   Theme hook variables.
+ */
+function template_preprocess_views_view_fields__e_resource_list__eresource_category(array &$variables): void {
+  template_preprocess_views_view_fields($variables);
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ *
+ * Prepare variable for the list display, which is the
+ * block display of the view.
+ *
+ * @see eonext_eresource_theme()
+ *
+ * @param array $variables
+ *   Theme hook variables.
+ */
 function template_preprocess_views_view_fields__e_resource_list__block(array &$variables): void {
   template_preprocess_views_view_fields($variables);
 
@@ -135,7 +195,10 @@ function template_preprocess_views_view_fields__e_resource_list__block(array &$v
 }
 
 /**
- * Implements hook_preprocess().
+ * Implements hook_preprocess_HOOK().
+ *
+ * @param array $variables
+ *   Theme hook variables.
  */
 function eonext_eresource_preprocess_taxonomy_term(array &$variables): void {
   $vid = $variables['term']->get('vid')->entity->id();
@@ -150,7 +213,10 @@ function eonext_eresource_preprocess_taxonomy_term(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_node().
+ * Implements hook_preprocess_HOOK().
+ *
+ * @param array $variables
+ *   Theme hook variables.
  */
 function eonext_eresource_preprocess_node(array &$variables): void {
   if ('e_resource' !== $variables['node']->bundle()) {
