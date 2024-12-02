@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Link;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 
 /**
@@ -37,7 +38,6 @@ function eonext_eresource_theme(): array {
       'base hook' => 'taxonomy_term',
     ],
     'node__e_resource__full' => [
-      'render element' => 'element',
       'base hook' => 'node',
     ],
     'field__node__e_resource' => [
@@ -65,6 +65,57 @@ function eonext_eresource_theme(): array {
       'base hook' => 'views_view_field',
     ],
   ];
+}
+
+function template_preprocess_node__e_resource__full(&$variables): void {
+  template_preprocess_node($variables);
+
+  $content = &$variables['content'];
+
+  $link_fields = [
+    'field_e_resource_category',
+    'field_e_resource_link'
+  ];
+  foreach ($link_fields as $link_field) {
+    foreach (Element::children($content[$link_field]) as $key => $value) {
+      $content[$link_field][$key]['#attributes']['class'][] = 'link-tag';
+    }
+  }
+
+  foreach (Element::children($content['field_e_resource_link']) as $key => $value) {
+    $title = $content['field_e_resource_link'][$key]['#title'];
+    $content['field_e_resource_link'][$key]['#attributes']['class'][] = 'link-tag';
+    $content['field_e_resource_link'][$key]['#attributes']['title'] = $title;
+    $content['field_e_resource_link'][$key]['#title'] = t('See online');
+  }
+
+  $variables['title_attributes']['class'][] = 'title';
+
+  // @todo: Somehow figure out how to generate e-resource overview link.
+//  $overview_link = $variables['node']->toLink()->toRenderable();
+//  $overview_link['#title'] = t('E-resources & media');
+//  $overview_link['#attributes']['class'][] = 'link-tag';
+//
+//  $variables['e_resources_link'] = [
+//    '#type' => 'html_tag',
+//    '#tag' => 'div',
+//    '#attributes' => [
+//      'class' => [
+//        'views-field',
+//        'views-field-see-more'
+//      ],
+//    ],
+//    'child' => [
+//      '#type' => 'html_tag',
+//      '#tag' => 'div',
+//      '#attributes' => [
+//        'class' => [
+//          'field-content',
+//        ],
+//      ],
+//      'child' => $overview_link,
+//    ],
+//  ];
 }
 
 /**
@@ -96,7 +147,7 @@ function template_preprocess_views_view_field__field_e_resource_link(array &$var
   $field_name = $variables['field']->field;
 
   $items = [];
-  foreach ($variables['row']->_entity->get($field_name) as $item) {
+  foreach ($row->_entity->get($field_name) as $item) {
     $url = Url::fromUri($item->uri);
     $link = Link::fromTextAndUrl(t('See online'), $url)->toRenderable();
     $link['#attributes'] = [
