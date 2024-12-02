@@ -65,6 +65,7 @@ class CategoryFilterBlock extends BlockBase implements ContainerFactoryPluginInt
         'attributes' => [
           'class' => [
             'e-resource-category',
+            'link-tag',
           ],
         ],
       ];
