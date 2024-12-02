@@ -82,6 +82,13 @@ function template_preprocess_node__e_resource__full(&$variables): void {
     }
   }
 
+  foreach (Element::children($content['field_e_resource_link']) as $key => $value) {
+    $title = $content['field_e_resource_link'][$key]['#title'];
+    $content['field_e_resource_link'][$key]['#attributes']['class'][] = 'link-tag';
+    $content['field_e_resource_link'][$key]['#attributes']['title'] = $title;
+    $content['field_e_resource_link'][$key]['#title'] = t('See online');
+  }
+
   $variables['title_attributes']['class'][] = 'title';
 
   // @todo: Somehow figure out how to generate e-resource overview link.
