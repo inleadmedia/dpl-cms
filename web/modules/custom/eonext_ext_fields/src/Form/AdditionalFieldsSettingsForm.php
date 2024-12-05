@@ -73,10 +73,11 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
 
     $form_state->setValue('additional_fields', implode("\n", $additional_fields_parsed));
 
-    $cover_override = $form_state->getValue('cover_override');
-    if (!preg_match('/^' . self::FBI_FIELD_PATTERN . '$/i', $cover_override)) {
+    $cover_override = trim($form_state->getValue('cover_override'));
+    if (!empty($cover_override) && !preg_match('/^' . self::FBI_FIELD_PATTERN . '$/i', $cover_override)) {
       $form_state->setErrorByName('cover_override', $this->t('Failed to validate pattern.'));
     }
+    $form_state->setValue('cover_override', $cover_override);
   }
 
 }

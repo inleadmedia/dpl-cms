@@ -12,9 +12,12 @@ function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
     $additional_fields_config = \Drupal::service('config.factory')
       ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
 
-    $variables['attributes']['data-eonext-ext-covers'] = $additional_fields_config->get('cover_override') ?? '';
+    $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
+    if ($cover_override_path) {
+      $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
+    }
 
-    if ('material' === $variables['name']) {
+    if ('material' === $variables['name'] && !empty($additional_fields_config->get('additional_fields'))) {
       $additional_fields = preg_split("/\r|\t|\n/", $additional_fields_config->get('additional_fields'));
       $frontend_payload = [];
       foreach ($additional_fields as $additional_field) {
