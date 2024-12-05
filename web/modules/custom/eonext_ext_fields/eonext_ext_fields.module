@@ -1,0 +1,31 @@
+<?php
+
+use Drupal\eonext_ext_fields\Form\AdditionalFieldsSettingsForm;
+
+/**
+ * @file
+ * Extended fields module logic.
+ */
+
+function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
+  if (in_array($variables['name'], ['material', 'search-result'])) {
+    $additional_fields_config = \Drupal::service('config.factory')
+      ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
+
+    $variables['attributes']['data-eonext-ext-covers'] = $additional_fields_config->get('cover_override') ?? '';
+
+    if ('material' === $variables['name']) {
+      $additional_fields = preg_split("/\r|\t|\n/", $additional_fields_config->get('additional_fields'));
+      $frontend_payload = [];
+      foreach ($additional_fields as $additional_field) {
+        [$label, $path] = explode('|', $additional_field);
+
+        if ($label && $path) {
+          $frontend_payload[$label] = $path;
+        }
+      }
+      /* @phpstan-ignore-next-line  */
+      $variables['attributes']['data-eonext-ext-fields'] = json_encode($frontend_payload);
+    }
+  }
+}
