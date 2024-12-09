@@ -106,7 +106,7 @@ function eonext_mobilesearch_mobilesearch_push_alter(MobilesearchEntityInterface
   $removal_map = [
     'vid', 'revision_uid',
     'revision_timestamp', 'revision_log',
-    'status', 'promote',
+    'promote',
     'sticky', 'default_langcode',
     'revision_default', 'revision_translation_affected',
     'entity_clone_template_active', 'entity_clone_template_image',
