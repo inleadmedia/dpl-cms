@@ -12,6 +12,12 @@
     "basic_auth": {
       "type": "basic"
     },
+    "oauth2": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "http://varnish:8080/oauth/authorize",
+      "tokenUrl": "http://varnish:8080/oauth/token"
+    },
     "csrf_token": {
       "type": "apiKey",
       "name": "X-CSRF-Token",
@@ -22,6 +28,9 @@
   "security": [
     {
       "basic_auth": []
+    }, 
+    {
+      "oauth2": []
     }, 
     {
       "csrf_token": []
@@ -993,6 +1002,14 @@
                       "description": "The name of a tag."
                     }
                   },
+                  "partners": {
+                    "type": "array",
+                    "description": "The partners associated with the event.",
+                    "items": {
+                      "type": "string",
+                      "description": "The name of a partner."
+                    }
+                  },
                   "ticket_categories": {
                     "type": "array",
                     "description": "Ticket categories used for the event. Not present for events without ticketing.",
@@ -1061,6 +1078,14 @@
                         "format": "uri",
                         "description": "An absolute URL provided by the third party where editorial users can administer the event. Accessing this URL should require authentication."
                       }
+                    }
+                  },
+                  "screen_names": {
+                    "type": "array",
+                    "description": "The screens this event should be shown on.",
+                    "items": {
+                      "type": "string",
+                      "description": "A screen name."
                     }
                   }
                 },
