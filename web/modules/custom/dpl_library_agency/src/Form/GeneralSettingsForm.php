@@ -285,6 +285,12 @@ class GeneralSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['use_lms_user_api'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use LMS user API', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('use_lms_user_api') ?? FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -340,6 +346,7 @@ class GeneralSettingsForm extends ConfigFormBase {
         'local' => $form_state->getValue('fbi_profile_local'),
         'global' => $form_state->getValue('fbi_profile_global'),
       ])
+      ->set('use_lms_user_api', $form_state->getValue('use_lms_user_api'))
       ->save();
 
     $this->branchSettings->setExcludedAvailabilityBranches(array_filter($form_state->getValue('availability')));
