@@ -26,6 +26,13 @@
   .e-resource-category.active {
     font-weight: 600;
   }
+  h3 {
+    text-transform: uppercase;
+    margin: 0 0 10px 0;
+  }
+  ul > li {
+    margin: 0 0 10px 0;
+  }
 }
 
 article.node--type-e_resource.node--view-mode-full {
@@ -114,6 +121,16 @@ article.node--type-e_resource.node--view-mode-full {
         }
       }
     }
+  }
+
+  li.content-list-page__filter {
+    list-style-type: none;
+  }
+
+  .search-full-text, .search-full-text:focus-within {
+    display: initial;
+    border: none;
+    outline: none;
   }
 
   .view-rows-unformatted {
