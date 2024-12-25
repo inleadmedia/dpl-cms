@@ -291,6 +291,12 @@ class GeneralSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('use_lms_user_api') ?? FALSE,
     ];
 
+    $form['show_search_branch_selection'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show branch selection on searchbox', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('show_search_branch_selection') ?? FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -347,6 +353,7 @@ class GeneralSettingsForm extends ConfigFormBase {
         'global' => $form_state->getValue('fbi_profile_global'),
       ])
       ->set('use_lms_user_api', $form_state->getValue('use_lms_user_api'))
+      ->set('show_search_branch_selection', $form_state->getValue('show_search_branch_selection'))
       ->save();
 
     $this->branchSettings->setExcludedAvailabilityBranches(array_filter($form_state->getValue('availability')));
