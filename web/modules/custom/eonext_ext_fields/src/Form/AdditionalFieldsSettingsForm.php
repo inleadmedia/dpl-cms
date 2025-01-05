@@ -36,10 +36,23 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
    * {@inheritDoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
+    $more_description = 'One entry per line. <br />
+      Field title|pointer - Custom detail fields <br />
+      e.g.: Custom original title|graphql:titles.original[0] <br />
+      Marc lang code|marc:041.a, marc:041.c <br /><br />
+      %Field title%|pointer - Custom description fields <br />
+      %Field title.options%|json - reserved keyword to pass field options<br />
+      Property options might have following values:<br />
+      options.concat<String> - One of "prepend", "append" (default: "append")<br />
+      options.url<String> - Absolute or relative url with possible templating "${tag}". E.g.: /search?q=${tag}.<br />
+      e.g.: %Series%|marc:041.a<br />
+      %Subject%|marc:041.c, marc:041.a<br />
+      %Subject.options%|{ "concat": "prepend", "url": "/search?q=${tag}" }<br />
+      %Original title%|graphql:titles.original[0]';
     $form['additional_fields'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Additional fields to expose inside Works object'),
-      '#description' => $this->t('One entry per line. <br />LABEL|DOT.SEPARATED_PATH, e.g.: TvTitle|titles.tvSeries.title'),
+      '#description' => $this->t($more_description),
       '#config_target' => self::CONFIG_ID . ':' . 'additional_fields',
     ];
 
@@ -63,11 +76,6 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
     $additional_fields_parsed = [];
     foreach (array_filter(preg_split("/\t|\r|\n/", $additional_fields)) as $additional_field_entry) {
       $additional_field_entry = trim($additional_field_entry);
-      if (!preg_match('/^[a-z0-9\s]+\|' . self::FBI_FIELD_PATTERN . '$/i', $additional_field_entry)) {
-        $form_state->setErrorByName('additional_fields', $this->t('Failed to validate one or more entries.'));
-        break;
-      }
-
       $additional_fields_parsed[] = $additional_field_entry;
     }
 
