@@ -1,0 +1,55 @@
+diff --git a/src/Plugin/WebformHandler/WebformMailerliteHandler.php b/src/Plugin/WebformHandler/WebformMailerliteHandler.php
+index 09c5244..6c9aace 100644
+--- a/src/Plugin/WebformHandler/WebformMailerliteHandler.php
++++ b/src/Plugin/WebformHandler/WebformMailerliteHandler.php
+@@ -78,6 +78,7 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+     return [
+       'list' => '',
+       'email' => '',
++      'fields' => [],
+     ];
+   }
+ 
+@@ -111,10 +112,17 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+       '#required' => TRUE,
+       '#default_value' => $default_value,
+       '#options' => $options,
+-      '#empty_option'=> $this->t('- Select an option -'),
++      '#empty_option' => $this->t('- Select an option -'),
+       '#description' => $this->t('Select the email element you want to use for subscribing to the MailerLite list specified above.'),
+     ];
+ 
++    $form['mailerlite']['fields'] = [
++      '#type' => 'textarea',
++      '#title' => $this->t('Fields Mapping'),
++      '#description' => $this->t('Enter the fields you want to map to MailerLite. Each field should be on a new line in the format "webform_field_name: mailerlite_field_name".'),
++      '#default_value' => $this->configuration['fields'],
++    ];
++
+     return $form;
+   }
+ 
+@@ -151,9 +159,21 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+     }
+ 
+     if (!empty($email)) {
+-      $data = array_merge(['email' => $email]);
++      $data = array_merge([
++        'email' => $email,
++      ]);
++
++      $configurationFields = explode("\n", $configuration['fields']);
++      foreach ($configurationFields as $field) {
++        $field = explode(':', $field);
++        if (count($field) == 2) {
++          $data['fields'][trim($field[1])] = trim($fields['data'][$field[0]] ?? '');
++        }
++      }
++
+       $this->mailerlite->subscribers->create($data);
+-    } else {
++    }
++    else {
+       \Drupal::logger('webform_submission')->warning(
+         'webform_mailerlite: No email address was provided to the handler.',
+       );
