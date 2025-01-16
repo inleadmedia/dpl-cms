@@ -18,17 +18,8 @@ function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
     }
 
     if ('material' === $variables['name'] && !empty($additional_fields_config->get('additional_fields'))) {
-      $additional_fields = preg_split("/\r|\t|\n/", $additional_fields_config->get('additional_fields'));
-      $frontend_payload = [];
-      foreach ($additional_fields as $additional_field) {
-        [$label, $path] = explode('|', $additional_field);
-
-        if ($label && $path) {
-          $frontend_payload[$label] = $path;
-        }
-      }
       /* @phpstan-ignore-next-line  */
-      $variables['attributes']['data-eonext-ext-fields'] = json_encode($frontend_payload);
+      $variables['attributes']['data-eonext-ext-fields'] = json_encode($additional_fields_config->get('additional_fields'));
     }
   }
 }
