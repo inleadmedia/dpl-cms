@@ -93,6 +93,13 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
 
+    $json_input = $form_state->getValue('additional_fields');
+    $trimmed_input = trim(preg_replace('/\s+/', '', $json_input));
+
+    if (json_decode($trimmed_input) === NULL && json_last_error() !== JSON_ERROR_NONE) {
+      $form_state->setErrorByName('additional_fields', $this->t('The provided input is not valid JSON.'));
+    }
+
     $cover_override = trim($form_state->getValue('cover_override'));
     if (!empty($cover_override) && !preg_match('/^' . self::FBI_FIELD_PATTERN . '$/i', $cover_override)) {
       $form_state->setErrorByName('cover_override', $this->t('Failed to validate pattern.'));

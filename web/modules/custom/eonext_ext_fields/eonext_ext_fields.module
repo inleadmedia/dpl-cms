@@ -8,18 +8,21 @@ use Drupal\eonext_ext_fields\Form\AdditionalFieldsSettingsForm;
  */
 
 function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
+  $additional_fields_config = \Drupal::service('config.factory')
+    ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
+
+  $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
+  if (!empty($cover_override_path)) {
+    $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
+  }
   if (in_array($variables['name'], ['material', 'search-result'])) {
-    $additional_fields_config = \Drupal::service('config.factory')
-      ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
-
-    $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
-    if ($cover_override_path) {
-      $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
-    }
-
-    if ('material' === $variables['name'] && !empty($additional_fields_config->get('additional_fields'))) {
-      /* @phpstan-ignore-next-line  */
-      $variables['attributes']['data-eonext-ext-fields'] = json_encode($additional_fields_config->get('additional_fields'));
+    $json_input = $additional_fields_config->get('additional_fields');
+    if ('material' === $variables['name'] && !empty($json_input)) {
+      $decoded_json = json_decode($json_input, TRUE);
+      if ($decoded_json !== NULL) {
+        /* @phpstan-ignore-next-line  */
+        $variables['attributes']['data-eonext-ext-fields'] = json_encode($decoded_json);
+      }
     }
   }
 }
