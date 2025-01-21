@@ -11,10 +11,6 @@ function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
   $additional_fields_config = \Drupal::service('config.factory')
     ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
 
-  $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
-  if (!empty($cover_override_path)) {
-    $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
-  }
   if (in_array($variables['name'], ['material', 'search-result'])) {
     $json_input = $additional_fields_config->get('additional_fields');
     if ('material' === $variables['name'] && !empty($json_input)) {
@@ -24,5 +20,18 @@ function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
         $variables['attributes']['data-eonext-ext-fields'] = json_encode($decoded_json);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function eonext_ext_fields_preprocess_html(array &$variables): void {
+  $additional_fields_config = \Drupal::service('config.factory')
+    ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
+
+  $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
+  if (!empty($cover_override_path)) {
+    $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
   }
 }
