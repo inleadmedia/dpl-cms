@@ -11,13 +11,14 @@ use Drupal\eonext_translation\Form\TranslationSettingsForm;
 /**
  * Implements hook_preprocess_HOOK().
  */
-function eonext_translation_preprocess_dpl_react_app(array &$variables): void {
+function eonext_translation_preprocess_html(array &$variables): void {
 
   $translation_settings = \Drupal::config('eonext_translation.settings');
+  $translation_type = $translation_settings->get('translation_type');
 
-  $variables['attributes']['data-eonext-translation-type'] = $translation_settings->get('translation_type') ?? TranslationSettingsForm::TRANSLATION_TYPE_GOOGLE_TRANSLATE;
+  $variables['attributes']['data-eonext-translation-type'] = implode(', ', $translation_type);
 
-  if ($translation_settings->get('translation_type') === TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE) {
+  if (in_array(TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translation_type)) {
     $availableLanguages = $translation_settings->get('drupal_translation_available_languages') ?? [];
 
     // We are storing an array of language ids/codes in the config,
@@ -34,7 +35,6 @@ function eonext_translation_preprocess_dpl_react_app(array &$variables): void {
   $footer_settings = \Drupal::service('eonext_translation.service')->getFooterSettings();
 
   if ($translate_footer) {
-    dpm(json_encode($footer_settings));
     $variables['attributes']['data-eonext-footer'] = json_encode($footer_settings);
   }
 

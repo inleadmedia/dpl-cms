@@ -99,7 +99,7 @@ final class FooterTranslateForm extends ConfigFormBase {
           ':input[name="translate_footer"]' => ['checked' => TRUE],
         ],
       ],
-      '#access' => $config->get('footer_items'),
+      '#access' => $config->get('footer_items') ? TRUE : FALSE,
     ];
 
     $form['edit']['edit_translations'] = [

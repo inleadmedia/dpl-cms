@@ -1,7 +1,15 @@
+eonext_translation.settings:
+  path: '/admin/config/eonext'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'EONEXT Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
 eonext_translation.translation_settings:
   path: "/admin/config/eonext/translation"
   defaults:
-    _title: "Translation Settings"
+    _title: "EONEXT Translation Functionality"
     _form: 'Drupal\eonext_translation\Form\TranslationSettingsForm'
   requirements:
     _permission: "administer site configuration"

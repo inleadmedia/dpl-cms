@@ -5,8 +5,11 @@ eonext_translation.settings:
   label: "EO Next Translation settings"
   mapping:
     translation_type:
-      type: string
+      type: sequence
       label: "Translation Type"
+      sequence:
+        type: string
+        label: "Translation type"
     drupal_translation_available_languages:
       type: sequence
       label: "Drupal Translation Language"
