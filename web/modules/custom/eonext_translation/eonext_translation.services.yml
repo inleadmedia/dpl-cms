@@ -1,0 +1,4 @@
+services:
+  eonext_translation.service:
+    class: Drupal\eonext_translation\TranslationService
+    arguments: ["@state", "@config.factory"]
