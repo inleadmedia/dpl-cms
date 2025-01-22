@@ -67,6 +67,12 @@ class AdvancedSearchConfigForm extends ConfigFormBase {
       '#config_target' => self::CONFIG_ID . ':advanced_search_enabled',
     ];
 
+    $form['disable_filter_by_branches'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable filter by branches on advanced search page'),
+      '#config_target' => self::CONFIG_ID . ':disable_filter_by_branches',
+    ];
+
     // Get the module path.
     $module_path = '/' . $this->moduleExtensionList->getPath('eonext_advanced_search') . '/Help/additional_settings.md';
 
@@ -92,7 +98,7 @@ class AdvancedSearchConfigForm extends ConfigFormBase {
     $json_input = $form_state->getValue('additional_settings');
     $trimmed_input = trim(preg_replace('/\s+/', '', $json_input));
 
-    if (json_decode($trimmed_input) === NULL && json_last_error() !== JSON_ERROR_NONE) {
+    if (!empty($trimmed_input) && json_decode($trimmed_input) === NULL && json_last_error() !== JSON_ERROR_NONE) {
       $form_state->setErrorByName('additional_settings', $this->t('The provided input is not valid JSON.'));
     }
   }
