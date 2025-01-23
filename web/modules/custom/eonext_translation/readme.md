@@ -10,10 +10,10 @@ This feature allows you to select a translation mode for your site. There are tw
 2. **Drupal Translation**:
    When this mode is selected, the site switches to Drupal's translation mode. This allows you to select the available languages, and the application will use the `preprocess_dpl_react_app` function to indicate that the site is running in translation mode. Two attributes are generated to reflect this configuration:
 
-   - **`data-eonext-translation-type`**: Indicates the translation type, either `google_translate` or `drupal_translate`.
+   - **`data-eonext-translation-type`**: Indicates the translation type, either `google_translate` or `drupal_translate` or both, comma-separated.
    - **`data-eonext-translation-languages`**: A JSON representation of available languages. Example:
      ```json
-     {"da": "Danish", "kl": "Greenlandic"}
+     {"en":{"name":"English","path":"\/en\/node\/15\/edit"},"da":{"name":"Danish","path":"\/da\/node\/15\/edit"}}
      ```
 
    When `data-eonext-translation-type` is set to `drupal_translate`, the default Google Translate widget is hidden. Instead, a new language selection widget is displayed, allowing users to translate the current page dynamically.

@@ -28,7 +28,21 @@ function eonext_translation_preprocess_html(array &$variables): void {
       return \Drupal::languageManager()->getLanguageName($lang);
     }, $availableLanguages));
 
-    $variables['attributes']['data-eonext-translation-languages'] = json_encode($availableLanguages);
+    $languages = [];
+
+    // Get the current path.
+    $current_path = \Drupal::service('path.current')->getPath();
+    // Get the URL in the desired language.
+    $url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path, 'en');
+
+    foreach ($availableLanguages as $langCode => $langName) {
+      $languages[$langCode] = [
+        'name' => $langName,
+        'path' => '/' . $langCode . $url,
+      ];
+    }
+
+    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languages);
   }
 
   $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
