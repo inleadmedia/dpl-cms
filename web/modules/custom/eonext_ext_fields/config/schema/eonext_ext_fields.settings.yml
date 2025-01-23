@@ -1,0 +1,13 @@
+eonext_ext_fields.settings:
+  type: config_object
+  label: 'Eonext extendef fields config'
+  mapping:
+    additional_fields:
+      type: text
+      label: 'Additional fields'
+    cover_override:
+      type: text
+      label: 'Cover override'
+    block_loans:
+      type: text
+      label: 'Block loans'
