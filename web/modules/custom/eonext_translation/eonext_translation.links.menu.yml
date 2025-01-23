@@ -1,11 +1,11 @@
 eonext_translation.settings:
-  title: 'EONEXT Configuration'
+  title: 'Eonext'
   route_name: eonext_translation.settings
   parent: system.admin_config
   weight: -1000
 
 eonext_translation.translation_settings:
-  title: EONEXT Translation Functionality
+  title: Translation
   description: Manages the site translation
   route_name: eonext_translation.translation_settings
   parent: eonext_translation.settings
