@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for EO Next Translation module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\eonext_translation\Form\TranslationSettingsForm;
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function eonext_translation_preprocess_html(array &$variables): void {
+
+  $translation_settings = \Drupal::config('eonext_translation.settings');
+  $translation_type = $translation_settings->get('translation_type');
+
+  $variables['attributes']['data-eonext-translation-type'] = implode(', ', $translation_type);
+
+  if (in_array(TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translation_type)) {
+    $availableLanguages = $translation_settings->get('drupal_translation_available_languages') ?? [];
+
+    // We are storing an array of language ids/codes in the config,
+    // Converting it to an array of ids as keys and language names as values.
+    // And translate the language names to the current interface language.
+    $availableLanguages = array_combine($availableLanguages, array_map(function ($lang) {
+      return \Drupal::languageManager()->getLanguageName($lang);
+    }, $availableLanguages));
+
+    $languages = [];
+
+    // Get the current path.
+    $current_path = \Drupal::service('path.current')->getPath();
+    // Get the URL in the desired language.
+    $url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path, 'en');
+
+    foreach ($availableLanguages as $langCode => $langName) {
+      $languages[$langCode] = [
+        'name' => $langName,
+        'path' => '/' . $langCode . $url,
+      ];
+    }
+
+    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languages);
+  }
+
+  $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
+  $footer_settings = \Drupal::service('eonext_translation.service')->getFooterSettings();
+
+  if ($translate_footer) {
+    $variables['attributes']['data-eonext-footer'] = json_encode($footer_settings);
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function eonext_translation_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
+  if ($form_id === 'dpl_footer_form') {
+    // Add a new submit handler to the footer form.
+    $form['#submit'][] = 'eonext_translation_footer_form_submit';
+  }
+}
+
+/**
+ * Submit handler for the footer form.
+ */
+function eonext_translation_footer_form_submit(array &$form, FormStateInterface $form_state): void {
+  \Drupal::service('eonext_translation.service')->saveFooterToConfig();
+}
