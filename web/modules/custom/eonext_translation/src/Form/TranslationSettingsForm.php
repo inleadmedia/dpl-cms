@@ -93,14 +93,14 @@ final class TranslationSettingsForm extends ConfigFormBase {
     $config = $this->config(static::SETTINGS);
 
     $form['translation_type'] = [
-      '#type' => 'checkboxes',
+      '#type' => 'radios',
       '#title' => $this->t('Translation type'),
       '#options' => [
         static::TRANSLATION_TYPE_GOOGLE_TRANSLATE => $this->t('Enable Google Translate'),
         static::TRANSLATION_TYPE_DRUPAL_TRANSLATE => $this->t('Enable Drupal Language switcher'),
       ],
       '#description' => $this->t('Select the translation type.'),
-      '#default_value' => $config->get('translation_type') ?? [],
+      '#default_value' => $config->get('translation_type') ?? static::TRANSLATION_TYPE_GOOGLE_TRANSLATE,
     ];
 
     $form['drupal_translation'] = [
@@ -109,9 +109,7 @@ final class TranslationSettingsForm extends ConfigFormBase {
       '#open' => TRUE,
       '#states' => [
         'visible' => [
-          ':input[name="translation_type[' . static::TRANSLATION_TYPE_DRUPAL_TRANSLATE . ']"]' => [
-            'checked' => TRUE,
-          ],
+          ':input[name="translation_type"]' => ['value' => static::TRANSLATION_TYPE_DRUPAL_TRANSLATE],
         ],
       ],
     ];
@@ -138,11 +136,9 @@ final class TranslationSettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
 
-    $translationType = array_keys(
-      array_filter($form_state->getValue('translation_type'))
-    );
+    $translationType = $form_state->getValue('translation_type');
 
-    if (in_array(static::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translationType)) {
+    if (static::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translationType) {
       $languages = array_keys(
         array_filter($form_state->getValue('drupal_translation_available_languages'))
       );
@@ -165,12 +161,10 @@ final class TranslationSettingsForm extends ConfigFormBase {
       array_filter($form_state->getValue('drupal_translation_available_languages'))
     );
 
-    $translationType = array_keys(
-      array_filter($form_state->getValue('translation_type'))
-    );
+    $translationType = $form_state->getValue('translation_type');
 
     // If the type is not drupal_translate then remove the languages.
-    if (!in_array(static::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translationType)) {
+    if (static::TRANSLATION_TYPE_DRUPAL_TRANSLATE !== $translationType) {
       $languages = [];
     }
 

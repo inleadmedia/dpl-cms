@@ -16,9 +16,9 @@ function eonext_translation_preprocess_html(array &$variables): void {
   $translation_settings = \Drupal::config('eonext_translation.settings');
   $translation_type = $translation_settings->get('translation_type');
 
-  $variables['attributes']['data-eonext-translation-type'] = implode(', ', $translation_type);
+  $variables['attributes']['data-eonext-translation-type'] = $translation_type;
 
-  if (in_array(TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translation_type)) {
+  if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
     $availableLanguages = $translation_settings->get('drupal_translation_available_languages') ?? [];
 
     // We are storing an array of language ids/codes in the config,
