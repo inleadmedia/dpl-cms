@@ -372,6 +372,9 @@
             },
             "drupal/theme_permission": {
                 "3105637: Edit, install and uninstall permission": "https://www.drupal.org/files/issues/2024-02-01/theme-permission-edit-install-uninstall-3105637-7.patch"
+            },
+            "drupal/webform_mailerlite": {
+                "Add support for field mapping": "patches/field-mapping-3499237.patch"
             }
         }
     }
