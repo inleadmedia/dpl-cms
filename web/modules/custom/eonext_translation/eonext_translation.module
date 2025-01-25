@@ -16,33 +16,11 @@ function eonext_translation_preprocess_html(array &$variables): void {
   $translation_settings = \Drupal::config('eonext_translation.settings');
   $translation_type = $translation_settings->get('translation_type');
 
-  $variables['attributes']['data-eonext-translation-type'] = implode(', ', $translation_type);
+  $variables['attributes']['data-eonext-translation-type'] = $translation_type;
 
-  if (in_array(TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE, $translation_type)) {
-    $availableLanguages = $translation_settings->get('drupal_translation_available_languages') ?? [];
-
-    // We are storing an array of language ids/codes in the config,
-    // Converting it to an array of ids as keys and language names as values.
-    // And translate the language names to the current interface language.
-    $availableLanguages = array_combine($availableLanguages, array_map(function ($lang) {
-      return \Drupal::languageManager()->getLanguageName($lang);
-    }, $availableLanguages));
-
-    $languages = [];
-
-    // Get the current path.
-    $current_path = \Drupal::service('path.current')->getPath();
-    // Get the URL in the desired language.
-    $url = \Drupal::service('path_alias.manager')->getAliasByPath($current_path, 'en');
-
-    foreach ($availableLanguages as $langCode => $langName) {
-      $languages[$langCode] = [
-        'name' => $langName,
-        'path' => '/' . $langCode . $url,
-      ];
-    }
-
-    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languages);
+  if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
+    $languageLinks = \Drupal::service('eonext_translation.service')->getLanguageLinks();
+    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languageLinks);
   }
 
   $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
@@ -69,4 +47,17 @@ function eonext_translation_form_alter(array &$form, FormStateInterface $form_st
  */
 function eonext_translation_footer_form_submit(array &$form, FormStateInterface $form_state): void {
   \Drupal::service('eonext_translation.service')->saveFooterToConfig();
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function eonext_translation_preprocess_page(array &$variables): void {
+
+  $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
+
+  if ($translate_footer) {
+    $variables['footer_settings'] = \Drupal::service('eonext_translation.service')->getFooterSettings();
+  }
+
 }

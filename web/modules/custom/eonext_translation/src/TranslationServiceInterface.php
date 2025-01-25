@@ -28,4 +28,12 @@ interface TranslationServiceInterface {
    */
   public function getFooterSettings(): array;
 
+  /**
+   * Get the language links.
+   *
+   * @return array
+   *   The language links.
+   */
+  public function getLanguageLinks(): array;
+
 }
