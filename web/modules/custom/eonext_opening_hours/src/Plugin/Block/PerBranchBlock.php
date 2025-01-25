@@ -55,7 +55,6 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('dpl_library_agency.branch.repository'),
       $container->get('entity_type.manager'),
       $container->get('dpl_opening_hours.repository'),
     );
