@@ -4,6 +4,7 @@ namespace Drupal\eonext_ext_fields\Form;
 
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\ConfigFormBase;
+use Drupal\Core\Form\ConfigTarget;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -69,6 +70,7 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
 
     $form['additional_fields'] = [
       '#type' => 'textarea',
+      '#mode' => 'javascript',
       '#title' => $this->t('Additional fields to expose inside Works object'),
       '#description' => $this->t('See the <a href="@url" target="_blank">documentation</a> for the detailed JSON schema.', [
         '@url' => $module_path,
@@ -81,7 +83,18 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
       '#type' => 'textfield',
       '#title' => $this->t('User covers from this path within Works object'),
       '#description' => $this->t('Fetch alternative covers from FBI well field, e.g., "manifestations.latest.cover.detail".'),
-      '#config_target' => self::CONFIG_ID . ':' . 'cover_override',
+      '#config_target' => self::CONFIG_ID . ':cover_override',
+    ];
+
+    $form['block_loans'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Block loans for items from this group'),
+      '#description' => $this->t('Block / blacklist loans for items from this group. Add a comma separated list of values. e.g., "group1,group2".'),
+      '#config_target' => new ConfigTarget(
+        self::CONFIG_ID,
+        'block_loans',
+        toConfig: static::class . '::formatBlockLoans'
+      ),
     ];
 
     return parent::buildForm($form, $form_state);
@@ -105,6 +118,30 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
       $form_state->setErrorByName('cover_override', $this->t('Failed to validate pattern.'));
     }
     $form_state->setValue('cover_override', $cover_override);
+
+    $block_loans = trim($form_state->getValue('block_loans'));
+    // Check if the input is a comma separated list of values,
+    // allow spaces between values.
+    // valid input: "group1, group2, group3"
+    // valid input: "group1,group2,group3".
+    if (!empty($block_loans) && !preg_match('/^([a-z0-9]+, ?)+[a-z0-9]+$/i', $block_loans)) {
+      $form_state->setErrorByName('block_loans', $this->t('Failed to validate pattern.'));
+    }
+  }
+
+  /**
+   * Formats the block loans value.
+   *
+   * Adding one space after each comma and removing trailing spaces.
+   *
+   * @param string $value
+   *   The value to format.
+   *
+   * @return string
+   *   The formatted value.
+   */
+  public static function formatBlockLoans(string $value): string {
+    return preg_replace('/, ?/', ', ', trim($value));
   }
 
 }

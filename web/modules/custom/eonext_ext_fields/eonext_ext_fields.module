@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 use Drupal\eonext_ext_fields\Form\AdditionalFieldsSettingsForm;
 
 /**
@@ -7,6 +11,9 @@ use Drupal\eonext_ext_fields\Form\AdditionalFieldsSettingsForm;
  * Extended fields module logic.
  */
 
+/**
+ *
+ */
 function eonext_ext_fields_preprocess_dpl_react_app(array &$variables): void {
   $additional_fields_config = \Drupal::service('config.factory')
     ->get(AdditionalFieldsSettingsForm::CONFIG_ID);
@@ -33,5 +40,11 @@ function eonext_ext_fields_preprocess_html(array &$variables): void {
   $cover_override_path = $additional_fields_config->get('cover_override') ?? '';
   if (!empty($cover_override_path)) {
     $variables['attributes']['data-eonext-ext-covers'] = $cover_override_path;
+  }
+
+  $blacklisted_loans = $additional_fields_config->get('block_loans') ?? '';
+
+  if (!empty($blacklisted_loans)) {
+    $variables['attributes']['data-blacklisted-reservation-groups'] = $blacklisted_loans;
   }
 }
