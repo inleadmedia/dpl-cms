@@ -1,35 +1,39 @@
 <div class="opening-hours-wrapper">
-  <table class="table primary-table">
-    <thead>
-      {% for item in header_items %}
-        <th>{{ item }}</th>
-      {% endfor %}
-    </thead>
-    <tbody>
-      {% for item in items %}
-        <tr>
-          <td>{{ item.branch }}</td>
-          <td>
-            <table class="table secondary-table">
-              <thead>
-                <th>{{ 'Type'|t }}</th>
-                <th>{{ 'Opening'|t }}</th>
-                <th>{{ 'Closing'|t }}</th>
-              </thead>
-              <tbody>
-                {% for opening in item.opening_hours %}
-                  {% set class = cycle(['odd', 'even'], loop.index0) %}
-                  <tr class="{{ class }}">
-                    <td>{{ opening.categoryTerm.label }}</td>
-                    <td>{{ opening.startTime | date("H:i")  }}</td>
-                    <td>{{ opening.endTime | date("H:i")  }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% if items.length == 0 %}
+    <div class="no-opening">{{ 'No opening hours available'|t }}</div>
+  {% else %}
+    <table class="table primary-table">
+      <thead>
+        {% for item in header_items %}
+          <th>{{ item }}</th>
+        {% endfor %}
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.branch }}</td>
+            <td>
+              <table class="table secondary-table">
+                <thead>
+                  <th>{{ 'Type'|t }}</th>
+                  <th>{{ 'Opening'|t }}</th>
+                  <th>{{ 'Closing'|t }}</th>
+                </thead>
+                <tbody>
+                  {% for opening in item.opening_hours %}
+                    {% set class = cycle(['odd', 'even'], loop.index0) %}
+                    <tr class="{{ class }}">
+                      <td>{{ opening.categoryTerm.label }}</td>
+                      <td>{{ opening.startTime | date("H:i")  }}</td>
+                      <td>{{ opening.endTime | date("H:i")  }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
 </div>
