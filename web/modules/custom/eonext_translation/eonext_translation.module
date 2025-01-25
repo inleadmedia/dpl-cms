@@ -20,47 +20,8 @@ function eonext_translation_preprocess_html(array &$variables): void {
   $variables['attributes']['data-eonext-translation-type'] = $translation_type;
 
   if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
-
-    $languageManager = \Drupal::service('language_manager');
-    $patchMatcher = \Drupal::service('path.matcher');
-    $routeMatch = \Drupal::routeMatch();
-
-    $availableLanguages = $translation_settings->get('drupal_translation_available_languages') ?? [];
-
-    // We are storing an array of language ids/codes in the config,
-    // Converting it to an array of ids as keys and language names as values.
-    // And translate the language names to the current interface language.
-    $availableLanguages = array_combine($availableLanguages, array_map(function ($lang) {
-      return \Drupal::languageManager()->getLanguageName($lang);
-    }, $availableLanguages));
-
-    $languages = [];
-    // If there is no route match, for example when creating blocks on 404 pages
-    // for logged-in users with big_pipe enabled using the front page instead.
-    if ($patchMatcher->isFrontPage() || !$routeMatch->getRouteObject()) {
-      // We are skipping the route match on both 404 and front page.
-      // Example: If on front page, there is no route match like when creating
-      // blocks on 404 pages for logged-in users with big_pipe enabled, use the
-      // front page.
-      $url = Url::fromRoute('<front>');
-    }
-    else {
-      $url = Url::fromRouteMatch($routeMatch);
-    }
-    $links = $languageManager->getLanguageSwitchLinks('language_interface', $url);
-    foreach ($availableLanguages as $langCode => $langName) {
-      $langUrl = $links->links[$langCode]['url'] ?? FALSE;
-      if (!$langUrl) {
-        continue;
-      }
-      $langUrl->setOption('language', $links->links[$langCode]['language']);
-      $languages[$langCode] = [
-        'name' => $langName,
-        'path' => $langUrl->toString(),
-      ];
-    }
-
-    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languages);
+    $languageLinks = \Drupal::service('eonext_translation.service')->getLanguageLinks();
+    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languageLinks);
   }
 
   $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
