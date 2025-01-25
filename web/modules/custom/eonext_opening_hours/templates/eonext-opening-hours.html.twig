@@ -24,8 +24,8 @@
                     {% set class = cycle(['odd', 'even'], loop.index0) %}
                     <tr class="{{ class }}">
                       <td>{{ opening.categoryTerm.label }}</td>
-                      <td>{{ opening.startTime | date("H:i")  }}</td>
-                      <td>{{ opening.endTime | date("H:i")  }}</td>
+                      <td>{{ opening.startTime|date("H:i") }}</td>
+                      <td>{{ opening.endTime|date("H:i") }}</td>
                     </tr>
                   {% endfor %}
                 </tbody>
