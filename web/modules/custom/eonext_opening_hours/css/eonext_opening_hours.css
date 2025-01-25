@@ -1,38 +1,31 @@
 .eonext-opening-hours {
   font-family: "Noto Sans",sans-serif;
 }
-
-.eonext-opening-hours .opening-hours-wrapper{
-  overflow-x:auto;
+.eonext-opening-hours .opening-hours-wrapper {
+  overflow-x: auto;
 }
-
 .eonext-opening-hours .primary-table {
   min-width: 720px;
 }
 .eonext-opening-hours .secondary-table th {
   width: 33.33%;
 }
-
 .eonext-opening-hours .table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #e0e0e0;
 }
-
 .eonext-opening-hours .table th {
   background-color: #f9f9f9;
 }
-
 .eonext-opening-hours .table th,
 .eonext-opening-hours .table td {
   padding: 4px;
   border: 1px solid #e0e0e0;
 }
-
 .eonext-opening-hours .table tr.odd {
   background-color: #f4f4f4;
 }
-
 .eonext-opening-hours .table tr.even {
   background-color: transparent;
 }
