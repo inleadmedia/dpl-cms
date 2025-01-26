@@ -10,23 +10,20 @@
       </thead>
       <tbody>
         {% for item in items %}
-          <tr>
+          {% set class = cycle(['even', 'odd'], loop.index0) %}
+          <tr class="{{ class }}">
             <td>{{ item.branch }}</td>
-            <td align="center">
+            <td align="center" class="opening-hours-cell">
               {% if item.opening_hours is not empty %}
                 <table class="table secondary-table">
-                  <thead>
-                    <th>{{ 'Type'|t }}</th>
-                    <th>{{ 'Opening'|t }}</th>
-                    <th>{{ 'Closing'|t }}</th>
-                  </thead>
                   <tbody>
                     {% for opening in item.opening_hours %}
                       {% set class = cycle(['odd', 'even'], loop.index0) %}
                       <tr class="{{ class }}">
                         <td>{{ opening.categoryTerm.label }}</td>
-                        <td>{{ opening.startTime|date("H:i") }}</td>
-                        <td>{{ opening.endTime|date("H:i") }}</td>
+                        <td>{{ opening.startTime|date("H:i") }}
+                          -
+                          {{ opening.endTime|date("H:i") }}</td>
                       </tr>
                     {% endfor %}
                   </tbody>

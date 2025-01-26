@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eonext_opening_hours\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -141,7 +142,9 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
     return [
       '#theme' => 'eonext_opening_hours',
       '#header_items' => [
-        $this->t('Branch'),
+        $this->t('Today: @date', [
+          '@date' => (new DrupalDateTime('today'))->format('l, F d'),
+        ]),
         $this->t('Opening hours'),
       ],
       '#items' => $items,
