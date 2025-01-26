@@ -1,0 +1,45 @@
+.eonext-opening-hours {
+  font-family: "Noto Sans",sans-serif;
+  max-width: 1056px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  color: #484848;
+}
+.eonext-opening-hours h2.title {
+  font-size: 40px;
+  line-height: 1.1em;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+.eonext-opening-hours .opening-hours-wrapper {
+  overflow-x: auto;
+}
+.eonext-opening-hours .primary-table {
+  min-width: 720px;
+}
+.eonext-opening-hours .secondary-table th {
+  width: 33.33%;
+}
+.eonext-opening-hours .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.eonext-opening-hours .table th {
+  background-color: #dbdbdb;
+}
+.eonext-opening-hours .table th,
+.eonext-opening-hours .table td {
+  padding: 4px;
+}
+.eonext-opening-hours .table td.opening-hours-cell {
+  padding: 4px 0;
+}
+.eonext-opening-hours .table tr.odd {
+  background-color: #dbdbdb;
+}
+.eonext-opening-hours .table tr.even {
+  background-color: transparent;
+}

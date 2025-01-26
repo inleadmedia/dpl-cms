@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for EO Next Opening Hours module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function eonext_opening_hours_theme() {
+  return [
+    'eonext_opening_hours' => [
+      'variables' => [
+        'header_items' => NULL,
+        'items' => NULL,
+      ],
+    ],
+    'paragraph__eonext_opening_hours' => [
+      'variables' => [],
+      '#render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Set the contents of the opening hours paragraph.
+ */
+function eonext_opening_hours_preprocess_paragraph__eonext_opening_hours(array &$variables): void {
+
+  $branches = $variables['elements']['field_available_branches'];
+  // Available branches are stored in array elements that has an integer key.
+  $branches = array_filter($branches, 'is_int', ARRAY_FILTER_USE_KEY);
+
+  $available_branches = [];
+  if (count($branches)) {
+    $available_branches = array_map(function ($branch) {
+      return $branch['#entity']->id();
+    }, $branches);
+  }
+
+  // Render the opening hours block here.
+  $block = \Drupal::service('plugin.manager.block')
+    ->createInstance('eonext_opening_hours_per_branch', [
+      'available_branches' => $available_branches,
+    ])
+    ->build();
+
+  $variables['title'] = $variables['elements']['field_paragraph_title'];
+  $variables['link'] = $variables['elements']['field_button_link'];
+
+  $variables['opening_hours'] = \Drupal::service('renderer')->render($block);
+}
