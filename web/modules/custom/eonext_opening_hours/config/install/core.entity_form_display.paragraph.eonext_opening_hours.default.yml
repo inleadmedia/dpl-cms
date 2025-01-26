@@ -6,11 +6,12 @@ dependencies:
     - field.field.paragraph.eonext_opening_hours.field_available_branches
     - field.field.paragraph.eonext_opening_hours.field_button_link
     - field.field.paragraph.eonext_opening_hours.field_paragraph_title
-    - field.field.paragraph.eonext_opening_hours.field_show_empty_branches
     - paragraphs.paragraphs_type.eonext_opening_hours
   module:
     - link
-    - eonext_opening_hours
+  enforced:
+    module:
+      - eonext_opening_hours
 id: paragraph.eonext_opening_hours.default
 targetEntityType: paragraph
 bundle: eonext_opening_hours
@@ -41,13 +42,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  field_show_empty_branches:
-    type: boolean_checkbox
-    weight: 2
-    region: content
-    settings:
-      display_label: true
     third_party_settings: {  }
 hidden:
   created: true

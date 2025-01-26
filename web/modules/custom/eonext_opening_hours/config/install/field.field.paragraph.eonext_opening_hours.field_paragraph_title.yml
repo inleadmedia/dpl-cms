@@ -6,7 +6,9 @@ dependencies:
     - field.storage.paragraph.field_paragraph_title
     - paragraphs.paragraphs_type.eonext_opening_hours
   module:
-    - eonext_opening_hours
+  enforced:
+    module:
+      - eonext_opening_hours
 id: paragraph.eonext_opening_hours.field_paragraph_title
 field_name: field_paragraph_title
 entity_type: paragraph

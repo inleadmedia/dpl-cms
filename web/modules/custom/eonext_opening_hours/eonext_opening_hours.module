@@ -44,7 +44,6 @@ function eonext_opening_hours_preprocess_paragraph__eonext_opening_hours(array &
   // Render the opening hours block here.
   $block = \Drupal::service('plugin.manager.block')
     ->createInstance('eonext_opening_hours_per_branch', [
-      'show_empty' => $variables['elements']['field_show_empty_branches'][0]['#markup'] === 'Yes',
       'available_branches' => $available_branches,
     ])
     ->build();

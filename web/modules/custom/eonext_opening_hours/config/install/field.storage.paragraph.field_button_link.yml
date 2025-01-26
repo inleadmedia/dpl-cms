@@ -5,7 +5,9 @@ dependencies:
   module:
     - link
     - paragraphs
-    - eonext_opening_hours
+  enforced:
+    module:
+      - eonext_opening_hours
 id: paragraph.field_button_link
 field_name: field_button_link
 entity_type: paragraph

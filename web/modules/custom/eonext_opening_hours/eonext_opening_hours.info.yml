@@ -5,4 +5,3 @@ package: Custom
 core_version_requirement: ^10 || ^11
 dependencies:
   - dpl_opening_hours:dpl_opening_hours
-  - dpl_library_agency:dpl_library_agency

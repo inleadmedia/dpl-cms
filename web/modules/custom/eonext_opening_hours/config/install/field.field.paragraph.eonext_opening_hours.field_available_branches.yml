@@ -7,7 +7,9 @@ dependencies:
     - node.type.branch
     - paragraphs.paragraphs_type.eonext_opening_hours
   module:
-    - eonext_opening_hours
+  enforced:
+    module:
+      - eonext_opening_hours
 id: paragraph.eonext_opening_hours.field_available_branches
 field_name: field_available_branches
 entity_type: paragraph

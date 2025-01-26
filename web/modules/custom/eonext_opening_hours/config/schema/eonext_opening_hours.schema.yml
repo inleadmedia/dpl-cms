@@ -2,9 +2,6 @@ block.settings.eonext_opening_hours_per_branch:
   type: block_settings
   label: 'Opening hours per branch block'
   mapping:
-    show_empty:
-      type: integer
-      label: Show empty branches
     available_branches:
       type: sequence
       label: Available branches

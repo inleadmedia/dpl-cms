@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dpl_opening_hours\Model\OpeningHoursRepository;
+use Drupal\dpl_opening_hours\Plugin\rest\resource\v1\OpeningHoursResourceBase;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -65,7 +66,7 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function defaultConfiguration(): array {
     return [
-      'show_empty' => $this->t('Show empty branches'),
+      'available_branches' => $this->t('Available branches'),
     ];
   }
 
@@ -81,12 +82,6 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
         'type' => 'branch',
         'status' => 1,
       ]);
-
-    $form['show_empty'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Show empty branches'),
-      '#default_value' => $this->configuration['show_empty'],
-    ];
 
     $form['available_branches'] = [
       '#type' => 'checkboxes',
@@ -104,7 +99,6 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function blockSubmit($form, FormStateInterface $form_state): void {
-    $this->configuration['show_empty'] = $form_state->getValue('show_empty');
     $this->configuration['available_branches'] = array_filter($form_state->getValue('available_branches'));
   }
 
@@ -113,32 +107,35 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function build(): array {
 
-    $branches = $this
-      ->entityTypeManager
-      ->getStorage('node')
-      ->loadByProperties([
-        'type' => 'branch',
-        'status' => 1,
-      ]);
+    // The available branches from the configuration.
+    $availableBranches = array_unique(
+      $this->configuration['available_branches']
+    );
 
-    $items = [];
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    $branchesQuery = $nodeStorage
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'branch')
+      ->condition('status', 1);
 
-    $availableBranches = $this->configuration['available_branches'];
-
-    // Filter branches by available branches configuration.
     if (!empty($availableBranches)) {
-      $branches = array_filter($branches, function ($branch) use ($availableBranches) {
-        return in_array($branch->id(), $availableBranches);
-      });
+      $branchesQuery->condition('nid', $availableBranches, 'IN');
+    }
+    $branchIds = $branchesQuery->execute();
+
+    $branches = $nodeStorage
+      ->loadMultiple($branchIds);
+
+    // Ordering branches by availableBranches.
+    if (!empty($availableBranches)) {
+      $branches = array_map(function ($branchId) use ($branches) {
+        return $branches[$branchId];
+      }, $availableBranches);
     }
 
     foreach ($branches as $branch) {
-      $item = $this->formatItem($branch);
-      // We are returning FALSE if the branch has no opening hours.
-      if (!$item) {
-        continue;
-      }
-      $items[] = $item;
+      $items[] = $this->formatItem($branch);
     }
 
     return [
@@ -149,7 +146,7 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
       ],
       '#items' => $items,
       '#cache' => [
-        'max-age' => 0,
+        'tags' => [OpeningHoursResourceBase::CACHE_TAG_LIST],
       ],
       '#attached' => [
         'library' => [
@@ -173,10 +170,6 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
     $openingHours = $this
       ->openingHoursRepository
       ->loadMultiple([$branch->id()], new \DateTime(), new \DateTime());
-
-    if (empty($openingHours) && $this->configuration['show_empty'] != TRUE) {
-      return FALSE;
-    }
 
     // Order openingHours by startTime.
     usort($openingHours, function ($a, $b) {
