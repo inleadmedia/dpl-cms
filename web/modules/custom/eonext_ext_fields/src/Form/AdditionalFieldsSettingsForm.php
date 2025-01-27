@@ -124,7 +124,8 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
     // allow spaces between values.
     // valid input: "group1, group2, group3"
     // valid input: "group1,group2,group3".
-    if (!empty($block_loans) && !preg_match('/^([a-z0-9]+, ?)+[a-z0-9]+$/i', $block_loans)) {
+    // valid input: "group1".
+    if (!empty($block_loans) && !preg_match('/^([a-z0-9]+(, ?)?)+$/i', $block_loans)) {
       $form_state->setErrorByName('block_loans', $this->t('Failed to validate pattern.'));
     }
   }
