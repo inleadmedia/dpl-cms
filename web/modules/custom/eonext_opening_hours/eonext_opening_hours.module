@@ -51,5 +51,9 @@ function eonext_opening_hours_preprocess_paragraph__eonext_opening_hours(array &
   $variables['title'] = $variables['elements']['field_paragraph_title'];
   $variables['link'] = $variables['elements']['field_button_link'];
 
+  if (isset($variables['link'][0])) {
+    $variables['link'][0]['#options']['attributes']['class'][] = 'branches-link';
+  }
+
   $variables['opening_hours'] = \Drupal::service('renderer')->render($block);
 }
