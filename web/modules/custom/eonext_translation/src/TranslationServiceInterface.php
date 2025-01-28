@@ -2,6 +2,8 @@
 
 namespace Drupal\eonext_translation;
 
+use Drupal\node\NodeInterface;
+
 /**
  * Interface for translation service..
  */
@@ -35,5 +37,15 @@ interface TranslationServiceInterface {
    *   The language links.
    */
   public function getLanguageLinks(): array;
+
+  /**
+   * Add branch attributes to the variables.
+   *
+   * @param array $variables
+   *   The variables to add the attributes to.
+   * @param \Drupal\node\NodeInterface|null $branch
+   *   The branch node.
+   */
+  public static function addBranchAttributes(array &$variables, NodeInterface|Null $branch = NULL): void;
 
 }
