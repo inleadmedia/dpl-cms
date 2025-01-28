@@ -2,12 +2,14 @@
 
 namespace Drupal\eonext_translation;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 
 /**
  * Translation service.
@@ -246,6 +248,26 @@ class TranslationService implements TranslationServiceInterface {
     });
 
     return $enabledLanguages;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function addBranchAttributes(array &$variables, NodeInterface|Null $branch = NULL): void {
+    if ($branch) {
+      $branch_label = $branch->label();
+      $variables['attributes']['class'][] = Html::getClass('branch-name-' . $branch_label);
+      $variables['attributes']['class'][] = Html::getClass('branch-id-' . $branch->id());
+
+      $variables['attributes']['data-branch-name'] = $branch_label;
+      $variables['attributes']['data-branch-id'] = $branch->id();
+    }
+    else {
+      $variables['attributes']['class'][] = 'branch-name-default';
+      $variables['attributes']['class'][] = 'branch-id-default';
+      $variables['attributes']['data-branch-name'] = 'default';
+      $variables['attributes']['data-branch-id'] = 'default';
+    }
   }
 
 }

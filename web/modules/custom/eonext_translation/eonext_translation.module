@@ -7,6 +7,8 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
+use Drupal\eonext_translation\TranslationService;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -28,6 +30,28 @@ function eonext_translation_preprocess_html(array &$variables): void {
 
   if ($translate_footer) {
     $variables['attributes']['data-eonext-footer'] = json_encode($footer_settings);
+  }
+
+  // Add content related classes and attributes.
+  $current_node = \Drupal::routeMatch()->getParameter('node');
+
+  if (
+    $current_node instanceof NodeInterface &&
+    in_array($current_node->bundle(), ['branch', 'page', 'article'])
+    ) {
+
+    $branch_node = NULL;
+    if ($current_node->hasField('field_branch')) {
+      $branch_node = $current_node->get('field_branch')->entity;
+    }
+    elseif ($current_node->bundle() === 'branch') {
+      $branch_node = $current_node;
+    }
+
+    TranslationService::addBranchAttributes($variables, $branch_node);
+  }
+  else {
+    TranslationService::addBranchAttributes($variables);
   }
 
 }
