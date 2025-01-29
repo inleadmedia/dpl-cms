@@ -18,8 +18,7 @@
                 <table class="table secondary-table">
                   <tbody>
                     {% for opening in item.opening_hours %}
-                      {% set class = cycle(['odd', 'even'], loop.index0) %}
-                      <tr class="{{ class }}">
+                      <tr>
                         <td>{{ opening.categoryTerm.label }}</td>
                         <td>{{ opening.startTime|date("H:i") }}
                           -
