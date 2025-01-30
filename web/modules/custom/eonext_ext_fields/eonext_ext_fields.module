@@ -58,6 +58,10 @@ function eonext_ext_fields_dpl_react_apps_data(array &$data): void {
     ->get(AdditionalFieldsSettingsForm::CONFIG_ID)
     ->get('text_fields');
 
+  if (empty($text_fields)) {
+    return;
+  }
+
   // Parse the JSON string.
   $decoded_json = json_decode($text_fields, TRUE);
 

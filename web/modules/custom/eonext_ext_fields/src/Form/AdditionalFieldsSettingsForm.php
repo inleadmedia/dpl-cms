@@ -156,23 +156,27 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
     }
 
     $text_fields = $form_state->getValue('text_fields');
-    $trimmed_text_fields = trim(preg_replace('/\s+/', '', $text_fields));
-    $json_text_fields = json_decode($trimmed_text_fields, TRUE);
-    if ($json_text_fields === NULL && json_last_error() !== JSON_ERROR_NONE) {
-      $form_state->setErrorByName('text_fields', $this->t('The provided input is not valid JSON.'));
-    }
-    else {
-      // Validate keys and values.
-      foreach ($json_text_fields as $key => $value) {
-        if (!preg_match('/^[a-z][a-zA-Z0-9]*Text$/', $key)) {
-          $form_state->setErrorByName('text_fields', $this->t('Invalid key: %key. Keys must be camelCase and end with "Text".', ['%key' => $key]));
-          return;
-        }
-        if (!is_string($value)) {
-          $form_state->setErrorByName('text_fields', $this->t('Invalid value for %key. Values must be strings.', ['%key' => $key]));
-          return;
+
+    if (!empty($text_fields)) {
+      $trimmed_text_fields = trim(preg_replace('/\s+/', '', $text_fields));
+      $json_text_fields = json_decode($trimmed_text_fields, TRUE);
+      if ($json_text_fields === NULL && json_last_error() !== JSON_ERROR_NONE) {
+        $form_state->setErrorByName('text_fields', $this->t('The provided input is not valid JSON.'));
+      }
+      else {
+        // Validate keys and values.
+        foreach ($json_text_fields as $key => $value) {
+          if (!preg_match('/^[a-z][a-zA-Z0-9]*Text$/', $key)) {
+            $form_state->setErrorByName('text_fields', $this->t('Invalid key: %key. Keys must be camelCase and end with "Text".', ['%key' => $key]));
+            return;
+          }
+          if (!is_string($value)) {
+            $form_state->setErrorByName('text_fields', $this->t('Invalid value for %key. Values must be strings.', ['%key' => $key]));
+            return;
+          }
         }
       }
+
     }
 
     $cover_override = trim($form_state->getValue('cover_override'));
