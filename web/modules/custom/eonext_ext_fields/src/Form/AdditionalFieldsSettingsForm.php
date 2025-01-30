@@ -70,7 +70,6 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
 
     $form['additional_fields'] = [
       '#type' => 'textarea',
-      '#mode' => 'javascript',
       '#title' => $this->t('Additional fields to expose inside Works object'),
       '#description' => $this->t('See the <a href="@url" target="_blank">documentation</a> for the detailed JSON schema.', [
         '@url' => $module_path,
@@ -78,6 +77,49 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
       '#rows' => 20,
       '#config_target' => self::CONFIG_ID . ':' . 'additional_fields',
     ];
+
+    $form['text_fields'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Text fields'),
+      '#description' => $this->t('Replace text fields for translation. Insert a key value format where key is camelCase string ending inText, and the value is a string.'),
+      '#rows' => 5,
+      '#config_target' => self::CONFIG_ID . ':text_fields',
+    ];
+
+    $textData = $this->config(self::CONFIG_ID)->get('text_fields');
+
+    if (!empty($textData)) {
+
+      $form['text_data'] = [
+        '#type' => 'details',
+        '#title' => $this->t('Generated text attributes'),
+        '#open' => TRUE,
+      ];
+
+      $textData = json_decode($textData, TRUE);
+
+      $table = [
+        '#type' => 'table',
+        '#header' => [
+          $this->t('Attribute'),
+          $this->t('Value'),
+        ],
+      ];
+
+      foreach ($textData as $key => $value) {
+        // Transform CamelCase to kebab-case. And remove Text suffix.
+        $keyAttribute = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $key));
+        $table[] = [
+          'attribute' => [
+            '#markup' => $keyAttribute,
+          ],
+          'value' => [
+            '#markup' => $this->t($value),
+          ],
+        ];
+      }
+      $form['text_data']['text_data'] = $table;
+    }
 
     $form['cover_override'] = [
       '#type' => 'textfield',
@@ -111,6 +153,26 @@ class AdditionalFieldsSettingsForm extends ConfigFormBase {
 
     if (json_decode($trimmed_input) === NULL && json_last_error() !== JSON_ERROR_NONE) {
       $form_state->setErrorByName('additional_fields', $this->t('The provided input is not valid JSON.'));
+    }
+
+    $text_fields = $form_state->getValue('text_fields');
+    $trimmed_text_fields = trim(preg_replace('/\s+/', '', $text_fields));
+    $json_text_fields = json_decode($trimmed_text_fields, TRUE);
+    if ($json_text_fields === NULL && json_last_error() !== JSON_ERROR_NONE) {
+      $form_state->setErrorByName('text_fields', $this->t('The provided input is not valid JSON.'));
+    }
+    else {
+      // Validate keys and values.
+      foreach ($json_text_fields as $key => $value) {
+        if (!preg_match('/^[a-z][a-zA-Z0-9]*Text$/', $key)) {
+          $form_state->setErrorByName('text_fields', $this->t('Invalid key: %key. Keys must be camelCase and end with "Text".', ['%key' => $key]));
+          return;
+        }
+        if (!is_string($value)) {
+          $form_state->setErrorByName('text_fields', $this->t('Invalid value for %key. Values must be strings.', ['%key' => $key]));
+          return;
+        }
+      }
     }
 
     $cover_override = trim($form_state->getValue('cover_override'));

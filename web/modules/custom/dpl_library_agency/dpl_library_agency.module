@@ -35,5 +35,13 @@ function dpl_library_agency_preprocess_html(array &$variables): void {
   if ($config->get('show_search_branch_selection')) {
     $variables['attributes']['data-show-search-branch-selection'] = 'true';
   }
+}
 
+/**
+ * Implements hook_dpl_react_apps_data().
+ */
+function dpl_library_agency_dpl_react_apps_data(array &$data): void {
+  $data['texts'] += [
+    'search-in-all-branches' => t('Search in all branches'),
+  ];
 }
