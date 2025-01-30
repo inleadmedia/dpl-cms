@@ -48,3 +48,27 @@ function eonext_ext_fields_preprocess_html(array &$variables): void {
     $variables['attributes']['data-blacklisted-reservation-groups'] = $blacklisted_loans;
   }
 }
+
+/**
+ * Implements hook_dpl_react_apps_data().
+ */
+function eonext_ext_fields_dpl_react_apps_data(array &$data): void {
+
+  $text_fields = \Drupal::service('config.factory')
+    ->get(AdditionalFieldsSettingsForm::CONFIG_ID)
+    ->get('text_fields');
+
+  // Parse the JSON string.
+  $decoded_json = json_decode($text_fields, TRUE);
+
+  if ($decoded_json === NULL || !is_array($decoded_json)) {
+    return;
+  }
+
+  foreach ($decoded_json as $key => $value) {
+    // Transform CamelCase to kebab-case. And remove Text suffix.
+    $keyAttribute = strtolower(preg_replace('/(?<!^)[A-Z]/', '-$0', $key));
+    $keyAttribute = str_replace('-text', '', $keyAttribute);
+    $data['texts'][$keyAttribute] = t($value);
+  }
+}

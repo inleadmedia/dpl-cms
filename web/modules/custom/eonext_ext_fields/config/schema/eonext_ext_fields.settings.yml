@@ -5,6 +5,9 @@ eonext_ext_fields.settings:
     additional_fields:
       type: string
       label: 'Additional fields'
+    text_fields:
+      type: string
+      label: 'Text fields'
     cover_override:
       type: string
       label: 'Cover override'
