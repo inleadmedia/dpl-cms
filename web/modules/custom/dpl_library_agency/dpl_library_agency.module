@@ -7,6 +7,7 @@
 
 use Drupal\dpl_library_agency\Form\GeneralSettingsForm;
 use Drupal\dpl_library_agency\GeneralSettings;
+use Drupal\dpl_react_apps\Controller\DplReactAppsController;
 
 /**
  * Implements hook_dpl_protected_nodes_get_protected_nodes().
@@ -34,6 +35,11 @@ function dpl_library_agency_preprocess_html(array &$variables): void {
   }
   if ($config->get('show_search_branch_selection')) {
     $variables['attributes']['data-show-search-branch-selection'] = 'true';
+
+    // Build configurations for blacklisted search branches and all branches.
+    $branchSettings = \Drupal::service('dpl_library_agency.branch_settings');
+    $blacklistedSearchBranchesConfig = DplReactAppsController::buildBranchesListProp($branchSettings->getExcludedSearchBranches());
+    $variables['attributes']['data-blacklisted-search-branches-config'] = $blacklistedSearchBranchesConfig;
   }
 }
 
