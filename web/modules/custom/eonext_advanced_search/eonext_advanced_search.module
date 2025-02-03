@@ -5,7 +5,6 @@
  * Module to expose advanced search enabled status.
  */
 
-use Drupal\dpl_react_apps\Controller\DplReactAppsController;
 use Drupal\eonext_advanced_search\Form\AdvancedSearchConfigForm;
 
 /**
@@ -36,17 +35,6 @@ function eonext_advanced_search_preprocess_dpl_react_app(array &$variables): voi
       }, $branches);
       $branches_id = implode(',', $ids);
       $variables['attributes']['data-blacklisted-search-branches-config'] = $branches_id;
-    }
-  }
-  else {
-
-    $currentRoute = \Drupal::routeMatch()->getRouteName();
-
-    if ($currentRoute !== 'dpl_react_apps.advanced_search') {
-      // Build configurations for blacklisted search branches and all branches.
-      $branchSettings = \Drupal::service('dpl_library_agency.branch_settings');
-      $blacklistedSearchBranchesConfig = DplReactAppsController::buildBranchesListProp($branchSettings->getExcludedSearchBranches());
-      $variables['attributes']['data-blacklisted-search-branches-config'] = $blacklistedSearchBranchesConfig;
     }
   }
 }
