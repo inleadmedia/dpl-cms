@@ -5,6 +5,7 @@
  * Primary module hooks for EO Next Translation module.
  */
 
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
@@ -86,10 +87,19 @@ function eonext_translation_preprocess_page(array &$variables): void {
   }
 
   if (isset($variables['breadcrumb'])) {
+    $current_language = \Drupal::languageManager()->getCurrentLanguage();
     $links = $variables['breadcrumb']->getLinks();
     foreach ($links as $link) {
       $url = $link->getUrl();
-      $url->setOption('language', \Drupal::languageManager()->getCurrentLanguage());
+      $url->setOption('language', $current_language);
+      $entity = $url->getOptions()['entity'] ?? NULL;
+      if ($entity instanceof ContentEntityBase) {
+        // Get the entity label for current language.
+        if ($entity->hasTranslation($current_language->getId())) {
+          $entity = $entity->getTranslation($current_language->getId());
+          $link->setText($entity->label());
+        }
+      }
     }
   }
 
