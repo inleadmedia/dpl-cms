@@ -5,6 +5,7 @@
  * Primary module hooks for EO Next Translation module.
  */
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
 use Drupal\eonext_translation\TranslationService;
@@ -95,5 +96,15 @@ function eonext_translation_preprocess_field(&$variables) {
     if ($country) {
       $variables['items'][0]['content']['country']['#value'] = t($country);
     }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function eonext_translation_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  // Alter the my_module_text field to use a custom class.
+  if ($entity_type->id() == 'eventseries' && !empty($fields['langcode'])) {
+    $fields['langcode']->setDisplayOptions('form', ['region' => 'hidden']);
   }
 }
