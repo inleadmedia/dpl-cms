@@ -85,6 +85,14 @@ function eonext_translation_preprocess_page(array &$variables): void {
     $variables['footer_settings'] = \Drupal::service('eonext_translation.service')->getFooterSettings();
   }
 
+  if (isset($variables['breadcrumb'])) {
+    $links = $variables['breadcrumb']->getLinks();
+    foreach ($links as $link) {
+      $url = $link->getUrl();
+      $url->setOption('language', \Drupal::languageManager()->getCurrentLanguage());
+    }
+  }
+
 }
 
 /**
