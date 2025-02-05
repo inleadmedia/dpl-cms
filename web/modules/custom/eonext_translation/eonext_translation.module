@@ -121,7 +121,7 @@ function eonext_translation_preprocess_field(&$variables) {
  * Implements hook_entity_base_field_info_alter().
  */
 function eonext_translation_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
-  // Alter the my_module_text field to use a custom class.
+  // Set add the langcode field to the hidden region for event series.
   if ($entity_type->id() == 'eventseries' && !empty($fields['langcode'])) {
     $fields['langcode']->setDisplayOptions('form', ['region' => 'hidden']);
   }
