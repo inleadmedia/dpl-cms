@@ -51,3 +51,4 @@ function dpl_library_agency_dpl_react_apps_data(array &$data): void {
     'search-in-all-branches' => t('Search in all branches'),
   ];
 }
+
