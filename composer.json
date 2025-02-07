@@ -184,6 +184,8 @@
         "myclabs/php-enum": "^1.8",
         "npm-asset/select2": "^4.0",
         "oomphinc/composer-installers-extender": "^2.0",
+        "php-http/message": "^1.16",
+        "php-http/message-factory": "^1.1",
         "phpdocumentor/reflection-docblock": "^5.3",
         "spatie/color": "^1.5",
         "symfony/property-access": "^6.2",
@@ -375,6 +377,9 @@
             },
             "drupal/webform_mailerlite": {
                 "Add support for field mapping": "patches/field-mapping-3499237.patch"
+            },
+            "sparkpost/sparkpost": {
+                "Fix the php-message compoatibility issues": "patches/sparkpost-sparkpost-lib.patch"
             }
         }
     }
