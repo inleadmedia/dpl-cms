@@ -5,6 +5,8 @@
  * Primary module hooks for EO Next Opening Hours module.
  */
 
+use Drupal\eonext_opening_hours\Plugin\Block\PerBranchBlock;
+
 /**
  * Implements hook_theme().
  */
@@ -56,4 +58,22 @@ function eonext_opening_hours_preprocess_paragraph__eonext_opening_hours(array &
   }
 
   $variables['opening_hours'] = \Drupal::service('renderer')->render($block);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function eonext_opening_hours_cron() {
+
+  // Define the cron interval. Midnight.
+  $next_midnight = strtotime('tomorrow');
+  $next_execution = \Drupal::state()->get('eonext_opening_hours.cron_next_execution', 0);
+  $request_time = \Drupal::time()->getRequestTime();
+
+  if ($request_time >= $next_execution) {
+    // Invalidate the tag.
+    \Drupal::service('cache_tags.invalidator')->invalidateTags([PerBranchBlock::MIDNIGHT_CACHE_TAG]);
+    \Drupal::state()->set('eonext_opening_hours.cron_next_execution', $next_midnight);
+    \Drupal::logger('eonext_opening_hours')->info('Cache tag invalidated and next execution time set to @time', ['@time' => date('Y-m-d H:i:s', $next_midnight)]);
+  }
 }
