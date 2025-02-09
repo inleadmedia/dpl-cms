@@ -25,6 +25,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
+
+  /**
+   * Defines the cache tag for midnight.
+   */
+  const MIDNIGHT_CACHE_TAG = 'midnight';
+
   /**
    * Constructs a PerBranchBlock block object.
    *
@@ -149,7 +155,9 @@ final class PerBranchBlock extends BlockBase implements ContainerFactoryPluginIn
       ],
       '#items' => $items,
       '#cache' => [
-        'tags' => [OpeningHoursResourceBase::CACHE_TAG_LIST],
+        'tags' => [OpeningHoursResourceBase::CACHE_TAG_LIST, self::MIDNIGHT_CACHE_TAG],
+        'max-age' => 86400,
+        'contexts' => ['day'],
       ],
       '#attached' => [
         'library' => [
