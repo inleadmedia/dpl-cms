@@ -125,6 +125,8 @@ class LibraryTokenHandlerTest extends UnitTestCase {
    *   Faulty configuration of the library token handler.
    * @param string $message
    *   The expected error message.
+   *
+   * @throws \Drupal\dpl_login\Exception\MissingConfigurationException
    */
   public function testItComplainsIfConfigurationIsNotSet(?array $settings, string $message): void {
     $collection = $this->prophesize(KeyValueStoreExpirableInterface::class);
@@ -139,6 +141,8 @@ class LibraryTokenHandlerTest extends UnitTestCase {
     }))->shouldBeCalledTimes(1);
     $logger_factory = $this->prophesize(LoggerChannelFactoryInterface::class);
     $logger_factory->get(LibraryTokenHandler::LOGGER_KEY)->willReturn($logger->reveal());
+
+    //$this->expectExceptionMessage($message);
 
     $client = $this->prophesize(ClientInterface::class);
 
@@ -156,7 +160,7 @@ class LibraryTokenHandlerTest extends UnitTestCase {
   }
 
   /**
-   * Dataprovider with settings and expected exception messages.
+   * Data provider with settings and expected exception messages.
    *
    * @return mixed[]
    */
@@ -212,10 +216,11 @@ class LibraryTokenHandlerTest extends UnitTestCase {
       $config->get('settings')->willReturn([
         'client_id' => 'client_id',
         'client_secret' => 'client_secret',
-        'redirect_url' => 'redirect_url',
+        'iss_allowed_domains' => '',
         'authorization_endpoint' => 'authorization_endpoint',
         'token_endpoint' => 'token_endpoint',
         'userinfo_endpoint' => 'userinfo_endpoint',
+        'logout_endpoint' => 'logout_endpoint',
         'agency_id' => 99999,
       ]);
     }
