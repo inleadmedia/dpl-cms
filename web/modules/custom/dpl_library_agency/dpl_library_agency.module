@@ -41,6 +41,9 @@ function dpl_library_agency_preprocess_html(array &$variables): void {
     $blacklistedSearchBranchesConfig = DplReactAppsController::buildBranchesListProp($branchSettings->getExcludedSearchBranches());
     $variables['attributes']['data-blacklisted-search-branches-config'] = $blacklistedSearchBranchesConfig;
   }
+  if ($config->get('show_cicero_lms_search_sorting')) {
+    $variables['attributes']['data-show-search-sorting'] = 'true';
+  }
 }
 
 /**
