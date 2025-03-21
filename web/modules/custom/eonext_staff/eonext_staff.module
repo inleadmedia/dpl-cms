@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ */
+
+use Drupal\user\UserInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\views\Views;
 
@@ -39,4 +44,21 @@ function eonext_staff_preprocess_paragraph__eonext_library_staff(array &$variabl
 
   $variables['header'] = t('Library staff', [], ['context' => 'eonext']);
   $variables['staff'] = \Drupal::service('renderer')->render($view_render);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for user entities.
+ */
+function eonext_staff_user_predelete(UserInterface $account): void {
+  // Delete staff entities that belong to this account.
+  $storage = \Drupal::entityTypeManager()->getStorage('eonext_library_staff');
+
+  $staffEntities = $storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+
+  $storage->delete(
+    $storage->loadMultiple($staffEntities)
+  );
 }
