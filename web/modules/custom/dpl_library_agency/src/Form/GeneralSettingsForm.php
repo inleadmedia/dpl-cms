@@ -297,6 +297,12 @@ class GeneralSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('show_search_branch_selection') ?? FALSE,
     ];
 
+    $form['show_cicero_lms_search_sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show search sorting for Cicero LMS consumer', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('show_cicero_lms_search_sorting') ?? FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -354,6 +360,7 @@ class GeneralSettingsForm extends ConfigFormBase {
       ])
       ->set('use_lms_user_api', $form_state->getValue('use_lms_user_api'))
       ->set('show_search_branch_selection', $form_state->getValue('show_search_branch_selection'))
+      ->set('show_cicero_lms_search_sorting', $form_state->getValue('show_cicero_lms_search_sorting'))
       ->save();
 
     $this->branchSettings->setExcludedAvailabilityBranches(array_filter($form_state->getValue('availability')));
