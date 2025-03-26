@@ -32,7 +32,12 @@ function eonext_opening_hours_theme() {
  */
 function eonext_opening_hours_preprocess_paragraph__eonext_opening_hours(array &$variables): void {
 
-  $branches = $variables['elements']['field_available_branches'];
+  $branches = $variables['elements']['field_available_branches'] ?? [];
+
+  if (!count($branches)) {
+    return;
+  }
+
   // Available branches are stored in array elements that has an integer key.
   $branches = array_filter($branches, 'is_int', ARRAY_FILTER_USE_KEY);
 
