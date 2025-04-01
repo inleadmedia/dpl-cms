@@ -5,6 +5,7 @@ namespace Drupal\dpl_library_token;
 use Drupal\Core\KeyValueStore\KeyValueExpirableFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\dpl_login\Adgangsplatformen\Config;
+use Drupal\dpl_login\Exception\MissingConfigurationException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Log\LogLevel;
@@ -16,7 +17,6 @@ class LibraryTokenHandler {
 
   const LIBRARY_TOKEN_KEY = 'library_token';
   const TOKEN_COLLECTION_KEY = 'dpl_library_token';
-  const NEXT_EXECUTION_KEY = 'dpl_library_token.next_execution';
   const LOGGER_KEY = 'dpl_library_tokens';
 
   /**
@@ -72,13 +72,30 @@ class LibraryTokenHandler {
    * Retrieve token from external service and save it.
    */
   public function retrieveAndStoreToken(bool $force = FALSE): null|bool {
-    // If force is False and if token is already stored.
+    // If force is FALSE and if token is already stored.
     if (!$force && $this->getToken()) {
       return NULL;
     }
 
+    try {
+      $agencyId = $this->adgangsplatformenConfig->getAgencyId();
+      $clientId = $this->adgangsplatformenConfig->getClientId();
+      $clientSecret = $this->adgangsplatformenConfig->getClientSecret();
+      $tokenEndpoint = $this->adgangsplatformenConfig->getTokenEndpoint();
+    }
+    catch (MissingConfigurationException $e) {
+
+      $variables = [
+        '@message' => 'Could not retrieve library token',
+        '@error_message' => $e->getMessage(),
+      ];
+
+      $this->logger->log(LogLevel::ERROR, '@message. Details: @error_message', $variables);
+      return FALSE;
+    }
+
     // Try to fetch token, if not possible return false.
-    if (!$token = $this->fetchToken()) {
+    if (!$token = $this->fetchToken($agencyId, $clientId, $clientSecret, $tokenEndpoint)) {
       return FALSE;
     }
 
@@ -115,24 +132,26 @@ class LibraryTokenHandler {
    * Fetches and returns library token from remote service.
    *
    * @return \Drupal\dpl_library_token\LibraryToken|null
-   *   If token was fetched it is returned. Otherwise NULL.
+   *   If token was fetched it is returned. Otherwise, return NULL.
+   *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    */
-  public function fetchToken(): ?LibraryToken {
+  public function fetchToken(string $agencyId, string $clientId, string $clientSecret, string $tokenEndpoint,): ?LibraryToken {
     $token = NULL;
 
     try {
-      $agency = sprintf('@%d', $this->adgangsplatformenConfig->getAgencyId());
+      $agency = sprintf('@%d', $agencyId);
 
       $response = $this->httpClient
-        ->request('POST', $this->adgangsplatformenConfig->getTokenEndpoint(), [
+        ->request('POST', $tokenEndpoint, [
           'form_params' => [
             'grant_type' => 'password',
             'username' => $agency,
             'password' => $agency,
           ],
           'auth' => [
-            $this->adgangsplatformenConfig->getClientId(),
-            $this->adgangsplatformenConfig->getClientSecret(),
+            $clientId,
+            $clientSecret,
           ],
         ]);
 

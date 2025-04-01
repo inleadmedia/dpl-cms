@@ -112,6 +112,12 @@ function dpl_update_install(): string {
   $messages[] = dpl_update_update_10028();
   $messages[] = dpl_update_update_10029();
   $messages[] = dpl_update_update_10030();
+  $messages[] = dpl_update_update_10031();
+  $messages[] = dpl_update_update_10034();
+  $messages[] = dpl_update_update_10035();
+  $messages[] = dpl_update_update_10037();
+  $messages[] = dpl_update_update_10039();
+  $messages[] = dpl_update_update_10040();
 
   return implode('\r\n', $messages);
 }
@@ -351,4 +357,111 @@ function dpl_update_update_10030(): string {
   );
 
   return $return;
+}
+
+/**
+ * Installing simple sitemap.
+ */
+function dpl_update_update_10031(): string {
+  return _dpl_update_install_modules(['simple_sitemap']);
+}
+
+/**
+ * Installing purge queues.
+ */
+function dpl_update_update_10032(): string {
+  return _dpl_update_install_modules(['purge_queues']);
+}
+
+/**
+ * Use alternate database backend for purge queue.
+ */
+function dpl_update_update_10033(): string {
+  // @see https://git.drupalcode.org/project/purge_queues/-/blob/2.0.x/src/Plugin/Purge/Queue/AltDatabaseQueue.php?ref_type=heads#L12
+  \Drupal::configFactory()->getEditable('purge.plugins')->set('queue', 'database_alt')->save();
+  return 'Configured purge queue to use database_alt.';
+}
+
+/**
+ * Installing graphql_compose_routes.
+ */
+function dpl_update_update_10034(): string {
+  return _dpl_update_install_modules(['graphql_compose_routes']);
+}
+
+/**
+ * Introducing a two module for the Go project and Lagoon handling.
+ */
+function dpl_update_update_10035(): string {
+  return _dpl_update_install_modules(['dpl_go', 'dpl_lagoon']);
+}
+
+/**
+ * Install state log.
+ */
+function dpl_update_update_10036(): string {
+  return _dpl_update_install_modules(['state_log']);
+}
+
+/**
+ * Installing Media VideoTool.
+ */
+function dpl_update_update_10037(): string {
+  return _dpl_update_install_modules(['media_videotool']);
+}
+
+/**
+ * Adding autowire_plugin_trait for BNF.
+ */
+function dpl_update_update_10038(): string {
+  return _dpl_update_install_modules(['autowire_plugin_trait']);
+}
+
+/**
+ * Remove old field instances and storage for paragraph fields.
+ */
+function dpl_update_update_10039(): string {
+  $messages = [];
+
+  $instance = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->load('paragraph.go_linkbox.field_go_link');
+  if ($instance) {
+    $instance->delete();
+    $messages[] = 'Deleted field.instance: paragraph.go_linkbox.field_go_link';
+  }
+
+  $instance = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->load('paragraph.go_link.field_link');
+  if ($instance) {
+    $instance->delete();
+    $messages[] = 'Deleted field.instance: paragraph.go_link.field_link';
+  }
+
+  $storage = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->load('paragraph.field_go_link');
+  if ($storage) {
+    $storage->delete();
+    $messages[] = 'Deleted field.storage: paragraph.field_go_link';
+  }
+
+  return $messages
+    ? implode('; ', $messages)
+    : 'No stale paragraph field configs found.';
+}
+
+/**
+ * Installing External Auth module.
+ */
+function dpl_update_update_10040(): string {
+  return _dpl_update_install_modules(['externalauth']);
+}
+
+/**
+ * Install HTTP cache control module.
+ */
+function dpl_update_update_10041(): string {
+  return _dpl_update_install_modules(['http_cache_control']);
 }
