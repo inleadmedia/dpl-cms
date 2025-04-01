@@ -5,6 +5,8 @@ dependencies:
   module:
     - media
     - node
+_core:
+  default_config_hash: MYQ4TNG7pNz6G7IvNRJg5tzBxMuzMJC_DQTm3zV2DBU
 id: node.field_e_resource_title_image
 field_name: field_e_resource_title_image
 entity_type: node

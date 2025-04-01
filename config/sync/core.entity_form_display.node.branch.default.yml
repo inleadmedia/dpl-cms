@@ -49,7 +49,8 @@ content:
     type: address_default
     weight: 10
     region: content
-    settings: {  }
+    settings:
+      wrapper_type: details
     third_party_settings: {  }
   field_email:
     type: email_default
@@ -85,6 +86,7 @@ content:
       features:
         add_above: '0'
         collapse_edit_all: collapse_edit_all
+        convert: '0'
         duplicate: duplicate
     third_party_settings:
       paragraphs_features:
@@ -92,10 +94,12 @@ content:
         add_in_between_link_count: 0
         delete_confirmation: true
         show_drag_and_drop: true
+        show_collapse_all: true
       paragraphs_ee:
         paragraphs_ee:
           dialog_off_canvas: false
           dialog_style: tiles
+          drag_drop: true
   field_phone:
     type: telephone_default
     weight: 12

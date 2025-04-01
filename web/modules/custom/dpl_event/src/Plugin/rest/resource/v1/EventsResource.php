@@ -6,8 +6,8 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\CacheableResponse;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\dpl_event\Entity\EventInstance;
 use Drupal\drupal_typed\RequestTyped;
-use Drupal\recurring_events\Entity\EventInstance;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -167,6 +167,14 @@ final class EventsResource extends EventResourceBase {
                       'description' => 'The name of a tag.',
                     ],
                   ],
+                  'partners' => [
+                    'type' => 'array',
+                    'description' => 'The partners associated with the event.',
+                    'items' => [
+                      'type' => 'string',
+                      'description' => 'The name of a partner.',
+                    ],
+                  ],
                   'ticket_categories' => [
                     'type' => 'array',
                     'description' => 'Ticket categories used for the event. Not present for events without ticketing.',
@@ -237,6 +245,14 @@ final class EventsResource extends EventResourceBase {
                       ],
                     ],
                   ],
+                  'screen_names' => [
+                    'type' => 'array',
+                    'description' => 'The screens this event should be shown on.',
+                    'items' => [
+                      'type' => 'string',
+                      'description' => 'A screen name.',
+                    ],
+                  ],
                 ],
                 'required' => ['uuid', 'title', 'created_at', 'updated_at', 'url', 'state', 'date_time'],
               ],
@@ -294,6 +310,7 @@ final class EventsResource extends EventResourceBase {
 
     // Create cache metadata.
     $cache_metadata = new CacheableMetadata();
+    $cache_metadata->setCacheContexts(['url.query_args:from_date']);
     $cache_metadata->setCacheTags(['eventinstance_list', 'eventseries_list']);
 
     // Add cache metadata to the response.

@@ -19,7 +19,7 @@ $config['system.site']['uuid'] = '13ef1a53-dfb4-4c82-9b64-44586a366729';
 
 // Hardcode the site mail as we don't want to allow changing it in the UI.
 // The email needs to match what is setup in Azure Communication Services.
-$config['system.site']['mail'] = 'mail@folkebibliotekernescms.dk';
+# $config['system.site']['mail'] = 'mail@folkebibliotekernescms.dk';
 
 // Configure logging using the project name and environment from the Lagoon
 // environment.
@@ -38,7 +38,9 @@ $settings['config_exclude_modules'] = [
   'dpl_related_content_tests',
   'dpl_example_content',
   'dpl_example_breadcrumb',
+  'dblog',
   'devel',
+  'devel_generate',
   'field_ui',
   'purge_ui',
   'views_ui',
@@ -54,9 +56,25 @@ $settings['config_exclude_modules'] = [
 // advanced security measure: '../config/sync'.
 $settings['config_sync_directory'] = '../config/sync';
 
+/**
+ * Private file path.
+ *
+ * A local file system path where private files will be stored. This directory
+ * must be absolute, outside the Drupal installation directory and not
+ * accessible over the web.
+ *
+ * Note: Caches need to be cleared when this value is changed to make the
+ * private:// stream wrapper available to the system.
+ *
+ * See https://www.drupal.org/documentation/modules/file for more information
+ * about securing private files.
+ */
+$settings['file_private_path'] = $app_root . '/sites/default/files/private';
+
 // Set service base urls for the react apps.
 $config['dpl_react_apps.settings']['services'] = [
   'cover' => ['base_url' => 'https://cover.dandigbib.org'],
+  // @todo This should be updated to use the correct URL when available.
   'fbi' => ['base_url' => 'https://fbi-api.dbc.dk/[profile]/graphql'],
   'material-list' => ['base_url' => 'https://prod.materiallist.dandigbib.org'],
 ];
@@ -81,21 +99,22 @@ if (getenv('CI')) {
   $config['dpl_fbs.settings'] = ['base_url' => 'http://fbs-openplatform.dbc.dk'];
   $config['dpl_publizon.settings'] = ['base_url' => 'http://pubhub-openplatform.dbc.dk'];
   // Adgangsplatformen OpenID Connect client.
-  $config['openid_connect.settings.adgangsplatformen']['settings']['authorization_endpoint'] = 'http://login.bib.dk/oauth/authorize';
-  $config['openid_connect.settings.adgangsplatformen']['settings']['token_endpoint'] = 'http://login.bib.dk/oauth/token/';
-  $config['openid_connect.settings.adgangsplatformen']['settings']['userinfo_endpoint'] = 'http://login.bib.dk/userinfo/';
-  $config['openid_connect.settings.adgangsplatformen']['settings']['logout_endpoint'] = 'http://login.bib.dk/logout';
+  $config['openid_connect.client.adgangsplatformen']['settings']['authorization_endpoint'] = 'http://login.bib.dk/oauth/authorize';
+  $config['openid_connect.client.adgangsplatformen']['settings']['token_endpoint'] = 'http://login.bib.dk/oauth/token/';
+  $config['openid_connect.client.adgangsplatformen']['settings']['userinfo_endpoint'] = 'http://login.bib.dk/userinfo/';
+  $config['openid_connect.client.adgangsplatformen']['settings']['logout_endpoint'] = 'http://login.bib.dk/logout';
   // The actual values here are not important. The primary thing is that the
   // Adgangsplatformen OpenID Connect client is configured.
-  $config['openid_connect.settings.adgangsplatformen']['settings']['client_id'] = 'dummy-id';
-  $config['openid_connect.settings.adgangsplatformen']['settings']['client_id'] = 'dummy-secret';
-  $config['openid_connect.settings.adgangsplatformen']['settings']['agency_id'] = '100200';
+  $config['openid_connect.client.adgangsplatformen']['settings']['client_id'] = 'dummy-id';
+  $config['openid_connect.client.adgangsplatformen']['settings']['client_id'] = 'dummy-secret';
+  $config['openid_connect.client.adgangsplatformen']['settings']['agency_id'] = '100200';
 
   // Set service base urls for the react apps.
   // We need http domains for testing in CI context.
   $config['dpl_react_apps.settings']['services'] = [
     'cover' => ['base_url' => 'http://cover.dandigbib.org'],
-    'fbi' => ['base_url' => 'http://fbi-api.dbc.dk/[profile]/graphql'],
+    // @todo This should be updated to use the correct URL when available.
+    'fbi' => ['base_url' => 'http://temp.fbi-api.dbc.dk/[profile]/graphql'],
     'material-list' => ['base_url' => 'http://prod.materiallist.dandigbib.org'],
   ];
 
@@ -114,6 +133,10 @@ if (getenv('LAGOON_ENVIRONMENT_TYPE') !== 'production') {
   // because the user pulling in the changes won't have permissions to modify
   // files in the directory.
   $settings['skip_permissions_hardening'] = TRUE;
+
+  // Set default Unilogin configuration on non-production environments.
+  $config['dpl_unilogin.settings']['unilogin_api_endpoint'] = 'https://et-broker.unilogin.dk';
+  $config['dpl_unilogin.settings']['unilogin_api_wellknown_endpoint'] = 'https://et-broker.unilogin.dk/auth/realms/broker/.well-known/openid-configuration';
 }
 
 // Setup Redis.

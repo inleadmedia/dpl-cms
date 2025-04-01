@@ -101,7 +101,7 @@ class AlphabeticalFilter extends FilterPluginBase {
     }
 
     $index = array_unique($index);
-    \Safe\natsort($index);
+    natsort($index);
 
     return $index;
   }
@@ -117,30 +117,16 @@ class AlphabeticalFilter extends FilterPluginBase {
     });
 
     if (!empty($selected_indexes)) {
-      /** @var \Drupal\Core\Database\Query\Condition $or */
-      /* @phpstan-ignore-next-line */
-      $or = $this->query->getConnection()->condition('OR');
-
-      foreach ($selected_indexes as $item) {
-        $or->condition("{$table}.title", "{$item}%", 'LIKE');
-      }
-
-      /* @phpstan-ignore-next-line */
-      $this->query->addWhere(0, $or);
+      $index = reset($selected_indexes);
+      $this->query->addWhere(0, "{$table}.title", "{$index}%", 'LIKE');
     }
-
-    // $argumentId = key($this->view->argument);
-    // $argument = $this->view->argument[$argumentId];
-    // $argument_table = $argument->definition['table'];
-    // $argument_field = $argument->definition['field'];
-    // $argument_value = $this->view->args[0];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags(): array {
-    return Cache::mergeTags(['node_list:e_resource'], parent::getCacheTags());
-  }
+//  public function getCacheTags(): array {
+//    return Cache::mergeTags(['node_list:e_resource'], parent::getCacheTags());
+//  }
 
 }

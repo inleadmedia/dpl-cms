@@ -16,197 +16,86 @@ dependencies:
     - node.type.e_resource
   module:
     - entity_reference_revisions
+    - field_group
     - file
     - layout_builder
+    - layout_discovery
     - link
     - text
     - user
 third_party_settings:
   layout_builder:
-    enabled: true
+    enabled: false
     allow_custom: false
-    sections:
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: ''
-        components:
-          64615810-71e4-4692-ba22-420d9ca51426:
-            uuid: 64615810-71e4-4692-ba22-420d9ca51426
-            region: content
-            configuration:
-              id: 'extra_field_block:node:e_resource:links'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-            weight: 0
-            additional: {  }
-          97344deb-00ae-415e-8689-753ffd5649fa:
-            uuid: 97344deb-00ae-415e-8689-753ffd5649fa
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:body'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: text_default
-                label: hidden
-                settings: {  }
-                third_party_settings: {  }
-            weight: 1
-            additional: {  }
-          22147da1-b0fd-4c88-a860-a29a391473bf:
-            uuid: 22147da1-b0fd-4c88-a860-a29a391473bf
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_title_image'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: false
-                third_party_settings: {  }
-            weight: 2
-            additional: {  }
-          1d195820-945d-42fa-b88f-550527171e7b:
-            uuid: 1d195820-945d-42fa-b88f-550527171e7b
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_list_image'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: false
-                third_party_settings: {  }
-            weight: 3
-            additional: {  }
-          039c713c-def8-43ef-8318-331caa965d99:
-            uuid: 039c713c-def8-43ef-8318-331caa965d99
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_lead'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: basic_string
-                label: above
-                settings: {  }
-                third_party_settings: {  }
-            weight: 4
-            additional: {  }
-          3040f3a0-e71a-42aa-8d06-82d8a1b8b69d:
-            uuid: 3040f3a0-e71a-42aa-8d06-82d8a1b8b69d
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_link'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: link
-                label: above
-                settings:
-                  trim_length: 80
-                  url_only: false
-                  url_plain: false
-                  rel: ''
-                  target: ''
-                third_party_settings: {  }
-            weight: 5
-            additional: {  }
-          83c3f054-c4b0-4248-823f-79229d59be19:
-            uuid: 83c3f054-c4b0-4248-823f-79229d59be19
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_category'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: true
-                third_party_settings: {  }
-            weight: 6
-            additional: {  }
-          21f8c852-bd07-4e05-8b45-1711679200f6:
-            uuid: 21f8c852-bd07-4e05-8b45-1711679200f6
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_access'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: true
-                third_party_settings: {  }
-            weight: 7
-            additional: {  }
-          8ece0a0c-a899-4544-8d6e-ce33ec001d92:
-            uuid: 8ece0a0c-a899-4544-8d6e-ce33ec001d92
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_tags'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: true
-                third_party_settings: {  }
-            weight: 8
-            additional: {  }
-          53259cd2-b173-4d9b-86a9-c898a145adc0:
-            uuid: 53259cd2-b173-4d9b-86a9-c898a145adc0
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_materials'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: entity_reference_revisions_entity_view
-                label: above
-                settings:
-                  view_mode: default
-                  link: ''
-                third_party_settings: {  }
-            weight: 9
-            additional: {  }
-          2becaea5-fb0a-4039-8d90-d41be5a789eb:
-            uuid: 2becaea5-fb0a-4039-8d90-d41be5a789eb
-            region: content
-            configuration:
-              id: 'field_block:node:e_resource:field_e_resource_files'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: file_default
-                label: above
-                settings:
-                  use_description_as_link_text: true
-                third_party_settings: {  }
-            weight: 10
-            additional: {  }
-        third_party_settings: {  }
+  field_group:
+    group_left:
+      children:
+        - field_e_resource_list_image
+        - field_e_resource_title_image
+      label: left
+      parent_name: ''
+      region: content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        classes: left
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_center:
+      children:
+        - links
+        - field_e_resource_lead
+        - body
+        - field_e_resource_category
+        - field_e_resource_tags
+      label: center
+      parent_name: ''
+      region: content
+      weight: 1
+      format_type: html_element
+      format_settings:
+        classes: center
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+    group_right:
+      children:
+        - field_e_resource_link
+        - field_e_resource_access
+      label: right
+      parent_name: ''
+      region: content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        classes: right
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        element: div
+        show_label: false
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+_core:
+  default_config_hash: HJjeFu3mLJLxV6Q5p1ZECdLxVS-KH31Gmbh5rt-dPkc
 id: node.e_resource.default
 targetEntityType: node
 bundle: e_resource
@@ -217,7 +106,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 101
+    weight: 5
     region: content
   field_e_resource_access:
     type: entity_reference_label
@@ -225,7 +114,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 107
+    weight: 5
     region: content
   field_e_resource_category:
     type: entity_reference_label
@@ -233,7 +122,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 106
+    weight: 6
     region: content
   field_e_resource_files:
     type: file_default
@@ -241,14 +130,14 @@ content:
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    weight: 110
+    weight: 7
     region: content
   field_e_resource_lead:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 104
+    weight: 4
     region: content
   field_e_resource_link:
     type: link
@@ -260,7 +149,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 105
+    weight: 4
     region: content
   field_e_resource_list_image:
     type: entity_reference_entity_view
@@ -269,7 +158,7 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 103
+    weight: 4
     region: content
   field_e_resource_materials:
     type: entity_reference_revisions_entity_view
@@ -278,7 +167,7 @@ content:
       view_mode: default
       link: ''
     third_party_settings: {  }
-    weight: 109
+    weight: 6
     region: content
   field_e_resource_tags:
     type: entity_reference_label
@@ -286,7 +175,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 108
+    weight: 7
     region: content
   field_e_resource_title_image:
     type: entity_reference_entity_view
@@ -295,12 +184,12 @@ content:
       view_mode: default
       link: false
     third_party_settings: {  }
-    weight: 102
+    weight: 5
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 3
     region: content
 hidden:
   langcode: true

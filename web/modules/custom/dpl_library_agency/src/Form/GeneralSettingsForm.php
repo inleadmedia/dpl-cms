@@ -14,9 +14,7 @@ use Drupal\dpl_library_agency\FbiProfileType;
 use Drupal\dpl_library_agency\GeneralSettings;
 use Drupal\dpl_library_agency\ReservationSettings;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use function Safe\array_combine as array_combine;
 use function Safe\preg_match as preg_match;
-use function Safe\usort as usort;
 
 /**
  * General Settings form for a library agency.
@@ -287,6 +285,24 @@ class GeneralSettingsForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
+    $form['use_lms_user_api'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use LMS user API', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('use_lms_user_api') ?? FALSE,
+    ];
+
+    $form['show_search_branch_selection'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show branch selection on searchbox', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('show_search_branch_selection') ?? FALSE,
+    ];
+
+    $form['show_cicero_lms_search_sorting'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show search sorting for Cicero LMS consumer', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('show_cicero_lms_search_sorting') ?? FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -342,6 +358,9 @@ class GeneralSettingsForm extends ConfigFormBase {
         'local' => $form_state->getValue('fbi_profile_local'),
         'global' => $form_state->getValue('fbi_profile_global'),
       ])
+      ->set('use_lms_user_api', $form_state->getValue('use_lms_user_api'))
+      ->set('show_search_branch_selection', $form_state->getValue('show_search_branch_selection'))
+      ->set('show_cicero_lms_search_sorting', $form_state->getValue('show_cicero_lms_search_sorting'))
       ->save();
 
     $this->branchSettings->setExcludedAvailabilityBranches(array_filter($form_state->getValue('availability')));

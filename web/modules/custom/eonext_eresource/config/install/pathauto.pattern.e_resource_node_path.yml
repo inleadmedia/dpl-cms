@@ -4,6 +4,8 @@ status: true
 dependencies:
   module:
     - node
+_core:
+  default_config_hash: gxo2TwyXLl0K6u4RNqtix3F6qz3RmZZb7La4Tlkj5l0
 id: e_resource_node_path
 label: 'E-resource node path'
 type: 'canonical_entities:node'

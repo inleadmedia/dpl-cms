@@ -64,6 +64,8 @@ third_party_settings:
             weight: 0
             additional: {  }
         third_party_settings: {  }
+_core:
+  default_config_hash: I-x8sNUrmKjo4bLxmVQk5QB59BUXJk-V9Gl96GQZLv0
 id: taxonomy_term.e_resource_category.full
 targetEntityType: taxonomy_term
 bundle: e_resource_category

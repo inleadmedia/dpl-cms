@@ -7,6 +7,8 @@ dependencies:
     - node.type.e_resource
   module:
     - link
+_core:
+  default_config_hash: rZ6TLqsMpAr2d08WSC-HdR_lfobJCeRsNRb6bS86Jmw
 id: node.e_resource.field_e_resource_link
 field_name: field_e_resource_link
 entity_type: node

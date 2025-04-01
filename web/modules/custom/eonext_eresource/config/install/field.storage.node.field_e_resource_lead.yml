@@ -4,6 +4,8 @@ status: true
 dependencies:
   module:
     - node
+_core:
+  default_config_hash: 1UKaJhHMFlq7sehwUr3YYnQUfg6Kg0BMgGFM4WUehA8
 id: node.field_e_resource_lead
 field_name: field_e_resource_lead
 entity_type: node

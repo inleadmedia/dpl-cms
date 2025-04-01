@@ -16,6 +16,7 @@
 # Ingore files that are only for the current local environment
 web/sites/*/settings.local.php
 web/sites/*/services.local.yml
+web/sites/default/settings.php
 
 # Ignore SimpleTest multi-site environment.
 web/sites/simpletest
@@ -65,3 +66,6 @@ docker-compose.override.yml
 
 # Danish translations folder
 /config/sync/language/da
+
+# We use this in the BNF setup, it should never be committed.
+/web/sites/sites.php

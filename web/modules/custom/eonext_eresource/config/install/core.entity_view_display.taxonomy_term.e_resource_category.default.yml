@@ -12,6 +12,8 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
+_core:
+  default_config_hash: 4FbF0tivKk1bDwwEak-q2jBbuZ0Amy7ks8O3aOnFKD0
 id: taxonomy_term.e_resource_category.default
 targetEntityType: taxonomy_term
 bundle: e_resource_category

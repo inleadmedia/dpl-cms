@@ -30,6 +30,21 @@ function _dpl_update_install_modules(array $modules): string {
 }
 
 /**
+ * Helper function to uninstall modules.
+ *
+ * @param string[] $modules
+ *   The modules to install.
+ *
+ * @return string
+ *   The feedback message.
+ */
+function _dpl_update_uninstall_modules(array $modules): string {
+  DrupalTyped::service(ModuleInstallerInterface::class, 'module_installer')->uninstall($modules);
+  $modules_string = implode(', ', $modules);
+  return "Uninstalled modules: {$modules_string}.";
+}
+
+/**
  * Helper function, for adding translations.
  *
  * Generally speaking, this should be avoided, as it is DDF's responsibility
@@ -84,6 +99,25 @@ function dpl_update_install(): string {
   $messages[] = dpl_update_update_10017();
   $messages[] = dpl_update_update_10018();
   $messages[] = dpl_update_update_10019();
+  $messages[] = dpl_update_update_10020();
+  $messages[] = dpl_update_update_10021();
+  $messages[] = dpl_update_update_10022();
+  $messages[] = dpl_update_update_10023();
+  $messages[] = dpl_update_update_10024();
+
+  // Do not uninstall dblog module on install. It is not installed by default.
+  // $messages[] = dpl_update_update_10025()
+  $messages[] = dpl_update_update_10026();
+  $messages[] = dpl_update_update_10027();
+  $messages[] = dpl_update_update_10028();
+  $messages[] = dpl_update_update_10029();
+  $messages[] = dpl_update_update_10030();
+  $messages[] = dpl_update_update_10031();
+  $messages[] = dpl_update_update_10034();
+  $messages[] = dpl_update_update_10035();
+  $messages[] = dpl_update_update_10037();
+  $messages[] = dpl_update_update_10039();
+  $messages[] = dpl_update_update_10040();
 
   return implode('\r\n', $messages);
 }
@@ -238,4 +272,196 @@ function dpl_update_update_10019(): string {
   );
 
   return $return;
+}
+
+/**
+ * Uninstall devel_generate module.
+ */
+function dpl_update_update_10020(): string {
+  return _dpl_update_uninstall_modules(['devel_generate']);
+}
+
+/**
+ * Install typed_data, graphql, graphql_compose and consumers modules.
+ */
+function dpl_update_update_10021(): string {
+  return _dpl_update_install_modules(['typed_data', 'graphql', 'graphql_compose', 'consumers']);
+}
+
+/**
+ * Install dpl_unilogin module.
+ */
+function dpl_update_update_10022(): string {
+  return _dpl_update_install_modules(['dpl_unilogin']);
+}
+
+/**
+ * Install dpl_graphql module.
+ */
+function dpl_update_update_10023(): string {
+  return _dpl_update_install_modules(['dpl_graphql']);
+}
+
+/**
+ * Install dpl_consumers.
+ */
+function dpl_update_update_10024(): string {
+  return _dpl_update_install_modules(['dpl_consumers']);
+}
+
+/**
+ * Uninstall dblog module.
+ */
+function dpl_update_update_10025(): string {
+  return _dpl_update_uninstall_modules(['dblog']);
+}
+
+/**
+ * Install dpl_webmaster.
+ */
+function dpl_update_update_10026(): string {
+  return _dpl_update_install_modules(['dpl_webmaster']);
+}
+
+/**
+ * Install simple_oauth.
+ */
+function dpl_update_update_10027(): string {
+  return _dpl_update_install_modules(['simple_oauth']);
+}
+
+/**
+ * Uninstall config_filter.
+ */
+function dpl_update_update_10028(): string {
+  return _dpl_update_uninstall_modules(['config_filter']);
+}
+
+/**
+ * Installing dpl_logging.
+ */
+function dpl_update_update_10029(): string {
+  return _dpl_update_install_modules(['dpl_logging']);
+}
+
+/**
+ * Add initial translation for event display.
+ */
+function dpl_update_update_10030(): string {
+  $return = _dpl_update_update_translation('Expired', 'Afholdt', 'DPL event');
+
+  $return .= _dpl_update_update_translation(
+    'Date',
+    'Dato',
+    'DPL event'
+  );
+
+  return $return;
+}
+
+/**
+ * Installing simple sitemap.
+ */
+function dpl_update_update_10031(): string {
+  return _dpl_update_install_modules(['simple_sitemap']);
+}
+
+/**
+ * Installing purge queues.
+ */
+function dpl_update_update_10032(): string {
+  return _dpl_update_install_modules(['purge_queues']);
+}
+
+/**
+ * Use alternate database backend for purge queue.
+ */
+function dpl_update_update_10033(): string {
+  // @see https://git.drupalcode.org/project/purge_queues/-/blob/2.0.x/src/Plugin/Purge/Queue/AltDatabaseQueue.php?ref_type=heads#L12
+  \Drupal::configFactory()->getEditable('purge.plugins')->set('queue', 'database_alt')->save();
+  return 'Configured purge queue to use database_alt.';
+}
+
+/**
+ * Installing graphql_compose_routes.
+ */
+function dpl_update_update_10034(): string {
+  return _dpl_update_install_modules(['graphql_compose_routes']);
+}
+
+/**
+ * Introducing a two module for the Go project and Lagoon handling.
+ */
+function dpl_update_update_10035(): string {
+  return _dpl_update_install_modules(['dpl_go', 'dpl_lagoon']);
+}
+
+/**
+ * Install state log.
+ */
+function dpl_update_update_10036(): string {
+  return _dpl_update_install_modules(['state_log']);
+}
+
+/**
+ * Installing Media VideoTool.
+ */
+function dpl_update_update_10037(): string {
+  return _dpl_update_install_modules(['media_videotool']);
+}
+
+/**
+ * Adding autowire_plugin_trait for BNF.
+ */
+function dpl_update_update_10038(): string {
+  return _dpl_update_install_modules(['autowire_plugin_trait']);
+}
+
+/**
+ * Remove old field instances and storage for paragraph fields.
+ */
+function dpl_update_update_10039(): string {
+  $messages = [];
+
+  $instance = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->load('paragraph.go_linkbox.field_go_link');
+  if ($instance) {
+    $instance->delete();
+    $messages[] = 'Deleted field.instance: paragraph.go_linkbox.field_go_link';
+  }
+
+  $instance = \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->load('paragraph.go_link.field_link');
+  if ($instance) {
+    $instance->delete();
+    $messages[] = 'Deleted field.instance: paragraph.go_link.field_link';
+  }
+
+  $storage = \Drupal::entityTypeManager()
+    ->getStorage('field_storage_config')
+    ->load('paragraph.field_go_link');
+  if ($storage) {
+    $storage->delete();
+    $messages[] = 'Deleted field.storage: paragraph.field_go_link';
+  }
+
+  return $messages
+    ? implode('; ', $messages)
+    : 'No stale paragraph field configs found.';
+}
+
+/**
+ * Installing External Auth module.
+ */
+function dpl_update_update_10040(): string {
+  return _dpl_update_install_modules(['externalauth']);
+}
+
+/**
+ * Install HTTP cache control module.
+ */
+function dpl_update_update_10041(): string {
+  return _dpl_update_install_modules(['http_cache_control']);
 }
