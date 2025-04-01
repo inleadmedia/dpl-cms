@@ -40,10 +40,10 @@
             "type": "package",
             "package": {
                 "name": "inleadmedia/dpl-react",
-                "version": "0.0.0-dev",
+                "version": "2025.11.0+inlead.12.03.2025",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-development/dist-development.zip",
+                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.11.0%2Binlead.12.03.2025/dist-2025-11-0-inlead-12-03-2025-449b56c1b4d71919949790c9fb5dc1f60e73dbb7.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -56,9 +56,9 @@
             "package": {
                 "name": "inleadmedia/dpl-design-system",
                 "type": "drupal-library",
-                "version": "0.0.0-dev",
+                "version": "2025.11.0+inlead.12.03.2025",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/branch-development/dist-development.zip",
+                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.11.0%2Binlead.12.03.2025/dist-2025-11-0-inlead-12-03-2025-7399eb39bd3c26f8b9a361b54320713dcab9e3ab.zip",
                     "type": "zip"
                 }
             }
@@ -185,8 +185,8 @@
         "drupal/webform": "^6.2",
         "drupal/webform_mailerlite": "^1.0",
         "drush/drush": "^12",
-        "inleadmedia/dpl-design-system": "0.0.0-dev",
-        "inleadmedia/dpl-react": "0.0.0-dev",
+        "inleadmedia/dpl-design-system": "2025.11.0+inlead.12.03.2025",
+        "inleadmedia/dpl-react": "2025.11.0+inlead.12.03.2025",
         "mnsami/composer-custom-directory-installer": "^2.0",
         "myclabs/php-enum": "^1.8",
         "npm-asset/select2": "^4.0",
