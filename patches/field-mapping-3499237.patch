@@ -1,0 +1,110 @@
+diff --git a/src/Plugin/WebformHandler/WebformMailerliteHandler.php b/src/Plugin/WebformHandler/WebformMailerliteHandler.php
+index 09c5244..f4238e1 100644
+--- a/src/Plugin/WebformHandler/WebformMailerliteHandler.php
++++ b/src/Plugin/WebformHandler/WebformMailerliteHandler.php
+@@ -4,6 +4,7 @@ namespace Drupal\webform_mailerlite\Plugin\WebformHandler;
+
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Site\Settings;
++use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\webform\Plugin\WebformHandlerBase;
+ use Drupal\webform\WebformSubmissionInterface;
+ use MailerLite\MailerLite;
+@@ -23,6 +24,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
+  */
+ class WebformMailerliteHandler extends WebformHandlerBase {
+
++  use StringTranslationTrait;
++
+   /**
+    * The Mailerlite client.
+    *
+@@ -78,6 +81,7 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+     return [
+       'list' => '',
+       'email' => '',
++      'fields' => [],
+     ];
+   }
+
+@@ -111,13 +115,55 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+       '#required' => TRUE,
+       '#default_value' => $default_value,
+       '#options' => $options,
+-      '#empty_option'=> $this->t('- Select an option -'),
++      '#empty_option' => $this->t('- Select an option -'),
+       '#description' => $this->t('Select the email element you want to use for subscribing to the MailerLite list specified above.'),
+     ];
+
++    $form['mailerlite']['fields'] = [
++      '#type' => 'webform_codemirror',
++      '#mode' => 'text/x-yaml',
++      '#title' => $this->t('Fields Mapping'),
++      '#description' => $this->t('Enter the fields you want to map to MailerLite. Each field should be on a new line in the format "machine_name_of_filed: mailerlite_field_name". Available fields: https://developers.mailerlite.com/docs/subscribers.html#update-a-subscriber'),
++      '#default_value' => $this->configuration['fields'],
++    ];
++
+     return $form;
+   }
+
++  /**
++   * {@inheritdoc}
++   */
++  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
++
++    // Get the list of configuration fields.
++    $configurationFields = explode("\n", $form_state->getValue([
++      'mailerlite',
++      'fields',
++    ]));
++
++    // The webform fields.
++    $fields = $this->getWebform()->getElementsInitializedAndFlattened();
++
++    foreach ($configurationFields as $field) {
++      $field = explode(':', $field);
++
++      // Check the format.
++      if (count($field) != 2) {
++        $form_state->setErrorByName('mailerlite][fields', $this->t('Fields Mapping should be in the format "machine_name_of_filed: mailerlite_field_name"'));
++      }
++
++      // Check if the webform field exists.
++      if (!isset($fields[trim($field[0])])) {
++        $form_state->setErrorByName('mailerlite][fields', $this->t('Field @field does not exist in the webform.', ['@field' => trim($field[0])]));
++      }
++
++      // No spaces are allowed in the machine name.
++      if (strpos(trim($field[0]), ' ') !== FALSE || strpos(trim($field[1]), ' ') !== FALSE) {
++        $form_state->setErrorByName('mailerlite][fields', $this->t('Machine name of the fields should not contain spaces.'));
++      }
++    }
++  }
++
+   /**
+    * {@inheritdoc}
+    */
+@@ -151,9 +197,21 @@ class WebformMailerliteHandler extends WebformHandlerBase {
+     }
+
+     if (!empty($email)) {
+-      $data = array_merge(['email' => $email]);
++      $data = array_merge([
++        'email' => $email,
++      ]);
++
++      $configurationFields = explode("\n", $configuration['fields']);
++      foreach ($configurationFields as $field) {
++        $field = explode(':', $field);
++        if (count($field) == 2) {
++          $data['fields'][trim($field[1])] = trim($fields['data'][$field[0]] ?? '');
++        }
++      }
++
+       $this->mailerlite->subscribers->create($data);
+-    } else {
++    }
++    else {
+       \Drupal::logger('webform_submission')->warning(
+         'webform_mailerlite: No email address was provided to the handler.',
+       );

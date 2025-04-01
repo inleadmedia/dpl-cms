@@ -1,0 +1,15 @@
+
+type GoLoginUrls {
+  adgangsplatformen: String
+}
+
+type GoLogoutUrls {
+  adgangsplatformen: String
+}
+
+type GoConfiguration {
+  unilogin: UniloginConfiguration
+  loginUrls: GoLoginUrls
+  logoutUrls: GoLogoutUrls
+}
+

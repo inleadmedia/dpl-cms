@@ -13,23 +13,18 @@ use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerTicketCat
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
-use Drupal\dpl_event\EventWrapper;
+use Drupal\dpl_event\Entity\EventInstance;
 use Drupal\dpl_event\Form\SettingsForm;
 use Drupal\file\FileInterface;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
-use Drupal\recurring_events\Entity\EventInstance;
+use Drupal\recurring_events\Entity\EventSeries;
 use Safe\DateTime;
 
 /**
  * Translator understand the link between EventInstances and resource objects.
  */
 class EventRestMapper {
-
-  /**
-   * EventWrapper, a suite of eventinstance helper methods.
-   */
-  private EventWrapper $eventWrapper;
 
   /**
    * The eventinstance.
@@ -49,30 +44,38 @@ class EventRestMapper {
    */
   public function getResponse(EventInstance $event_instance): EventsGET200ResponseInner {
     $this->event = $event_instance;
-    $this->eventWrapper = new EventWrapper($this->event);
 
-    return new EventsGET200ResponseInner([
-      'title' => $this->event->label(),
+    $response = new EventsGET200ResponseInner([
+      'title' => $this->getValue('title'),
       'uuid' => $this->event->uuid(),
       'url' => $this->event->toUrl()->setAbsolute(TRUE)->toString(TRUE)->getGeneratedUrl(),
       'ticketManagerRelevance' => !empty($this->getSeriesValue('field_relevant_ticket_manager')),
       'description' => $this->getValue('event_description'),
-      'body' => $this->eventWrapper->getDescription(),
-      'state' => $this->eventWrapper->getState()?->value,
+      'body' => $this->event->getDescription(),
+      'state' => $this->event->getState()?->value,
       'image' => $this->getImage(),
       'branches' => $this->getBranches(),
       'address' => $this->getAddress(),
       'tags' => $this->getTags(),
+      'partners' => $this->getMultiValue('event_partners'),
       'ticketCapacity' => $this->getValue('event_ticket_capacity'),
       'ticketCategories' => $this->getTicketCategories(),
       'createdAt' => $this->getDateField('created'),
-      'updatedAt' => $this->getDateField('changed'),
+      'updatedAt' => $this->event->getUpdatedDate(),
       'dateTime' => $this->getDate(),
       'externalData' => $this->getExternalData(),
-      'series' => new EventsGET200ResponseInnerSeries([
-        'uuid' => $this->event->getEventSeries()->uuid(),
-      ]),
+      'screenNames' => $this->event->getScreenNames(),
     ]);
+
+    $series = $this->event->getEventSeries();
+
+    if ($series instanceof EventSeries) {
+      $response->setSeries(new EventsGET200ResponseInnerSeries([
+        'uuid' => $series->uuid(),
+      ]));
+    }
+
+    return $response;
   }
 
   /**
@@ -84,7 +87,7 @@ class EventRestMapper {
   private function getBranches(): array {
     $names = [];
 
-    $branches = $this->eventWrapper->getBranches() ?? [];
+    $branches = $this->event->getBranches() ?? [];
 
     foreach ($branches as $branch) {
       $label = $branch->getTitle();
@@ -130,7 +133,7 @@ class EventRestMapper {
    * Helper, getting the event instance date in correct format.
    */
   private function getDate(): ?EventsGET200ResponseInnerDateTime {
-    $field = $this->eventWrapper->getField('date');
+    $field = $this->event->getField('date');
 
     if (!($field instanceof FieldItemListInterface)) {
       return NULL;
@@ -168,7 +171,7 @@ class EventRestMapper {
 
     $categories = [];
 
-    $field = $this->eventWrapper->getField('event_ticket_categories');
+    $field = $this->event->getField('event_ticket_categories');
 
     if (!($field instanceof FieldItemListInterface)) {
       return $categories;
@@ -209,27 +212,29 @@ class EventRestMapper {
    *
    * Notice that this may be the address of the related branch.
    *
-   * @see eventWrapper->getAddressField()
+   * @see BranchAddressFormatter
    */
-  private function getAddress(): ?EventsGET200ResponseInnerAddress {
-    $field = $this->eventWrapper->getAddressField();
+  private function getAddress(): EventsGET200ResponseInnerAddress {
+    // Loading the field, and rendering it, to let the BranchAddressFormatter
+    // do the work of looking up a possible branch.
+    $rendered = $this->event->get('event_address')->view('full');
 
-    if (!($field instanceof FieldItemListInterface)) {
-      return NULL;
+    $zip = $rendered[0]['postal_code']['#value'] ?? NULL;
+    $address_1 = $rendered[0]['address_line1']['#value'] ?? NULL;
+    $address_2 = $rendered[0]['address_line2']['#value'] ?? NULL;
+
+    $street = "$address_1 $address_2";
+
+    if (empty($address_1) && empty($address_2)) {
+      $street = NULL;
     }
-
-    $value = $field->getValue();
-
-    $zip = $value[0]['postal_code'] ?? NULL;
-    $address_1 = $value[0]['address_line1'] ?? NULL;
-    $address_2 = $value[0]['address_line2'] ?? NULL;
 
     $address = new EventsGET200ResponseInnerAddress();
     $address->setLocation($this->getValue('event_place'));
-    $address->setStreet("$address_1 $address_2");
+    $address->setStreet($street);
     $address->setZipCode(!empty($zip) ? intval($zip) : NULL);
-    $address->setCity($value[0]['locality'] ?? NULL);
-    $address->setCountry($value[0]['country_code'] ?? NULL);
+    $address->setCity($rendered[0]['locality']['#value'] ?? NULL);
+    $address->setCountry($rendered[0]['country_code']['#value'] ?? NULL);
 
     return $address;
   }
@@ -251,11 +256,30 @@ class EventRestMapper {
   }
 
   /**
+   * Get multiple string values as an array output.
+   *
+   * @return string[]
+   *   An array of string values.
+   */
+  private function getMultiValue(string $field_name): array {
+    $field = $this->event->getField($field_name);
+
+    if (!($field instanceof FieldItemListInterface)) {
+      return [];
+    }
+
+    $values = $field->getValue();
+
+    // Turning the value keys into a simple, one-level array of strings.
+    return array_column($values, 'value');
+  }
+
+  /**
    * Get string value of a possible field (or fallback field).
    */
   private function getValue(string $field_name): ?string {
 
-    $field = $this->eventWrapper->getField($field_name);
+    $field = $this->event->getField($field_name);
 
     if (!($field instanceof FieldItemListInterface)) {
       return NULL;
@@ -274,7 +298,7 @@ class EventRestMapper {
   private function getSeriesValue(string $field_name): ?string {
     $series = $this->event->getEventSeries();
 
-    if (!$series->hasField($field_name)) {
+    if (!($series instanceof EventSeries) || !$series->hasField($field_name)) {
       return NULL;
     }
 
@@ -291,7 +315,7 @@ class EventRestMapper {
    * Get the event image, loading the file and generating the original URL.
    */
   private function getImage(): ?EventsGET200ResponseInnerImage {
-    $media_field = $this->eventWrapper->getField('event_image');
+    $media_field = $this->event->getField('event_image');
 
     if (!($media_field instanceof FieldItemListInterface)) {
       return NULL;

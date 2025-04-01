@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for EO Next Translation module.
+ */
+
+use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\eonext_translation\Form\TranslationSettingsForm;
+use Drupal\eonext_translation\TranslationService;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function eonext_translation_preprocess_html(array &$variables): void {
+
+  $translation_settings = \Drupal::config('eonext_translation.settings');
+  $translation_type = $translation_settings->get('translation_type');
+
+  $variables['attributes']['data-eonext-translation-type'] = $translation_type;
+
+  if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
+    $languageLinks = \Drupal::service('eonext_translation.service')->getLanguageLinks();
+    $variables['attributes']['data-eonext-translation-languages'] = json_encode($languageLinks);
+  }
+
+  $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
+  $footer_settings = \Drupal::service('eonext_translation.service')->getFooterSettings();
+
+  if ($translate_footer) {
+    $variables['attributes']['data-eonext-footer'] = json_encode($footer_settings);
+  }
+
+  // Add content related classes and attributes.
+  $current_node = \Drupal::routeMatch()->getParameter('node');
+
+  if (
+    $current_node instanceof NodeInterface &&
+    in_array($current_node->bundle(), ['branch', 'page', 'article'])
+    ) {
+
+    $branch_node = NULL;
+    if ($current_node->hasField('field_branch')) {
+      $branch_node = $current_node->get('field_branch')->entity;
+    }
+    elseif ($current_node->bundle() === 'branch') {
+      $branch_node = $current_node;
+    }
+
+    TranslationService::addBranchAttributes($variables, $branch_node);
+  }
+  else {
+    TranslationService::addBranchAttributes($variables);
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function eonext_translation_form_alter(array &$form, FormStateInterface $form_state, $form_id): void {
+  if ($form_id === 'dpl_footer_form') {
+    // Add a new submit handler to the footer form.
+    $form['#submit'][] = 'eonext_translation_footer_form_submit';
+  }
+}
+
+/**
+ * Submit handler for the footer form.
+ */
+function eonext_translation_footer_form_submit(array &$form, FormStateInterface $form_state): void {
+  \Drupal::service('eonext_translation.service')->saveFooterToConfig();
+}
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function eonext_translation_preprocess_page(array &$variables): void {
+
+  $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
+
+  if ($translate_footer) {
+    $variables['footer_settings'] = \Drupal::service('eonext_translation.service')->getFooterSettings();
+  }
+
+  if (isset($variables['breadcrumb'])) {
+    $current_language = \Drupal::languageManager()->getCurrentLanguage();
+    $links = $variables['breadcrumb']->getLinks();
+    foreach ($links as $link) {
+      $url = $link->getUrl();
+      $url->setOption('language', $current_language);
+      $entity = $url->getOptions()['entity'] ?? NULL;
+      if ($entity instanceof ContentEntityBase) {
+        // Get the entity label for current language.
+        if ($entity->hasTranslation($current_language->getId())) {
+          $entity = $entity->getTranslation($current_language->getId());
+          $link->setText($entity->label());
+        }
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function eonext_translation_preprocess_field(&$variables) {
+  if ($variables['field_type'] === 'address') {
+    $country = $variables['items'][0]['content']['country']['#value'] ?? '';
+    if ($country) {
+      $variables['items'][0]['content']['country']['#value'] = t($country);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function eonext_translation_entity_base_field_info_alter(&$fields, EntityTypeInterface $entity_type) {
+  // Set add the langcode field to the hidden region for event series.
+  if ($entity_type->id() == 'eventseries' && !empty($fields['langcode'])) {
+    $fields['langcode']->setDisplayOptions('form', ['region' => 'hidden']);
+  }
+}

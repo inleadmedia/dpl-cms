@@ -4,7 +4,6 @@ namespace Drupal\dpl_login\Adgangsplatformen;
 
 use Drupal\dpl_login\Exception\MissingConfigurationException;
 use Drupal\dpl_react\DplReactConfigBase;
-use function Safe\sprintf as sprintf;
 
 /**
  * Structured access to configuration for Adgangsplatformen.
@@ -19,7 +18,7 @@ class Config extends DplReactConfigBase {
   /**
    * The Drupal configuration key under which the config is stored.
    */
-  const CONFIG_KEY = "openid_connect.settings.adgangsplatformen";
+  const CONFIG_KEY = "openid_connect.client.adgangsplatformen";
 
   /**
    * Get a specific configuration value.

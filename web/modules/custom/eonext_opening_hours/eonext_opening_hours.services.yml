@@ -1,0 +1,6 @@
+services:
+  cache_context.day:
+    class: Drupal\eonext_opening_hours\Cache\Context\DayCacheContext
+    arguments: ["@datetime.time"]
+    tags:
+      - { name: cache.context, id: "day" }

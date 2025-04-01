@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.node.field_e_resource_lead
     - node.type.e_resource
+_core:
+  default_config_hash: EAOUYuqK8d0jxgVgXXMELPqcwFmArY7dhJy3GY2E6Bs
 id: node.e_resource.field_e_resource_lead
 field_name: field_e_resource_lead
 entity_type: node

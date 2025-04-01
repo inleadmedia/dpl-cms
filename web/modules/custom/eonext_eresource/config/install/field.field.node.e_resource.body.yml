@@ -8,6 +8,8 @@ dependencies:
     - node.type.e_resource
   module:
     - text
+_core:
+  default_config_hash: qEmH238G-EvlTmggxd29edGMeVElllD9MlZH6yDPmvc
 id: node.e_resource.body
 field_name: body
 entity_type: node

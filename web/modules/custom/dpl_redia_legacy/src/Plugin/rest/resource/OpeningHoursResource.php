@@ -84,8 +84,12 @@ final class OpeningHoursResource extends OpeningHoursResourceBase {
             ],
             'nid' => [
               'name' => 'nid',
-              'type' => 'integer',
-              'description' => 'The (node) id of the node (Branch) that the opening hour applies to.',
+              'type' => 'array',
+              'items' => [
+                'type' => 'integer',
+              ],
+              'collectionFormat' => 'csv',
+              'description' => 'The id(s) of the branch(es) for which to retrieve opening hours. Can be a single id or a comma-separated list of ids.',
               'in' => 'query',
               'required' => TRUE,
             ],
@@ -118,8 +122,8 @@ final class OpeningHoursResource extends OpeningHoursResourceBase {
   public function get(Request $request): Response {
     $typedRequest = new RequestTyped($request);
 
-    $nid = $typedRequest->getInt('nid');
-    if ($nid === NULL) {
+    $nid = $typedRequest->getInts('nid');
+    if (empty($nid)) {
       throw new BadRequestHttpException("The 'nid' parameter is required.");
     }
     $fromDate = $typedRequest->getDateTime('from_date');
@@ -170,11 +174,15 @@ final class OpeningHoursResource extends OpeningHoursResourceBase {
   public function toLegacyResponse(OpeningHoursInstance $instance) : OpeningHoursLegacyResponse {
     return (new OpeningHoursLegacyResponse())
       ->setNid(intval($instance->branch->id()))
-      ->setCategoryTid(intval($instance->categoryTerm->id()))
       ->setDate(new DateTime($instance->startTime->format('Y-m-d')))
       ->setStartTime($instance->startTime->format("H:i"))
       ->setEndTime($instance->endTime->format('H:i'))
-      ->setNotice(NULL);
+      // The Redia app will display the notice as the title of opening hours
+      // if defined regardless of the category. This is a simple way to show the
+      // right title instead of providing a separate API exposing categories
+      // with ids and titles.
+      ->setCategoryTid(intval($instance->categoryTerm->id()))
+      ->setNotice($instance->categoryTerm->getName());
   }
 
   /**
