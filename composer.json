@@ -43,7 +43,7 @@
                 "version": "0.0.0-dev",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-development/dist-development.zip",
+                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-dpl-2025.11.0--inlead-12.03.2025--hotfix/dist-dpl-2025-11-0-inlead-12-03-2025-hotfix.zip",
                     "type": "zip"
                 },
                 "require": {
