@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "76d988a6bd8dc2fbc5c6a9cba70fc003",
+    "content-hash": "6f4f13b2bc35051b094cdc4628bc97d9",
     "packages": [
         {
             "name": "amazeeio/drupal_integrations",
@@ -9872,19 +9872,19 @@
         },
         {
             "name": "inleadmedia/dpl-design-system",
-            "version": "0.0.0-dev",
+            "version": "2025.17.1+inlead.30.04.2025",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/branch-development/dist-development.zip"
+                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.17.1%2Binlead.30.04.2025/dist-2025-17-1-inlead-30-04-2025-1f912660c31d47d61a4fdfaf136ed5975cb21cfc.zip"
             },
             "type": "drupal-library"
         },
         {
             "name": "inleadmedia/dpl-react",
-            "version": "0.0.0-dev",
+            "version": "2025.17.1+inlead.30.04.2025",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-dpl-2025.11.0--inlead-12.03.2025--hotfix/dist-dpl-2025-11-0-inlead-12-03-2025-hotfix.zip"
+                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.17.1%2Binlead.30.04.2025/dist-2025-17-1-inlead-30-04-2025-0bd4807accc266592c27453147f80462d70b7a20.zip"
             },
             "require": {
                 "composer/installers": "^1.2.0"
@@ -21738,9 +21738,7 @@
         "drupal/openapi_rest": 5,
         "drupal/openid_connect": 15,
         "drupal/potion": 20,
-        "drupal/sparkpost": 15,
-        "inleadmedia/dpl-design-system": 20,
-        "inleadmedia/dpl-react": 20
+        "drupal/sparkpost": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
