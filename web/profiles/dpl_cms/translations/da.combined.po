@@ -4,23 +4,11 @@
 # #-#-#-#-#  da.config.po (PROJECT VERSION)  #-#-#-#-#
 # da translation of DPL CMS
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"#-#-#-#-#  da.po (PROJECT VERSION)  #-#-#-#-#\n"
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2025-03-11 22:12+0100\n"
-"PO-Revision-Date: 2025-03-11 22:12+0100\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"#-#-#-#-#  da.config.po (PROJECT VERSION)  #-#-#-#-#\n"
-"Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2025-03-11 22:13+0100\n"
-"PO-Revision-Date: 2025-03-11 22:13+0100\n"
+"POT-Creation-Date: 2025-04-22 16:11+0200\n"
+"PO-Revision-Date: 2025-04-22 16:11+0200\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -665,15 +653,23 @@ msgstr ""
 "\n"
 "The UniLogin API client secret."
 
+msgctxt "BNF"
 msgid "BNF State"
-msgstr "Delingstjenesten status"
+msgstr ""
 
+msgctxt "BNF"
 msgid ""
 "The BNF state of the entity, defining if it was imported, exported, or "
 "neither."
 msgstr ""
-"Delingstjenestens status definerer om enheden blev importeret, eksporteret "
-"eller hverken eller. "
+
+msgctxt "BNF"
+msgid "BNF Source"
+msgstr ""
+
+msgctxt "BNF"
+msgid "The site name of the source of this content"
+msgstr ""
 
 msgid "Publish and submit to BNF"
 msgstr "Publicer og send til Delingstjenesten"
@@ -751,6 +747,9 @@ msgstr "For eksempel <em>https://bibliotekernesnationaleformidling.dk/</em>."
 
 msgctxt "Validation"
 msgid "IsHttps"
+msgstr "IsHttps"
+
+msgid "BNF client library"
 msgstr ""
 
 msgctxt "BNF"
@@ -1174,10 +1173,6 @@ msgstr ""
 "https://)"
 
 msgctxt "Patron page settings form"
-msgid "Ereolen always available"
-msgstr "eReolens titler som altid er tilgængelige"
-
-msgctxt "Patron page settings form"
 msgid "Pincode length (min)"
 msgstr "Pinkodelængde (minimumslængde)"
 
@@ -1249,8 +1244,8 @@ msgid ""
 msgstr "Der findes titler uden begrænsning på antal lån pr. måned."
 
 msgctxt "Patron page"
-msgid "DIGITAL LOANS (EREOLEN)"
-msgstr "DIGITALE LÅN (eREOLEN)"
+msgid "DIGITAL LOANS"
+msgstr ""
 
 msgctxt "Patron page"
 msgid "Click here, to see titles always eligible to be loaned"
@@ -1379,7 +1374,7 @@ msgstr "Lån"
 
 msgctxt "Loan list"
 msgid "Due date digital @date"
-msgstr "Udløbsdato @date"
+msgstr "Udløber automatisk @date"
 
 msgctxt "Loan list"
 msgid "Due date physical @date"
@@ -1616,22 +1611,6 @@ msgid "Allow removing ready reservations"
 msgstr "Tillad sletning af opfyldte reserveringer"
 
 msgctxt "Library Agency Configuration"
-msgid "Ereolen my page link"
-msgstr "Link til Min side på eReolen"
-
-msgctxt "Library Agency Configuration"
-msgid "My page in ereolen"
-msgstr "Min side på eReolen"
-
-msgctxt "Library Agency Configuration"
-msgid "Ereolen home link"
-msgstr "Link til eReolen"
-
-msgctxt "Library Agency Configuration"
-msgid "Home page in ereolen"
-msgstr "eReolen startside"
-
-msgctxt "Library Agency Configuration"
 msgid "Pause reservation link"
 msgstr "Link til side om reserveringspause"
 
@@ -1781,7 +1760,7 @@ msgid "The WorkID value"
 msgstr ""
 
 msgid "The material type (e.g., bog, e-bog)."
-msgstr ""
+msgstr "Materialetype (fx bog, film, lydbog)"
 
 msgid "List of DPL-Go Unilogin configuration."
 msgstr ""
@@ -1796,14 +1775,6 @@ msgstr "The color value in #HEX format."
 
 msgid "The opacity value."
 msgstr "The opacity value."
-
-msgid "DPL Configuration."
-msgstr "DPL Configuration."
-
-msgid "DPL Configuration"
-msgstr ""
-"\n"
-"DPL Configuration"
 
 msgid "A CQL search string."
 msgstr "En CQL søgestreng."
@@ -2043,24 +2014,26 @@ msgid "Add @type"
 msgstr "Tilføj @type"
 
 msgid "Add @type video via URL"
-msgstr ""
+msgstr "Tilføj @type video via URL"
 
 msgid ""
 "VideoTool URL example: https://media.videotool.dk?"
 "vn=557_2023103014511477700668916683"
 msgstr ""
+"VideoTool URL eksempel: https://media.videotool.dk?"
+"vn=557_2023103014511477700668916683"
 
 msgid "Add"
 msgstr "Tilføj"
 
 msgid "The given URL does not match the VideoTool URL pattern."
-msgstr ""
+msgstr "URL'en matcher ikke VideoTool URL mønsteret."
 
 msgid "VideoTool URL"
-msgstr ""
+msgstr "VideoTool URL"
 
 msgid "VideoTool embed"
-msgstr ""
+msgstr "VideoTool indlejring"
 
 msgid "Name"
 msgstr "Name"
@@ -2459,7 +2432,7 @@ msgstr "Materialetype"
 
 msgctxt "Search Result"
 msgid "Material types specific"
-msgstr "Format"
+msgstr "Materialetype"
 
 msgctxt "Search Result"
 msgid "Subjects"
@@ -3349,11 +3322,9 @@ msgstr "Dit bibliotek har nået grænsen for antal udlån i denne måned"
 
 msgctxt "Work Page"
 msgid ""
-"You do not have access to eReolen from this library as you are not "
+"You do not have access to digital materials from this library as you are not "
 "registered as a resident in the municipality. Contact the library."
 msgstr ""
-"Du har ikke adgang til eReolen fra dette bibliotek, da du ikke er "
-"registreret som bosiddende i Kommunen. Kontakt biblioteket"
 
 msgctxt "Work Page"
 msgid "No country could be found with the given country code"
@@ -3790,7 +3761,7 @@ msgstr "Se vores takster"
 
 msgctxt "Global"
 msgid "Expires @date"
-msgstr "Udløber @date"
+msgstr "Udløber automatisk @date"
 
 msgctxt "Global"
 msgid "Close renew loans modal"
@@ -3902,7 +3873,7 @@ msgstr "Luk pop-up med detaljevisning af materiale"
 
 msgctxt "Global"
 msgid "Expires"
-msgstr "Udløber"
+msgstr "Udløber automatisk"
 
 msgctxt "Global"
 msgid "View material"
@@ -4310,10 +4281,6 @@ msgid "Borrow before"
 msgstr "Lån før"
 
 msgctxt "Global"
-msgid "Go to eReolen"
-msgstr "Gå til eReolen"
-
-msgctxt "Global"
 msgid "Your reservation expires @date!"
 msgstr "Din reservering udløber @date!"
 
@@ -4612,9 +4579,6 @@ msgstr "Opdater enkelte åbningstider"
 msgid "Allowed if bnf_server is enabled."
 msgstr ""
 
-msgid "DPL configuration schema extensions for GraphQL Compose."
-msgstr "DPL configuration schema extensions for GraphQL Compose."
-
 msgid "Generate proxy url"
 msgstr "Generate proxy URL / Generer proxy URL"
 
@@ -4666,7 +4630,7 @@ msgid "Handling the search pages."
 msgstr "Handling the search pages."
 
 msgid "DPL Go"
-msgstr ""
+msgstr "DPL GO"
 
 msgid "Module used for handling go specific functionality."
 msgstr ""
@@ -4824,6 +4788,12 @@ msgstr "Delingstjenesten Server"
 
 msgid "BNF (Bibliotekernes Nationale Formidling) server"
 msgstr "Delingstjenesten (Bibliotekernes Nationale Formidling) server"
+
+msgid "Example content for BNF"
+msgstr ""
+
+msgid "Provides example content for Delingstjenesten"
+msgstr ""
 
 msgid "DPL Lagoon related functionality"
 msgstr ""
@@ -7481,43 +7451,9 @@ msgstr "Issue-kø"
 msgid "to report problems."
 msgstr "til at reportere problemer."
 
-msgid "Save settings"
-msgstr "Gem indstillinger"
-
 msgctxt "Entity type group"
 msgid "Content"
 msgstr "Indhold"
-
-msgid "Save and continue"
-msgstr "Gem og fortsæt"
-
-msgid "Save field settings"
-msgstr "Gem feltindstillinger"
-
-msgid "Update settings"
-msgstr "Opdatér indstillinger"
-
-msgid "Saved %name configuration"
-msgstr "Gemt %name konfiguration"
-
-msgid "Multiple test entity entities match this reference;"
-msgstr "Flere testenhedsenheder matcher denne reference;"
-
-msgid ""
-"Many test entity entities are called %value. Specify the one you want by "
-"appending the id in parentheses"
-msgstr ""
-"Mange testenheder kaldes %value. Specificer den, du ønsker, ved at tilføje "
-"id'et i parentes"
-
-msgid "There are no test entity entities matching \"%value\"."
-msgstr "Der er ingen testenheder, der matcher \"%value\"."
-
-msgid "Preview"
-msgstr "Preview"
-
-msgid "@type %title has been created."
-msgstr "@type %title oprettet."
 
 msgid "The referenced entity (%type: %id) does not exist."
 msgstr "Den refererede entity (%type: %id) eksisterer ikke."
@@ -8495,6 +8431,9 @@ msgid ""
 "A unique machine-readable name containing letters, numbers, and underscores."
 msgstr "Et unikt systemnavn som indeholder bogstaver, tal og understregninger."
 
+msgid "Save and continue"
+msgstr "Gem og fortsæt"
+
 msgid "Create group"
 msgstr "Opret gruppe"
 
@@ -9077,6 +9016,9 @@ msgid ""
 msgstr ""
 "Angiv fokus for dette billede i formen \"leftoffset,topoffset\" hvor "
 "forskydningerne er i procent. Eksempel: 25,75"
+
+msgid "Preview"
+msgstr "Preview"
 
 msgid ""
 "Focal Point allows you to specify the portion of an image that is most "
@@ -13760,7 +13702,7 @@ msgid "Web page or blog URL"
 msgstr "Web side eller blog URL"
 
 msgid "Preferred email address"
-msgstr ""
+msgstr "Foretrukket e-mailadresse"
 
 msgid "Email verified"
 msgstr "Email verificeret"
@@ -13802,7 +13744,7 @@ msgid "Client secret"
 msgstr "Klienthemmelighed"
 
 msgid "Allowed domains"
-msgstr ""
+msgstr "Tilladte domæner"
 
 msgid "Enter one domain per line that are allowed to initiate SSO using ISS."
 msgstr ""
@@ -13924,7 +13866,7 @@ msgid "LinkedIn"
 msgstr "LinkedIn"
 
 msgid "Generic OAuth 2.0"
-msgstr ""
+msgstr "Generic OAuth 2.0"
 
 msgid "OpenID Connect clients"
 msgstr ""
@@ -14386,7 +14328,7 @@ msgstr ""
 "for arrangementinstanser."
 
 msgid "Automatically delete orphaned eventinstances."
-msgstr ""
+msgstr "Automatisk slet forældreløse event instanser."
 
 msgid "Event Creation"
 msgstr "Arrangør"
@@ -19560,6 +19502,18 @@ msgid "Author & Date"
 msgstr ""
 
 msgctxt ""
+"core.entity_form_display.node.page.default:third_party_settings:field_group:"
+"group_tagging:label"
+msgid "Tagging"
+msgstr ""
+
+msgctxt ""
+"core.entity_form_display.node.page.default:third_party_settings:field_group:"
+"group_metatags:label"
+msgid "Meta tags"
+msgstr ""
+
+msgctxt ""
 "core.entity_form_display.node.page.default:content:field_hero_title:settings:"
 "placeholder"
 msgid "If empty, the regular page title will be shown."
@@ -20641,6 +20595,19 @@ msgid ""
 "it as a reference in the content structure tree</a>"
 msgstr ""
 
+msgctxt "field.field.node.page.field_canonical_url:label"
+msgid "Canonical url"
+msgstr ""
+
+msgctxt "field.field.node.page.field_canonical_url:description"
+msgid ""
+"Please provide a canonical URL if this content has been duplicated from "
+"other websites. This helps signal to search engines that the preferred "
+"source of this content is the specified canonical URL, preventing potential "
+"duplicate content issues and ensuring proper attribution to the original "
+"source."
+msgstr ""
+
 msgctxt "field.field.node.page.field_display_titles:label"
 msgid "Display titles"
 msgstr ""
@@ -20679,6 +20646,10 @@ msgstr ""
 
 msgctxt "field.field.node.page.field_subtitle:label"
 msgid "Subtitle"
+msgstr ""
+
+msgctxt "field.field.node.page.field_tags:label"
+msgid "Tags"
 msgstr ""
 
 msgctxt "field.field.node.page.field_teaser_image:label"
@@ -22815,6 +22786,18 @@ msgctxt "pathauto.pattern.category_term:label"
 msgid "Category term - embedded search"
 msgstr ""
 
+msgctxt "pathauto.pattern.go_articles:label"
+msgid "GO Articles"
+msgstr ""
+
+msgctxt "pathauto.pattern.go_categories:label"
+msgid "GO Categories"
+msgstr ""
+
+msgctxt "pathauto.pattern.go_pages:label"
+msgid "GO Pages"
+msgstr ""
+
 msgctxt "pathauto.pattern.tag_term:label"
 msgid "Tag term - embedded search"
 msgstr ""
@@ -23001,6 +22984,10 @@ msgctxt "system.action.user_add_role_action.bnf_graphql_client:label"
 msgid "Add the BNF GraphQL Client role to the selected user(s)"
 msgstr "Add the BNF GraphQL Client role to the selected user(s)"
 
+msgctxt "system.action.user_add_role_action.bnf_pilot:label"
+msgid "Add the BNF Pilot role to the selected user(s)"
+msgstr ""
+
 msgctxt "system.action.user_add_role_action.external_system:label"
 msgid "Add the External system role to the selected user(s)"
 msgstr ""
@@ -23024,6 +23011,10 @@ msgstr ""
 msgctxt "system.action.user_remove_role_action.bnf_graphql_client:label"
 msgid "Remove the BNF GraphQL Client role from the selected user(s)"
 msgstr "Remove the BNF GraphQL Client role from the selected user(s)"
+
+msgctxt "system.action.user_remove_role_action.bnf_pilot:label"
+msgid "Remove the BNF Pilot role from the selected user(s)"
+msgstr ""
 
 msgctxt "system.action.user_remove_role_action.external_system:label"
 msgid "Remove the External system role from the selected user(s)"
@@ -23358,6 +23349,10 @@ msgstr ""
 msgctxt "user.role.bnf_graphql_client:label"
 msgid "BNF GraphQL Client"
 msgstr "BNF GraphQL Client"
+
+msgctxt "user.role.bnf_pilot:label"
+msgid "BNF Pilot"
+msgstr ""
 
 msgctxt "user.role.editor:label"
 msgid "Editor"
@@ -25208,6 +25203,108 @@ msgctxt "views.view.files:display:page_2:display_options:arguments:fid:title"
 msgid "File usage information for {{ arguments.fid }}"
 msgstr ""
 
+msgctxt "views.view.go_categories:label"
+msgid "GO Categories"
+msgstr ""
+
+msgctxt "views.view.go_categories:display:default:display_title"
+msgid "Default"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:pager:options:"
+"expose:items_per_page_label"
+msgid "Items per page"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:pager:options:"
+"expose:items_per_page_options_all_label"
+msgid "- All -"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:pager:options:"
+"expose:offset_label"
+msgid "Offset"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:exposed_form:"
+"options:submit_button"
+msgid "Apply"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:exposed_form:"
+"options:reset_button_label"
+msgid "Reset"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:exposed_form:"
+"options:exposed_sorts_label"
+msgid "Sort by"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:exposed_form:"
+"options:sort_asc_label"
+msgid "Asc"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:default:display_options:exposed_form:"
+"options:sort_desc_label"
+msgid "Desc"
+msgstr ""
+
+msgctxt "views.view.go_categories:display:go_categories:display_title"
+msgid "GraphQL"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"tags:next"
+msgid "Next ›"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"tags:previous"
+msgid "‹ Previous"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"tags:first"
+msgid "« First"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"tags:last"
+msgid "Last »"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"expose:items_per_page_label"
+msgid "Items per page"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"expose:items_per_page_options_all_label"
+msgid "- All -"
+msgstr ""
+
+msgctxt ""
+"views.view.go_categories:display:go_categories:display_options:pager:options:"
+"expose:offset_label"
+msgid "Offset"
+msgstr ""
+
 msgctxt "views.view.importable_content:label"
 msgid "Importable content"
 msgstr ""
@@ -25262,6 +25359,12 @@ msgctxt ""
 "views.view.importable_content:display:default:display_options:fields:"
 "field_categories:alter:text"
 msgid "Edited by BNR"
+msgstr ""
+
+msgctxt ""
+"views.view.importable_content:display:default:display_options:fields:"
+"bnf_source_name:label"
+msgid "Source"
 msgstr ""
 
 msgctxt ""
