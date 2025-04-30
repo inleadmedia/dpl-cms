@@ -121,6 +121,7 @@
         "drupal/editor_advanced_link": "^2.2",
         "drupal/entity_clone_template": "^2.0",
         "drupal/entity_reference_revisions": "^1.11.0",
+        "drupal/entityqueue": "^1.9",
         "drupal/enum_field": "^1.0",
         "drupal/externalauth": "^2.0",
         "drupal/facets": "^2.0",
@@ -195,7 +196,7 @@
         "php-http/message-factory": "^1.1",
         "phpdocumentor/reflection-docblock": "^5.3",
         "spatie/color": "^1.5",
-        "spawnia/sailor": "^0.35.0",
+        "spawnia/sailor": "^1.1.0",
         "symfony/property-access": "^6.2",
         "symfony/property-info": "^6.2",
         "thecodingmachine/safe": "^2.5.0",
@@ -389,7 +390,8 @@
                 "3468521: (4/4)": "https://git.drupalcode.org/project/recurring_events/-/commit/ad99ae79f5c55fc2db17427e9936ab141314609d.patch",
                 "3468300: Update EventSeriesSettings to use datetime form element.": "https://git.drupalcode.org/project/recurring_events/-/commit/5d9bc3b1cf7c00972f053f3d14873012b1ad7140.patch",
                 "3487412: Fix WSOD when EventInstance has invalid translation.": "https://git.drupalcode.org/project/recurring_events/-/commit/996052eeb7518ce591df968a0bb12c4819fb4edf.patch",
-                "3504806: Clean up orphaned eventinstances automatically": "https://www.drupal.org/files/issues/2025-02-06/reccuring_events_auto_delete_orphaned.patch"
+                "3504806: Clean up orphaned eventinstances automatically": "https://www.drupal.org/files/issues/2025-02-06/reccuring_events_auto_delete_orphaned.patch",
+                "3515976: EventUserTrait may return NULL if owner has been deleted": "https://git.drupalcode.org/issue/recurring_events-3515976/-/commit/4bf78bde6378b01367c4f57b0d5c40b51e8dc53f.patch"
             },
             "drupal/state_log": {
                 "3501178: Call to undefined method Drupal\\state_log\\StateLog::destruct()": "https://git.drupalcode.org/project/state_log/-/commit/8d63dd4827a930f5294004a1d13f051487ec4269.patch",
