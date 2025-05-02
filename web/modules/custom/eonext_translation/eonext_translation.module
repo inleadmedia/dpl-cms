@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
@@ -125,4 +126,31 @@ function eonext_translation_entity_base_field_info_alter(&$fields, EntityTypeInt
   if ($entity_type->id() == 'eventseries' && !empty($fields['langcode'])) {
     $fields['langcode']->setDisplayOptions('form', ['region' => 'hidden']);
   }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function eonext_translation_entity_update(EntityInterface $entity) {
+
+  if ($entity->getEntityTypeId() === 'eventseries') {
+
+    $entityLanguage = $entity->language()->getId();
+
+    // Find the event instances that are related to this event series.
+    $eventInstances = \Drupal::service('entity_type.manager')
+      ->getStorage('eventinstance')
+      ->loadByProperties(['eventseries_id' => $entity->id()]);
+
+    // Create the translation of the event instances.
+    foreach ($eventInstances as $eventInstance) {
+      if (!$eventInstance->hasTranslation($entityLanguage)) {
+        $translation = $eventInstance->addTranslation($entityLanguage);
+        // Set the series ID and save.
+        $translation->set('eventseries_id', $entity->id());
+        $translation->save();
+      }
+    }
+  }
+
 }
