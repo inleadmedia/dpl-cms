@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6f4f13b2bc35051b094cdc4628bc97d9",
+    "content-hash": "ffd20e50718911f846d9e1af01a3f741",
     "packages": [
         {
             "name": "amazeeio/drupal_integrations",
@@ -9872,19 +9872,19 @@
         },
         {
             "name": "inleadmedia/dpl-design-system",
-            "version": "2025.17.1+inlead.30.04.2025",
+            "version": "2025.17.2+inlead.06.05.2025",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.17.1%2Binlead.30.04.2025/dist-2025-17-1-inlead-30-04-2025-1f912660c31d47d61a4fdfaf136ed5975cb21cfc.zip"
+                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.17.2%2Binlead.06.05.2025/dist-2025-17-2-inlead-06-05-2025-bcc8a0acf3a6787d9ec872f16467a3b399f525f8.zip"
             },
             "type": "drupal-library"
         },
         {
             "name": "inleadmedia/dpl-react",
-            "version": "2025.17.1+inlead.30.04.2025",
+            "version": "2025.17.2+inlead.06.05.2025",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.17.1%2Binlead.30.04.2025/dist-2025-17-1-inlead-30-04-2025-0bd4807accc266592c27453147f80462d70b7a20.zip"
+                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.17.2%2Binlead.06.05.2025/dist-2025-17-2-inlead-06-05-2025-8945309a9a1a5675bdaa87e049c7e2ac34e59bd6.zip"
             },
             "require": {
                 "composer/installers": "^1.2.0"
