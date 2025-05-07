@@ -9884,7 +9884,7 @@
             "version": "2025.17.2+inlead.06.05.2025",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.17.2%2Binlead.06.05.2025/dist-2025-17-2-inlead-06-05-2025-8945309a9a1a5675bdaa87e049c7e2ac34e59bd6.zip"
+                "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-dpl-2025.17.2-hotfix/dist-dpl-2025-17-2-hotfix.zip"
             },
             "require": {
                 "composer/installers": "^1.2.0"
