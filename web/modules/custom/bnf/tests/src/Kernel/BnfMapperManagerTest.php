@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\bnf\Kernel;
 
+use Drupal\bnf\GraphQL\Operations\GetNode\Node\Changed\DateTime as ChangedDateTime;
+use Drupal\bnf\GraphQL\Operations\GetNode\Node\Created\DateTime as CreatedDateTime;
 use Drupal\bnf\GraphQL\Operations\GetNode\Node\NodeArticle;
 use Drupal\bnf\GraphQL\Operations\GetNode\Node\Paragraphs\Body\Text;
 use Drupal\bnf\GraphQL\Operations\GetNode\Node\Paragraphs\ParagraphTextBody;
+use Drupal\bnf\GraphQL\Operations\GetNode\Node\PublicationDate\DateTime as PublicationDateDateTime;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\KernelTests\KernelTestBase;
@@ -27,6 +30,7 @@ class BnfMapperManagerTest extends KernelTestBase {
     'user',
     // Needed for the bnf_state base field.
     'options',
+    'file',
   ];
 
   /**
@@ -43,6 +47,9 @@ class BnfMapperManagerTest extends KernelTestBase {
 
     $entityManagerProphecy->getStorage('node')->willReturn($nodeStorageProphecy);
     $entityManagerProphecy->getStorage('paragraph')->willReturn($paragraphStorageProphecy);
+    $nodeStorageProphecy->loadByProperties(['uuid' => '982e0d87-f6b8-4b84-8de8-c8c8bcfef557'])
+      ->willReturn([]);
+
     $nodeStorageProphecy->create([
       'type' => 'article',
       'uuid' => '982e0d87-f6b8-4b84-8de8-c8c8bcfef557',
@@ -55,10 +62,19 @@ class BnfMapperManagerTest extends KernelTestBase {
     $this->container->set('entity_type.manager', $entityManagerProphecy->reveal());
 
     $graphqlNode = NodeArticle::make(
-      '982e0d87-f6b8-4b84-8de8-c8c8bcfef557',
-      'Bibliotekarerne anbefaler læsning til den mørke tid',
-      [
-        ParagraphTextBody::make(Text::make('text', 'format')),
+      id: '982e0d87-f6b8-4b84-8de8-c8c8bcfef557',
+      title: 'Bibliotekarerne anbefaler læsning til den mørke tid',
+      url: '/anbefalinger-til-mork-tid',
+      status: TRUE,
+      changed: ChangedDateTime::make(timestamp: 1735689661, timezone: 'UTC'),
+      created: CreatedDateTime::make(timestamp: 1735689661, timezone: 'UTC'),
+      publicationDate: PublicationDateDateTime::make(timestamp: 1735689661, timezone: 'UTC'),
+      paragraphs: [
+        ParagraphTextBody::make(
+          id: '982e0d87-f6b8-4b84-8de8-c8c8bcfef999',
+          body: Text::make(
+            format: 'with_format', value: 'This is the text')
+        ),
       ]
     );
 
@@ -66,12 +82,13 @@ class BnfMapperManagerTest extends KernelTestBase {
     $node = $mapper->map($graphqlNode);
 
     $this->assertSame($node, $nodeProphecy->reveal());
-    $nodeProphecy->set('title', 'Bibliotekarerne anbefaler læsning til den mørke tid')->shouldHaveBeenCalled();
     $nodeProphecy->set('field_paragraphs', [$paragraphProphecy->reveal()])->shouldHaveBeenCalled();
+
     $paragraphProphecy->set('field_body', [
-      'value' => 'text',
-      'format' => 'format',
+      'value' => 'This is the text',
+      'format' => 'with_format',
     ])->shouldHaveBeenCalled();
+
   }
 
 }

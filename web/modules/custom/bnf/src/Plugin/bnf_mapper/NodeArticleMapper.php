@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Drupal\bnf\Plugin\bnf_mapper;
 
 use Drupal\bnf\Attribute\BnfMapper;
-use Drupal\bnf\BnfMapperManager;
 use Drupal\bnf\GraphQL\Operations\GetNode\Node\NodeArticle;
-use Drupal\bnf\Plugin\BnfMapperPluginBase;
-use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\node\NodeInterface;
 use Spawnia\Sailor\ObjectLike;
 
 /**
@@ -18,53 +15,22 @@ use Spawnia\Sailor\ObjectLike;
 #[BnfMapper(
   id: NodeArticle::class,
 )]
-class NodeArticleMapper extends BnfMapperPluginBase {
-
-  /**
-   * Entity storage to create node in.
-   */
-  protected EntityStorageInterface $nodeStorage;
+class NodeArticleMapper extends BnfMapperNodePluginBase {
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(
-    array $configuration,
-    string $pluginId,
-    array $pluginDefinition,
-    protected BnfMapperManager $manager,
-    EntityTypeManagerInterface $entityTypeManager,
-  ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
-
-    $this->nodeStorage = $entityTypeManager->getStorage('node');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function map(ObjectLike $object): mixed {
+  public function map(ObjectLike $object): NodeInterface {
     if (!$object instanceof NodeArticle) {
       throw new \RuntimeException('Wrong class handed to mapper');
     }
 
-    /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->nodeStorage->create([
-      'type' => 'article',
-      'uuid' => $object->id,
-    ]);
+    $node = $this->getNode($object, 'article');
 
-    $node->set('title', $object->title);
+    $node->set('field_subtitle', $object->subtitle);
 
-    if ($object->paragraphs) {
-      $paragraphs = [];
-
-      foreach ($object->paragraphs as $paragraph) {
-        $paragraphs[] = $this->manager->map($paragraph);
-      }
-
-      $node->set('field_paragraphs', $paragraphs);
-    }
+    $node->set('field_teaser_text', $object->teaserText);
+    $node->set('field_teaser_image', $this->getImageValue($object->teaserImage));
 
     return $node;
   }

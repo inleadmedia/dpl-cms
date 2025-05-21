@@ -2,9 +2,12 @@
 
 namespace Drupal\dpl_library_token\Plugin\GraphQL\DataProducer;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dpl_library_token\LibraryTokenHandler;
+use Drupal\graphql\GraphQL\Execution\FieldContext;
 use Drupal\graphql\Plugin\GraphQL\DataProducer\DataProducerPluginBase;
+use Safe\DateTime;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,15 +55,38 @@ class AdgangsplatformenLibraryTokenProducer extends DataProducerPluginBase imple
   }
 
   /**
-   * Resolves the library access token.
+   * Transforms an RFC3339 formatted date string into Drupal GraphQL datetime.
+   *
+   * @param string $expire
+   *   The date the token expires in RFC3339 format.
    *
    * @return mixed[]
-   *   The library access token.
+   *   The formatted date array.
    */
-  public function resolve(): array | null {
+  protected function formatExpireDate(string $expire): array {
+    $dateTime = new DateTime($expire);
+
     return [
-      "token" => $this->libraryTokenHandler->getToken(),
+      'timestamp' => $dateTime->getTimestamp(),
+      'timezone' => $dateTime->getTimezone()->getName(),
+      'offset' => $dateTime->format('P'),
+      'time' => $dateTime->format(\DateTime::RFC3339),
     ];
+  }
+
+  /**
+   * Resolves the library access token.
+   *
+   * @param \Drupal\graphql\GraphQL\Execution\FieldContext $field_context
+   *   Field context.
+   */
+  public function resolve(FieldContext $field_context): object | null {
+    $field_context->addCacheableDependency((new CacheableMetadata())->setCacheMaxAge(0));
+    $token = $this->libraryTokenHandler->getToken();
+    return $token ? (object) [
+      'token' => $token->token,
+      'expire' => $this->formatExpireDate($token->expiresAt),
+    ] : NULL;
   }
 
 }

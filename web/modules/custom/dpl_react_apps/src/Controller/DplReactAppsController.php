@@ -149,6 +149,8 @@ class DplReactAppsController extends ControllerBase {
       'showing-results-for-text' => $this->t('Showing results for "@query"', [], ['context' => 'Search Result']),
       'showing-text' => $this->t('Showing', [], ['context' => 'Search Result']),
       'web-search-link-text' => $this->t('Switch to the results for the library content.', [], ['context' => 'Search Result']),
+      'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
+      'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -232,6 +234,8 @@ class DplReactAppsController extends ControllerBase {
       'advanced-search-filter-location-description-text' => $this->t('Add a comma separated list for multiple locations', [], ['context' => 'advanced search']),
       'advanced-search-filter-sublocation-text' => $this->t('sublocation', [], ['context' => 'advanced search']),
       'advanced-search-filter-sublocation-description-text' => $this->t('Add a comma separated list for multiple sublocations', [], ['context' => 'advanced search']),
+      'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
+      'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -271,6 +275,8 @@ class DplReactAppsController extends ControllerBase {
       'sms-notifications-for-reservations-enabled-config' => (int) $this->reservationSettings->smsNotificationsIsEnabled(),
       'instant-loan-config' => $this->instantLoanSettings->getConfig(),
       'interest-periods-config' => json_encode($this->generalSettings->getInterestPeriodsConfig()),
+      'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
+      'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
 
       // Texts.
       'already-reserved-text' => $this->t('Already reserved', [], ['context' => 'Work Page']),
@@ -369,6 +375,7 @@ class DplReactAppsController extends ControllerBase {
           $this->t('We have @count copies of the material in stock', [], ['context' => 'Work Page']),
         ],
       ],
+      'material-grid-related-title-text' => $this->t('Other materials', [], ['context' => 'Work Page']),
       'missing-data-text' => $this->t('Missing data', [], ['context' => 'Work Page']),
       'modal-reservation-form-email-header-description-text' => $this->t('If you want to receive notifications by e-mail, you can enter or change the desired e-mail here.', [], ['context' => 'Work Page']),
       'modal-reservation-form-email-header-title-text' => $this->t('Change email', [], ['context' => 'Work Page']),
@@ -445,7 +452,7 @@ class DplReactAppsController extends ControllerBase {
       'publizon-error-status-invalid-phone-number-text' => $this->t('Invalid phone number', [], ['context' => 'Work Page']),
       'publizon-error-status-library-server-not-responding-text' => $this->t("The library's server is not responding – try logging in again later.", [], ['context' => 'Work Page']),
       'publizon-error-status-monthly-loan-limit-reached-text' => $this->t('Your library has reached the limit for the number of loans this month', [], ['context' => 'Work Page']),
-      'publizon-error-status-no-access-because-not-resident-text' => $this->t('You do not have access to eReolen from this library as you are not registered as a resident in the municipality. Contact the library.', [], ['context' => 'Work Page']),
+      'publizon-error-status-no-access-because-not-resident-text' => $this->t('You do not have access to digital materials from this library as you are not registered as a resident in the municipality. Contact the library.', [], ['context' => 'Work Page']),
       'publizon-error-status-no-country-found-with-given-country-code-text' => $this->t('No country could be found with the given country code', [], ['context' => 'Work Page']),
       'publizon-error-status-number-of-simultaneous-blue-loans-exceeded-text' => $this->t('The number of simultaneous loans of blue titles has been exceeded', [], ['context' => 'Work Page']),
       'publizon-error-status-number-of-simultaneous-loans-exceeded-text' => $this->t('The number of simultaneous loans has been exceeded', [], ['context' => 'Work Page']),

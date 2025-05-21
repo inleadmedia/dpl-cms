@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.go_category.field_go_color
     - field.field.node.go_category.field_paragraphs
     - field.field.node.go_category.field_publication_date
+    - field.field.node.go_category.field_tags
     - node.type.go_category
   module:
     - datetime
@@ -19,14 +20,13 @@ dependencies:
     - paragraphs_features
     - path
     - scheduler
+    - select2
 third_party_settings:
   field_group:
     group_category_info:
       children:
         - field_category_menu_title
-        - field_category_menu_color
         - field_category_menu_image
-        - field_category_menu_sound
       label: 'Category Info'
       region: content
       parent_name: ''
@@ -47,7 +47,24 @@ third_party_settings:
       label: 'Author & Date'
       region: content
       parent_name: ''
-      weight: 7
+      weight: 8
+      format_type: details_sidebar
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        label_as_html: false
+        open: true
+        description: ''
+        required_fields: true
+        weight: 0
+    group_tagging:
+      children:
+        - field_tags
+      label: Tagging
+      region: content
+      parent_name: ''
+      weight: 9
       format_type: details_sidebar
       format_settings:
         classes: ''
@@ -65,14 +82,7 @@ mode: default
 content:
   field_category_menu_image:
     type: media_library_widget
-    weight: 29
-    region: content
-    settings:
-      media_types: {  }
-    third_party_settings: {  }
-  field_category_menu_sound:
-    type: media_library_widget
-    weight: 30
+    weight: 28
     region: content
     settings:
       media_types: {  }
@@ -84,12 +94,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  field_go_color:
-    type: options_select
-    weight: 31
-    region: content
-    settings: {  }
     third_party_settings: {  }
   field_paragraphs:
     type: paragraphs
@@ -128,9 +132,19 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_tags:
+    type: select2_entity_reference
+    weight: 10
+    region: content
+    settings:
+      width: 100%
+      autocomplete: false
+      match_operator: CONTAINS
+      match_limit: 10
+    third_party_settings: {  }
   path:
     type: path
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -146,7 +160,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   simple_sitemap:
-    weight: 11
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -172,12 +186,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   url_redirects:
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
 hidden:
   created: true
+  field_category_menu_sound: true
+  field_go_color: true
   langcode: true
   promote: true
   sticky: true
