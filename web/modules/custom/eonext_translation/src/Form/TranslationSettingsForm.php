@@ -128,6 +128,14 @@ final class TranslationSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('drupal_translation_available_languages') ?? [],
     ];
 
+    $form['drupal_translation']['drupal_translation_oh_locale'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Locales for opening hours widget'),
+      '#rows' => 3,
+      '#description' => $this->t('Site lang code with its related local from https://github.com/iamkun/dayjs/tree/dev/src/locale per line. For ex: en:en-gb.'),
+      '#default_value' => $config->get('drupal_translation_oh_locale') ?? [],
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -171,6 +179,7 @@ final class TranslationSettingsForm extends ConfigFormBase {
     $this->config(static::SETTINGS)
       ->set('translation_type', $translationType)
       ->set('drupal_translation_available_languages', $languages)
+      ->set('drupal_translation_oh_locale', $form_state->getValue('drupal_translation_oh_locale'))
       ->save();
 
     parent::submitForm($form, $form_state);

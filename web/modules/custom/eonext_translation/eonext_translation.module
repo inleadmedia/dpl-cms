@@ -26,6 +26,24 @@ function eonext_translation_preprocess_html(array &$variables): void {
   if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
     $languageLinks = \Drupal::service('eonext_translation.service')->getLanguageLinks();
     $variables['attributes']['data-eonext-translation-languages'] = json_encode($languageLinks);
+
+    // Prepare opening hours locale.
+    $translation_oh = $translation_settings->get('drupal_translation_oh_locale');
+
+    if (!empty($translation_oh)) {
+      $locale = \Drupal::languageManager()->getCurrentLanguage()->getId();
+      // Parse the config string into an associative array.
+      $locale_map = [];
+      foreach (explode("\n", $translation_oh) as $line) {
+        [$key, $value] = array_map('trim', explode(':', $line, 2));
+        if ($key && $value) {
+          $locale_map[$key] = $value;
+        }
+      }
+      // Get the mapped value for the current locale.
+      $mapped_locale = $locale_map[$locale] ?? NULL;
+      $variables['attributes']['data-eonext-translation-oh-locale'] = $mapped_locale ?? 'da';
+    }
   }
 
   $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');

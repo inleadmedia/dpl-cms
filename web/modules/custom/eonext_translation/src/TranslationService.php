@@ -161,7 +161,7 @@ class TranslationService implements TranslationServiceInterface {
 
       // This may happen if the language is enabled in eonext config
       // but disabled later in the language manager.
-      if (!$langUrl) {
+      if (!$langUrl || !isset($languageManagerLinks->links[$langCode]['language'])) {
         continue;
       }
 
