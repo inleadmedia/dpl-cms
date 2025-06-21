@@ -9,6 +9,7 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\AttachmentsInterface;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
 use Drupal\eonext_translation\TranslationService;
 use Drupal\node\NodeInterface;
@@ -26,24 +27,6 @@ function eonext_translation_preprocess_html(array &$variables): void {
   if (TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE === $translation_type) {
     $languageLinks = \Drupal::service('eonext_translation.service')->getLanguageLinks();
     $variables['attributes']['data-eonext-translation-languages'] = json_encode($languageLinks);
-
-    // Prepare opening hours locale.
-    $translation_oh = $translation_settings->get('drupal_translation_oh_locale');
-
-    if (!empty($translation_oh)) {
-      $locale = \Drupal::languageManager()->getCurrentLanguage()->getId();
-      // Parse the config string into an associative array.
-      $locale_map = [];
-      foreach (explode("\n", $translation_oh) as $line) {
-        [$key, $value] = array_map('trim', explode(':', $line, 2));
-        if ($key && $value) {
-          $locale_map[$key] = $value;
-        }
-      }
-      // Get the mapped value for the current locale.
-      $mapped_locale = $locale_map[$locale] ?? NULL;
-      $variables['attributes']['data-eonext-translation-oh-locale'] = $mapped_locale ?? 'da';
-    }
   }
 
   $translate_footer = \Drupal::config('eonext_translation.footer')->get('translate_footer');
@@ -171,4 +154,61 @@ function eonext_translation_entity_update(EntityInterface $entity) {
     }
   }
 
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function eonext_translation_page_attachments(array &$attachments) {
+  $config = \Drupal::config('eonext_translation.settings');
+  $translation_type = $config->get('translation_type');
+
+  if ($translation_type !== TranslationSettingsForm::TRANSLATION_TYPE_DRUPAL_TRANSLATE) {
+    return;
+  }
+
+  $mapping_string = $config->get('drupal_translation_oh_locale');
+  if (empty($mapping_string)) {
+    return;
+  }
+
+  $locale = \Drupal::languageManager()->getCurrentLanguage()->getId();
+  $locale_map = [];
+  foreach (explode("\n", $mapping_string) as $line) {
+    [$key, $value] = array_map('trim', explode(':', $line, 2));
+    if ($key && $value) {
+      $locale_map[$key] = $value;
+    }
+  }
+
+  $mapped_locale = $locale_map[$locale] ?? 'da';
+  $cdn_url = "https://cdn.jsdelivr.net/npm/dayjs@1/locale/{$mapped_locale}.js";
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => ['type' => 'text/javascript'],
+      '#value' => <<<JS
+window.dayjs = {
+  default: {
+    locale: function(locale) {
+      window.DPL_dayjsCustomLocale = locale;
+    }
+  }
+};
+JS
+    ],
+    'eonext_translation_inline_dayjs_setup',
+  ];
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $cdn_url,
+        'type' => 'text/javascript',
+      ],
+    ],
+    'eonext_translation_dayjs_locale_cdn',
+  ];
 }
