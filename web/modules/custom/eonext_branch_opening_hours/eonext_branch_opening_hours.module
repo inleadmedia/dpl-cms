@@ -1,5 +1,8 @@
 <?php
 
+use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * @file
  * Branch Opening Hours logic.
@@ -62,4 +65,87 @@ function template_preprocess_html__node__opening_hours_bare(array &$variables): 
     ['@library_name' => $branch_node->getTitle()],
     ['context' => 'eonext']
   );
+}
+
+/**
+ * Implements hook_entity_insert().
+ *
+ * Triggers on creation of a 'branch' node.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The inserted entity.
+ */
+function eonext_branch_opening_hours_entity_insert(EntityInterface $entity): void {
+  if ($entity instanceof NodeInterface && $entity->bundle() === 'branch') {
+    _eonext_branch_opening_hours_trigger($entity, 'insert');
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * Triggers on update of a 'branch' node.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The updated entity.
+ */
+function eonext_branch_opening_hours_entity_update(EntityInterface $entity): void {
+  if ($entity instanceof NodeInterface && $entity->bundle() === 'branch') {
+    _eonext_branch_opening_hours_trigger($entity, 'update');
+  }
+}
+
+/**
+ * Sends branch node data to an external API.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ *   The branch node being processed.
+ * @param string $action
+ *   The type of action performed: 'insert' or 'update'.
+ */
+function _eonext_branch_opening_hours_trigger(NodeInterface $node, string $action): void {
+  $config = \Drupal::config('eonext_branch_opening_hours.settings');
+
+  if (!$config->get('enabled')) {
+    return;
+  }
+
+  $domain = trim($config->get('domain'), '/');
+  $consumer_hash = $config->get('consumer_hash');
+
+  // Construct the URL for the POST request.
+  $url = "https://{$domain}/{$consumer_hash}/update-google-business/opening-hours";
+
+  // Build the request payload.
+  $payload = [
+    'libraryId' => $node->id(),
+    'libraryTitle' => $node->label(),
+    'action' => $action,
+  ];
+
+  \Drupal::logger('eonext_branch_opening_hours')->debug(
+    'branch ID @id; Title: @title; action: @action',
+    [
+      '@id' => $node->id(),
+      '@title' => $node->label(),
+      '@action' => $action,
+    ]
+  );
+
+  try {
+    $client = \Drupal::httpClient();
+    $client->post($url, [
+      'headers' => ['Content-Type' => 'application/json'],
+      'json' => $payload,
+    ]);
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('eonext_branch_opening_hours')->error(
+      'Failed to push opening hours for branch ID @id: @message',
+      [
+        '@id' => $node->id(),
+        '@message' => $e->getMessage(),
+      ]
+    );
+  }
 }

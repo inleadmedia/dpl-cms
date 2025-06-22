@@ -1,0 +1,8 @@
+services:
+  eonext_branch_opening_hours.rest_subscriber:
+    class: Drupal\eonext_branch_opening_hours\EventSubscriber\OpeningHoursRestSubscriber
+    arguments:
+      - '@config.factory'
+      - '@http_client'
+    tags:
+      - { name: event_subscriber }

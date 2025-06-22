@@ -1,0 +1,6 @@
+eonext_branch_opening_hours.settings:
+  title: 'Branch Opening Hours'
+  description: 'Settings for pushing branch opening hours externally.'
+  route_name: eonext_branch_opening_hours.settings
+  parent: system.admin_config
+  weight: 100

@@ -4,3 +4,12 @@ eonext_branch_opening_hours.node_bare:
     _controller: '\Drupal\eonext_branch_opening_hours\Controller\BareOpeningHoursEditorController::content'
   requirements:
     _custom_access: '\Drupal\eonext_branch_opening_hours\Controller\BareOpeningHoursEditorController::access'
+eonext_branch_opening_hours.settings:
+  path: '/admin/config/eonext/branch-opening-hours'
+  defaults:
+    _form: '\Drupal\eonext_branch_opening_hours\Form\BranchOpeningHoursSettingsForm'
+    _title: 'Branch Opening Hours Settings'
+  requirements:
+    _permission: 'administer eonext branch opening hours'
+  options:
+    _admin_route: TRUE
