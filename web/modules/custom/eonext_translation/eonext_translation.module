@@ -211,4 +211,34 @@ JS
     ],
     'eonext_translation_dayjs_locale_cdn',
   ];
+
+  $cdn_url_fc = "https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.17/locales/{$mapped_locale}.global.min.js";
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => ['type' => 'text/javascript'],
+      '#value' => <<<JS
+window.FullCalendar = {
+    globalLocales: {
+      push: function(locale) {
+        window.DPL_fullCalendarCustomLocale = locale;
+      }
+    }
+  };
+JS
+    ],
+    'eonext_translation_inline_fullcalendar_setup',
+  ];
+
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'src' => $cdn_url_fc,
+        'type' => 'text/javascript',
+      ],
+    ],
+    'eonext_translation_fullcalendar_locale_cdn',
+  ];
 }

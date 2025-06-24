@@ -132,7 +132,7 @@ final class TranslationSettingsForm extends ConfigFormBase {
       '#type' => 'textarea',
       '#title' => $this->t('Locales for opening hours widget'),
       '#rows' => 3,
-      '#description' => $this->t('Site lang code with its related local from https://github.com/iamkun/dayjs/tree/dev/src/locale per line. For ex: en:en-gb.'),
+      '#description' => $this->t('Site lang code with its related local from https://github.com/iamkun/dayjs/tree/dev/src/locale and https://github.com/fullcalendar/fullcalendar/tree/main/packages/core/src/locales per line. For ex: en:en-gb.'),
       '#default_value' => $config->get('drupal_translation_oh_locale') ?? [],
     ];
 
