@@ -17,6 +17,7 @@ use Drupal\dpl_event\Form\SettingsForm;
 use Drupal\dpl_event\Services\EventRestMapper as EventsRestMapperDefault;
 use Drupal\eonext_event_status\Model\EventsGET200ResponseInner;
 use Drupal\file\FileInterface;
+use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\recurring_events\Entity\EventSeries;
 
