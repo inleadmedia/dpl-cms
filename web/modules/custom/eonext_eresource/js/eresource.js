@@ -26,10 +26,10 @@
 
         // Create dropdown wrapper
         const dropdownWrapper = document.createElement('div');
-        dropdownWrapper.className = 'dropdown dropdown--grey-borders';
+        dropdownWrapper.className = 'dropdown';
 
         select = document.createElement('select');
-        select.className = 'form-select dropdown__select dropdown__select--grey';
+        select.className = 'form-select dropdown__select';
         select.onchange = function () {
           if (this.value) window.location.href = this.value;
         };

@@ -194,6 +194,15 @@ article.node--type-e_resource.node--view-mode-full {
       }
     }
   }
+  .views-field-field-e-resource-category {
+    display: none;
+  }
+  .e-resource-category-filter {
+    margin-bottom: 10px;
+    h3 {
+      font-size: 1em;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
