@@ -289,6 +289,12 @@ class GeneralSettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('show_cicero_lms_search_sorting') ?? FALSE,
     ];
 
+    $form['search_lazy_types_loading'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable search lazy loading (search optimization)', [], ['context' => 'eonext']),
+      '#default_value' => $config->get('search_lazy_types_loading') ?? FALSE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -345,6 +351,7 @@ class GeneralSettingsForm extends ConfigFormBase {
       ->set('use_lms_user_api', $form_state->getValue('use_lms_user_api'))
       ->set('show_search_branch_selection', $form_state->getValue('show_search_branch_selection'))
       ->set('show_cicero_lms_search_sorting', $form_state->getValue('show_cicero_lms_search_sorting'))
+      ->set('search_lazy_types_loading', $form_state->getValue('search_lazy_types_loading'))
       ->save();
 
     $this->branchSettings->setExcludedAvailabilityBranches(array_filter($form_state->getValue('availability')));
