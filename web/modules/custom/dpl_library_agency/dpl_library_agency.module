@@ -44,6 +44,9 @@ function dpl_library_agency_preprocess_html(array &$variables): void {
   if ($config->get('show_cicero_lms_search_sorting')) {
     $variables['attributes']['data-show-search-sorting'] = 'true';
   }
+  if ($config->get('search_lazy_types_loading')) {
+    $variables['attributes']['data-search-lazy-types-loading'] = 'true';
+  }
 }
 
 /**
