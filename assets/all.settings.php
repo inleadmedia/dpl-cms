@@ -144,6 +144,12 @@ if (getenv('CI')) {
     'material-list' => ['base_url' => 'http://prod.materiallist.dandigbib.org'],
   ];
 
+  // Avoid attempts to send out mail during tests.
+  $config['mailsystem.settings']['defaults'] = [
+    'formatter' => 'devel_mail_log',
+    'sender' => 'devel_mail_log',
+  ];
+
   // We need to be fixed language in our UI texts
   // because we use them for assertions in tests.
   $config['language.negotiation']['selected_langcode'] = 'en';
@@ -159,10 +165,6 @@ if (getenv('LAGOON_ENVIRONMENT_TYPE') !== 'production') {
   // because the user pulling in the changes won't have permissions to modify
   // files in the directory.
   $settings['skip_permissions_hardening'] = TRUE;
-
-  // Set default Unilogin configuration on non-production environments.
-  $config['dpl_unilogin.settings']['unilogin_api_endpoint'] = 'https://broker.unilogin.dk';
-  $config['dpl_unilogin.settings']['unilogin_api_wellknown_endpoint'] = 'https://broker.unilogin.dk/auth/realms/broker/.well-known/openid-configuration';
 }
 
 // Setup Redis.
@@ -182,6 +184,13 @@ if (getenv('LAGOON')) {
   ) {
     // Enable the cache backend.
     $settings['cache']['default'] = 'cache.backend.redis';
+
+    // The graphql module seems to have issues with things getting munged in
+    // the cache. Obviously this shouldn't happen, but for the moment move
+    // it's cache to the database.
+    // @see https://www.drupal.org/project/graphql/issues/3477239
+    $settings['cache']['bins']['graphql_ast'] = 'cache.backend.database';
+    $settings['cache']['bins']['graphql_results'] = 'cache.backend.database';
 
     // The default example configuration that ships with the module works fine.
     // By using it, we rely on future developers that updates the module to
