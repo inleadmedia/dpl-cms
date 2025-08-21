@@ -4,6 +4,7 @@ namespace Drupal\dpl_react_apps\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\dpl_fbi\FirstAccessionDateOperator;
 use Drupal\dpl_fbs\Form\FbsSettingsForm;
 use Drupal\dpl_instant_loan\DplInstantLoanSettings;
 use Drupal\dpl_library_agency\Branch\Branch;
@@ -226,6 +227,7 @@ class DplReactAppsController extends ControllerBase {
       'clause-or-text' => $this->t('or', [], ['context' => 'advanced search']),
       'copied-link-to-this-search-text' => $this->t('Link copied to clipboard', [], ['context' => 'advanced search']),
       'copied-to-clipboard-text' => $this->t('Copied', [], ['context' => 'advanced search']),
+      'cql-search-external-help-link-text' => $this->t('CQL search external help link text', [], ['context' => 'advanced search']),
       'cql-search-title-text' => $this->t('CQL search', [], ['context' => 'advanced search']),
       'loading-results-text' => $this->t('Loading results...', [], ['context' => 'advanced search']),
       'showing-materials-text' => $this->t('showing materials', [], ['context' => 'advanced search']),
@@ -234,8 +236,30 @@ class DplReactAppsController extends ControllerBase {
       'advanced-search-filter-location-description-text' => $this->t('Add a comma separated list for multiple locations', [], ['context' => 'advanced search']),
       'advanced-search-filter-sublocation-text' => $this->t('sublocation', [], ['context' => 'advanced search']),
       'advanced-search-filter-sublocation-description-text' => $this->t('Add a comma separated list for multiple sublocations', [], ['context' => 'advanced search']),
+      'advanced-search-filter-branch-text' => $this->t('Branch', [], ['context' => 'advanced search']),
+      'advanced-search-filter-branch-description-text' => $this->t('Add a comma separated list for multiple branches', [], ['context' => 'advanced search']),
+      'advanced-search-filter-department-text' => $this->t('Department', [], ['context' => 'advanced search']),
+      'advanced-search-filter-department-description-text' => $this->t('E.g. "Adult" or "Children"', [], ['context' => 'advanced search']),
+      'advanced-search-first-accession-date-text' => $this->t('Date for first accession date', [], ['context' => 'advanced search']),
+      'advanced-search-first-accession-date-operator-text' => $this->t('Choose operator', [], ['context' => 'advanced search']),
+      'advanced-search-filter-later-than-text' => FirstAccessionDateOperator::LaterThan->label(),
+      'advanced-search-filter-exact-date-text' => FirstAccessionDateOperator::ExactDate->label(),
+      'advanced-search-filter-earlier-than-text' => FirstAccessionDateOperator::EarlierThan->label(),
+      'advanced-search-first-accession-date-description-text' => $this->t('The format should be YYYY-MM-DD e.g. 2024-11-24. Terms ”NOW”, ”DAYS” and ”MONTHS” can also be used. For example ”NOW - 90 DAYS”. Remember to add a space on both sides of the plus and minus symbols.', [], ['context' => 'advanced search']),
+      'advanced-search-first-accession-date-specify-date-text' => $this->t('Input desired date in format ”YYYY-MM-DD”', [], ['context' => 'advanced search']),
       'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
       'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
+      'advanced-search-sort-label-text' => $this->t('Sort by', [], ['context' => 'advanced search']),
+      'advanced-search-sort-relevance-text' => $this->t('Relevance', [], ['context' => 'advanced search']),
+      'advanced-search-sort-latest-pub-date-text' => $this->t('Latest publication date', [], ['context' => 'advanced search']),
+      'advanced-search-sort-latest-pub-date-desc-text' => $this->t('Latest publication date (descending)', [], ['context' => 'advanced search']),
+      'advanced-search-sort-latest-pub-date-asc-text' => $this->t('Latest publication date (ascending)', [], ['context' => 'advanced search']),
+      'advanced-search-sort-creator-text' => $this->t('Author', [], ['context' => 'advanced search']),
+      'advanced-search-sort-creator-asc-text' => $this->t('Author (ascending)', [], ['context' => 'advanced search']),
+      'advanced-search-sort-creator-desc-text' => $this->t('Author (descending)', [], ['context' => 'advanced search']),
+      'advanced-search-sort-title-text' => $this->t('Title', [], ['context' => 'advanced search']),
+      'advanced-search-sort-title-asc-text' => $this->t('Title (ascending)', [], ['context' => 'advanced search']),
+      'advanced-search-sort-title-desc-text' => $this->t('Title (descending)', [], ['context' => 'advanced search']),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -275,6 +299,7 @@ class DplReactAppsController extends ControllerBase {
       'sms-notifications-for-reservations-enabled-config' => (int) $this->reservationSettings->smsNotificationsIsEnabled(),
       'instant-loan-config' => $this->instantLoanSettings->getConfig(),
       'interest-periods-config' => json_encode($this->generalSettings->getInterestPeriodsConfig()),
+      'find-on-shelf-disclosures-default-open-config' => (int) $this->generalSettings->getFindOnShelfDisclosuresDefaultOpen(),
       'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
       'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
 
@@ -340,6 +365,7 @@ class DplReactAppsController extends ControllerBase {
       'hearts-icon-text' => $this->t('hearts', [], ['context' => 'Work Page']),
       'identifier-text' => $this->t('Identifiers', [], ['context' => 'Work Page']),
       'in-same-series-text' => $this->t('In the same series', [], ['context' => 'Work Page']),
+      'infomedia-copyright-text' => $this->t('All material in Infomedia is covered by copyright law and may not be copied without special permission.', [], ['context' => 'Work Page']),
       'infomedia-modal-close-modal-aria-label-text' => $this->t('Close infomedia modal', [], ['context' => 'Work Page']),
       'infomedia-modal-screen-reader-modal-description-text' => $this->t('Infomedia modal screen reader description', [], ['context' => 'Work Page']),
       'instant-loan-sub-title-text' => $this->t('Avoid the queue and pick up the material now', [], ['context' => 'Work Page']),
@@ -352,6 +378,7 @@ class DplReactAppsController extends ControllerBase {
       'interest-period-two-months-config-text' => $this->t('1', [], ['context' => 'Work Page']),
       'isbn-text' => $this->t('ISBN', [], ['context' => 'Work Page']),
       'language-text' => $this->t('Language', [], ['context' => 'Work Page']),
+      'library-assessment-text' => $this->t('Library assessment', [], ['context' => 'Work Page']),
       'libraries-have-the-material-text' => $this->t('Libraries have the material', [], ['context' => 'Work Page']),
       'listen-online-text' => $this->t('Listen online', [], ['context' => 'Work Page']),
       'loan-with-material-type-text' => $this->t('Loan @materialType', [], ['context' => 'Work Page']),
@@ -376,6 +403,11 @@ class DplReactAppsController extends ControllerBase {
         ],
       ],
       'material-grid-related-title-text' => $this->t('Other materials', [], ['context' => 'Work Page']),
+      'material-grid-related-recommendations-data-label-text' => $this->t('Recommendations', [], ['context' => 'Work Page']),
+      'material-grid-related-series-data-label-text' => $this->t('In same series', [], ['context' => 'Work Page']),
+      'material-grid-related-author-data-label-text' => $this->t('By same author', [], ['context' => 'Work Page']),
+      'material-grid-related-inline-filters-aria-label-text' => $this->t('Filter displayed materials', [], ['context' => 'Work Page']),
+      'material-grid-related-select-aria-label-text' => $this->t('Select material filter', [], ['context' => 'Work Page']),
       'missing-data-text' => $this->t('Missing data', [], ['context' => 'Work Page']),
       'modal-reservation-form-email-header-description-text' => $this->t('If you want to receive notifications by e-mail, you can enter or change the desired e-mail here.', [], ['context' => 'Work Page']),
       'modal-reservation-form-email-header-title-text' => $this->t('Change email', [], ['context' => 'Work Page']),
@@ -466,6 +498,8 @@ class DplReactAppsController extends ControllerBase {
       'read-article-text' => $this->t('Read article', [], ['context' => 'Work Page']),
       'receive-email-when-material-ready-text' => $this->t('Receive mail when the material is ready', [], ['context' => 'Work Page']),
       'receive-sms-when-material-ready-text' => $this->t('Receive SMS when the material is ready', [], ['context' => 'Work Page']),
+      'reservable-from-another-library-missing-email-text' => $this->t('You need to add an email address to reserve from another library.', [], ['context' => 'Work Page']),
+      'reservable-from-another-library-extra-info-text' => $this->t('NOTE! This material is ordered from another library. Therefore, it may take a few days before it appears on your list of reservations.', [], ['context' => 'Work Page']),
       'reservable-from-another-library-text' => $this->t('Ordered from another library', [], ['context' => 'Work Page']),
       'reservation-errors-description-text' => $this->t('Year', [], ['context' => 'Work Page']),
       'reservation-errors-title-text' => $this->t('Reservation error', [], ['context' => 'Work Page']),
