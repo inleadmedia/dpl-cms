@@ -84,6 +84,28 @@ class GetNode extends \Spawnia\Sailor\Operation
               teaserText
               paragraphs {
                 __typename
+                ... on ParagraphNavGridManual {
+                  id
+                  titleOptional: title
+                  showSubtitles
+                  contentReferenceUuids
+                }
+                ... on ParagraphNavSpotsManual {
+                  id
+                  navSpotsContentUuids
+                }
+                ... on ParagraphCardGridManual {
+                  id
+                  titleOptional: title
+                  moreLink {
+                    __typename
+                    internal
+                    title
+                    url
+                    id
+                  }
+                  gridContentUuids
+                }
                 ... on ParagraphAccordion {
                   id
                   accordionDescription {
@@ -119,6 +141,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                   underlinedTitle {
                     __typename
@@ -174,6 +197,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                   heroTitle
                 }
@@ -184,6 +208,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                 }
                 ... on ParagraphMaterialGridAutomatic {
@@ -257,6 +282,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                 }
                 ... on ParagraphTextBody {
@@ -325,6 +351,28 @@ class GetNode extends \Spawnia\Sailor\Operation
               teaserText
               paragraphs {
                 __typename
+                ... on ParagraphNavGridManual {
+                  id
+                  titleOptional: title
+                  showSubtitles
+                  contentReferenceUuids
+                }
+                ... on ParagraphNavSpotsManual {
+                  id
+                  navSpotsContentUuids
+                }
+                ... on ParagraphCardGridManual {
+                  id
+                  titleOptional: title
+                  moreLink {
+                    __typename
+                    internal
+                    title
+                    url
+                    id
+                  }
+                  gridContentUuids
+                }
                 ... on ParagraphAccordion {
                   id
                   accordionDescription {
@@ -360,6 +408,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                   underlinedTitle {
                     __typename
@@ -415,6 +464,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                   heroTitle
                 }
@@ -425,6 +475,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                 }
                 ... on ParagraphMaterialGridAutomatic {
@@ -498,6 +549,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                     internal
                     title
                     url
+                    id
                   }
                 }
                 ... on ParagraphTextBody {
@@ -593,17 +645,6 @@ class GetNode extends \Spawnia\Sailor\Operation
                     }
                   }
                 }
-                ... on ParagraphGoLink {
-                  id
-                  linkRequired: link {
-                    __typename
-                    internal
-                    title
-                    url
-                  }
-                  targetBlank
-                  ariaLabel
-                }
                 ... on ParagraphGoLinkbox {
                   id
                   title
@@ -632,6 +673,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                         internal
                         title
                         url
+                        id
                       }
                       targetBlank
                       ariaLabel
@@ -791,17 +833,6 @@ class GetNode extends \Spawnia\Sailor\Operation
                     }
                   }
                 }
-                ... on ParagraphGoLink {
-                  id
-                  linkRequired: link {
-                    __typename
-                    internal
-                    title
-                    url
-                  }
-                  targetBlank
-                  ariaLabel
-                }
                 ... on ParagraphGoLinkbox {
                   id
                   title
@@ -830,6 +861,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                         internal
                         title
                         url
+                        id
                       }
                       targetBlank
                       ariaLabel
@@ -988,6 +1020,7 @@ class GetNode extends \Spawnia\Sailor\Operation
                         internal
                         title
                         url
+                        id
                       }
                       targetBlank
                       ariaLabel

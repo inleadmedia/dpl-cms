@@ -20,3 +20,7 @@ import './commands';
 // require('./commands')
 
 import 'cypress-plugin-api';
+
+// Collect logs for the console.
+import installLogsCollector from 'cypress-terminal-report/src/installLogsCollector';
+installLogsCollector();
