@@ -66,7 +66,7 @@ class GraphQLResponseSubscriber implements EventSubscriberInterface {
     }
   }
 
-  /**
+    /**
    * Remove language prefix from a URL.
    *
    * @param string $url
@@ -76,19 +76,9 @@ class GraphQLResponseSubscriber implements EventSubscriberInterface {
    *   The cleaned URL.
    */
   protected function removeLanguagePrefix(string $url): string {
-    // If it's a full URL, extract just the path part.
-    if (filter_var($url, FILTER_VALIDATE_URL)) {
-      $parsedUrl = parse_url($url);
-      $url = $parsedUrl['path'] ?? '/';
-    }
-
     // Remove language prefix if present (e.g., /en/, /da/, /de/, /kl/).
-    if (preg_match('/^\/[a-z]{2}\//', $url)) {
-      $cleanUrl = preg_replace('/^\/[a-z]{2}\//', '/', $url);
-      return $cleanUrl;
-    }
-
-    return $url;
+    // This works for both full URLs and relative paths.
+    return preg_replace('/\/[a-z]{2}\//', '/', $url);
   }
 
 }
