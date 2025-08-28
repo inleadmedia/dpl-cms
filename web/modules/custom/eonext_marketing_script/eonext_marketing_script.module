@@ -1,0 +1,138 @@
+<?php
+
+/**
+ * @file
+ * EO Next Marketing Script paragraph module.
+ */
+
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_theme().
+ */
+function eonext_marketing_script_theme($existing, $type, $theme, $path) {
+  return [
+    'paragraph__marketing_script' => [
+      'template' => 'paragraph--marketing-script',
+      'base hook' => 'paragraph',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ *
+ * Replaces marketing_script paragraph content with the marketing form.
+ */
+function eonext_marketing_script_preprocess_paragraph(&$variables) {
+  $paragraph = $variables['paragraph'];
+
+  if ($paragraph->bundle() === 'marketing_script') {
+    // Marketing form HTML with styling - EXACT COPY from original.
+    $marketing_html = '
+<!--
+Do not modify the NAME value of any of the INPUT fields
+the FORM action, or any of the hidden fields (eg. input type=hidden).
+These are all required for this form to function correctly.
+-->
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+			function CheckMultiple7430(frm, name) {
+				for (var i=0; i < frm.length; i++)
+				{
+					fldObj = frm.elements[i];
+					fldId = fldObj.id;
+					if (fldId) {
+						var fieldnamecheck=fldObj.id.indexOf(name);
+						if (fieldnamecheck != -1) {
+							if (fldObj.checked) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+
+						function CheckForm7430(f) {
+			var email_re = /[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i;
+				if (!email_re.test(f.email.value)) {
+					alert("Venligst indtaste din e-mail-adresse.");
+					f.email.focus();
+					return false;
+				}
+
+				if(typeof intlNumber != "undefined" && intlNumber != "")
+				{
+					$("#mobile").val(intlNumber);
+				}
+				return true;
+			}
+
+// ]]>
+</script>
+<style type="text/css">
+.myForm td, input, select, textarea, checkbox {
+	font-family: tahoma;
+	font-size: 12px;
+}
+
+.required {
+	color: red;
+}
+
+input.fb {
+	background-image: url(\'https://app.marketingplatform.com/public/images/facebookautofill.jpg\');
+	width: 179px;
+	height: 37px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+</style>
+<div>
+	<table border="0" cellpadding="2" class="myForm">
+		<tbody>
+			<tr>
+				<td></td>
+				<td>
+					<form method="post" action="https://app.marketingplatform.com/ExtAccess/Form?form=7430" id="frmSS7430"
+						onsubmit="return CheckForm7430(this);">
+						<table>
+							<tr>
+	<td><span class="required">*</span>
+&nbsp;
+Din e-mail:</td>
+	<td><input type="text" name="email" /></td>
+</tr><tr>
+	<td>&nbsp;&nbsp;&nbsp;&nbsp;
+Interesseområde:</td>
+	<td><label class="icon" for="CustomFields[335222_7430]_Børn og familie"><input type="checkbox" id="CustomFields[335222_7430]_Børn og familie"  name="CustomFields[335222][]" value="Børn og familie">Børn og familie</label><br/><label class="icon" for="CustomFields[335222_7430]_Voksne"><input type="checkbox" id="CustomFields[335222_7430]_Voksne"  name="CustomFields[335222][]" value="Voksne">Voksne</label><br/></td>
+</tr><tr style="display:none;"><td>&nbsp;&nbsp;&nbsp;&nbsp;First Name:</td><td><input type="text" class="form-control" name="first_name_mp" id="first_name_mp" ></td></tr>
+							<tr>
+								<td>&nbsp;</td>
+								<td><input type="submit"
+									value="Tilmeld"
+									style="background-color: #f0f0f0; font-size: 12px;\'" /></td>
+							</tr>
+							<tr>
+								<td colspan="2" style="text-align: right"><a href="http://www.marketingplatform.com" target="_blank">Email Marketing System fra Marketingplatform.com</a></td>
+							</tr>
+						</table>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+';
+
+    // Replace the paragraph content with the marketing form.
+    $variables['content'] = [
+      '#markup' => Markup::create($marketing_html),
+    ];
+  }
+}
