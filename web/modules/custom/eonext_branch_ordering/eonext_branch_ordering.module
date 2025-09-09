@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -17,6 +18,12 @@ function eonext_branch_ordering_form_dpl_library_agency_general_settings_alter(&
 
   // Get the branch repository to load all branches.
   $branch_repository = \Drupal::service('dpl_library_agency.branch.repository');
+
+  // Get branch settings to check for excluded branches.
+  $branch_settings = \Drupal::service('dpl_library_agency.branch_settings');
+  $excluded_search = $branch_settings->getExcludedSearchBranches();
+  $excluded_availability = $branch_settings->getExcludedAvailabilityBranches();
+  $excluded_reservation = $branch_settings->getExcludedReservationBranches();
 
   try {
     $branches = $branch_repository->getBranches();
@@ -32,9 +39,20 @@ function eonext_branch_ordering_form_dpl_library_agency_general_settings_alter(&
     $table_data = [];
     foreach ($branches as $branch) {
       $sort_order = $ordering_data[$branch->id] ?? 9999;
+
+      // Check if branch is excluded from any service.
+      $is_excluded = in_array($branch->id, $excluded_search) ||
+                     in_array($branch->id, $excluded_availability) ||
+                     in_array($branch->id, $excluded_reservation);
+
+      $branch_title = $branch->title;
+      if ($is_excluded) {
+        $branch_title = '<del style="color: #999;">' . $branch_title . '</del>';
+      }
+
       $table_data[] = [
         'branch_id' => $branch->id,
-        'branch_title' => $branch->title,
+        'branch_title' => $branch_title,
         'sort_order' => $sort_order,
       ];
     }
@@ -78,7 +96,7 @@ function eonext_branch_ordering_form_dpl_library_agency_general_settings_alter(&
         '#attributes' => ['class' => ['draggable']],
         '#weight' => $index,
         'branch_title' => [
-          '#markup' => $row['branch_title'],
+          '#markup' => Markup::create($row['branch_title']),
         ],
         'branch_id' => [
           '#markup' => $row['branch_id'],
