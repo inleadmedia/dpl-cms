@@ -66,8 +66,13 @@ function eonext_branch_ordering_form_dpl_library_agency_general_settings_alter(&
     $form['branch_ordering'] = [
       '#type' => 'details',
       '#title' => t('Branch Ordering'),
-      '#open' => TRUE,
-      '#weight' => 50,
+      '#open' => FALSE,
+      '#weight' => 1,
+      '#states' => [
+        'visible' => [
+          ':input[name="show_search_branch_selection"]' => ['checked' => TRUE],
+        ],
+      ],
     ];
 
     // Create the draggable table.
@@ -119,8 +124,8 @@ function eonext_branch_ordering_form_dpl_library_agency_general_settings_alter(&
     $form['branch_ordering'] = [
       '#type' => 'details',
       '#title' => t('Branch Ordering'),
-      '#open' => FALSE,
-      '#weight' => 50,
+      '#open' => TRUE,
+      '#weight' => 1,
     ];
 
     $form['branch_ordering']['error'] = [
