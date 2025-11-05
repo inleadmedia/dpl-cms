@@ -336,7 +336,7 @@ function dpl_react_apps_texts(): array {
     'three-months' => t('3 months', [], ['context' => 'Global']),
     'two-months' => t('2 months', [], ['context' => 'Global']),
   ];
-};
+}
 
 /**
  * Implements hook_dpl_react_apps_data().
@@ -398,6 +398,7 @@ function dpl_react_apps_dpl_react_apps_data(array &$data, array &$variables): vo
     ),
     'view-fees-and-compensation-rates' =>
     $fees_settings->getViewFeesAndCompensationRatesUrl(),
+    'zero-hits-search' => $general_settings->getZeroHitsSearchUrl(),
   ];
 
   if (!empty($fees_settings->getBlockedPatronElinkUrl())) {

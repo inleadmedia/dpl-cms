@@ -13,6 +13,7 @@ use Drupal\dpl_library_agency\BranchSettings;
 use Drupal\dpl_library_agency\FbiProfileType;
 use Drupal\dpl_library_agency\GeneralSettings;
 use Drupal\dpl_library_agency\ReservationSettings;
+use Drupal\dpl_login\Adgangsplatformen\Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -34,6 +35,7 @@ class DplReactAppsController extends ControllerBase {
     protected BranchRepositoryInterface $branchRepository,
     protected DplInstantLoanSettings $instantLoanSettings,
     protected GeneralSettings $generalSettings,
+    protected Config $adgangsplatformenConfig,
   ) {}
 
   /**
@@ -52,6 +54,7 @@ class DplReactAppsController extends ControllerBase {
       $container->get('dpl_library_agency.branch.repository'),
       $container->get('dpl_instant_loan.settings'),
       $container->get('dpl_library_agency.general_settings'),
+      $container->get('dpl_login.adgangsplatformen.config'),
     );
   }
 
@@ -114,6 +117,12 @@ class DplReactAppsController extends ControllerBase {
       'blacklisted-availability-branches-config' => $this->buildBranchesListProp($this->branchSettings->getExcludedAvailabilityBranches()),
       'blacklisted-search-branches-config' => $this->buildBranchesListProp($this->branchSettings->getExcludedSearchBranches()),
       'branches-config' => $this->buildBranchesJsonProp($this->branchRepository->getBranches()),
+      'search-infobox-config' => json_encode([
+        'title' => $this->generalSettings->loadConfig()->get('search_infobox_title'),
+        'content' => $this->generalSettings->loadConfig()->get('search_infobox_content'),
+        'buttonLabel' => $this->generalSettings->loadConfig()->get('search_infobox_button_label'),
+        'buttonUrl' => $this->generalSettings->loadConfig()->get('search_infobox_button_url'),
+      ]),
       // Dynamic values, set through preprocess.
       'web-search-config' => json_encode([
         'hasWebSearchResults' => FALSE,
@@ -300,6 +309,7 @@ class DplReactAppsController extends ControllerBase {
       'instant-loan-config' => $this->instantLoanSettings->getConfig(),
       'interest-periods-config' => json_encode($this->generalSettings->getInterestPeriodsConfig()),
       'find-on-shelf-disclosures-default-open-config' => (int) $this->generalSettings->getFindOnShelfDisclosuresDefaultOpen(),
+      'agency-id-config' => $this->adgangsplatformenConfig->getAgencyId(),
       'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
       'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
 
@@ -520,6 +530,17 @@ class DplReactAppsController extends ControllerBase {
       'type-text' => $this->t('Type', [], ['context' => 'Work Page']),
       'we-have-shopped-text' => $this->t('In stock:', [], ['context' => 'Work Page']),
       'you-have-borrowed-text' => $this->t('You have borrowed', [], ['context' => 'Work Page']),
+      'copy-link-default-text' => $this->t('Copy link', [], ['context' => 'Work Page']),
+      'copy-link-success-text' => $this->t('Link copied', [], ['context' => 'Work Page']),
+      'copy-link-to-edition-text' => $this->t('Copy link to edition', [], ['context' => 'Work Page']),
+      'edition-switch-button-change-text' => $this->t('Change edition', [], ['context' => 'Work Page']),
+      'edition-switch-button-choose-text' => $this->t('Choose', [], ['context' => 'Work Page']),
+      'edition-switch-button-fiction-text' => $this->t('First available edition', [], ['context' => 'Work Page']),
+      'edition-switch-button-non-fiction-text' => $this->t('Latest edition', [], ['context' => 'Work Page']),
+      'edition-switch-modal-close-aria-label-text' => $this->t('Close edition switch modal', [], ['context' => 'Work Page']),
+      'edition-switch-modal-description-text' => $this->t('Select which edition you would like to reserve from the available options below.', [], ['context' => 'Work Page']),
+      'edition-switch-modal-screen-reader-description-text' => $this->t('Edition switch modal', [], ['context' => 'Work Page']),
+      'edition-switch-modal-title-text' => $this->t('Choose Edition', [], ['context' => 'Work Page']),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -562,7 +583,7 @@ class DplReactAppsController extends ControllerBase {
       foreach ($general_settings->getFbiProfiles() as $type => $profile) {
         $service_key = sprintf('fbi-%s', $type);
         // The default FBI service has its own key with no suffix.
-        if ($type === FbiProfileType::DEFAULT->value) {
+        if ($type === FbiProfileType::Default->value) {
           $service_key = 'fbi';
         }
         // Create a service url with the profile embedded.

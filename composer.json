@@ -83,11 +83,11 @@
         }
     ],
     "require": {
-        "php": "8.1.*",
+        "php": "8.3.*",
         "ext-dom": "*",
         "amazeeio/drupal_integrations": "^0.5",
         "bower-asset/jsnlog": "^2.30",
-        "brick/math": "^0.13.0",
+        "brick/math": "^0.14.0",
         "composer/installers": "1.12.0",
         "cweagans/composer-patches": "1.7.3",
         "danskernesdigitalebibliotek/cms-api": "*",
@@ -110,17 +110,19 @@
         "drupal/consumers": "^1.19",
         "drupal/content_lock": "^2.4",
         "drupal/cookieinformation": "^2.1",
+        "drupal/core": "^10",
+        "drupal/core-composer-scaffold": "^10",
+        "drupal/core-recommended": "^10",
         "drupal/css_editor": "^2.0",
-        "drupal/core-composer-scaffold": "10.4.8",
-        "drupal/core-recommended": "10.4.8",
         "drupal/date_range_formatter": "^4.0",
         "drupal/default_content": "^2.0@alpha",
         "drupal/devel": "^5.1",
         "drupal/dynamic_entity_reference": "^3.1",
-        "drupal/editor_advanced_link": "^2.2",
+        "drupal/editor_advanced_link": "^2",
         "drupal/entity_clone_template": "^2.0",
         "drupal/entity_reference_revisions": "^1.11.0",
         "drupal/enum_field": "^1.0",
+        "drupal/evac": "^1.0",
         "drupal/externalauth": "^2.0",
         "drupal/facets": "^3.0",
         "drupal/field_group": "^4.0",
@@ -138,6 +140,10 @@
         "drupal/honeypot": "^2.2",
         "drupal/http_cache_control": "^2.5",
         "drupal/job_scheduler": "^4.0",
+        "drupal/jquery_ui": "^1.7",
+        "drupal/jquery_ui_datepicker": "^2.1",
+        "drupal/jquery_ui_slider": "^2.1",
+        "drupal/jquery_ui_touch_punch": "^1.1",
         "drupal/jsnlog": "^1.3",
         "drupal/jsonlog": "^4.0",
         "drupal/language_neutral_aliases": "^3.1",
@@ -170,7 +176,7 @@
         "drupal/select2_multicheck": "^1.0",
         "drupal/selective_better_exposed_filters": "^3.0",
         "drupal/simple_menu_permissions": "^3.0",
-        "drupal/simple_oauth": "^5.2",
+        "drupal/simple_oauth": "^6",
         "drupal/simple_sitemap": "^4.2",
         "drupal/sparkpost": "^3.0@alpha",
         "drupal/state_log": "^2.2",
@@ -186,7 +192,7 @@
         "drupal/views_infinite_scroll": "^2.0",
         "drupal/webform": "^6.2",
         "drupal/webform_mailerlite": "^1.0",
-        "drush/drush": "^12",
+        "drush/drush": "^13",
         "inleadmedia/dpl-design-system": "0.0.0-dev",
         "inleadmedia/dpl-react": "0.0.0-dev",
         "mnsami/composer-custom-directory-installer": "^2.0",
@@ -198,8 +204,8 @@
         "phpdocumentor/reflection-docblock": "^5.3",
         "spatie/color": "^1.5",
         "spawnia/sailor": "^1.1.0",
-        "symfony/property-access": "^6.2",
-        "symfony/property-info": "^6.2",
+        "symfony/property-access": "^7.3",
+        "symfony/property-info": "^7.3",
         "thecodingmachine/safe": "^2.5.0",
         "webmozart/assert": "^1.11",
         "zaporylie/composer-drupal-optimizations": "1.2.0"
@@ -324,7 +330,8 @@
                 "3035578: Add details for AJAX response errors": "https://www.drupal.org/files/issues/2023-07-24/3035578-26.patch",
                 "Always assume chmod succeeds": "patches/core-chmod-true.patch",
                 "Debug Form triggering element detection": "patches/form-triggering-element-detection-paragraphs-ee.patch",
-                "Don't check for file owner in update": "patches/dont-check-fileowner.patch"
+                "Don't check for file owner in update": "patches/dont-check-fileowner.patch",
+                "Debug outdated forms": "patches/ddfsal-412-logging.patch"
             },
             "drupal/date_range_formatter": {
                 "3309324: Fails when start and end date are identical": "https://www.drupal.org/files/issues/2023-12-22/date_range_formatter_3309324_1.patch"
@@ -336,14 +343,13 @@
                 "3396393: Entity with a dynamic entity reference field can't be cloned using entity_clone": "https://www.drupal.org/files/issues/2023-10-24/3396393-2.patch"
             },
             "drupal/entity_clone": {
-                "2708731: Allow redirect to edit form after cloning": "https://www.drupal.org/files/issues/2022-11-15/improve-workflow-of-cloned-entity-2708731-39.patch"
-            },
-            "drupal/entity_clone_template": {
-                "3424597: Fix error when creating entity of type without templates": "https://git.drupalcode.org/project/entity_clone_template/-/commit/ad4964dd51f7f5e814111fcb73e6e472eefccf5c.patch",
-                "3530772: entity_clone_template_active should be FALSE by default": "https://git.drupalcode.org/project/entity_clone_template/-/commit/7cd2ee6541cd25b6370b304911d49a00c46c3a0.patch"
+                "2708731: Allow redirect to edit form after cloning": "https://www.drupal.org/files/issues/2024-07-25/improve-workflow-of-cloned-entity-2708731-40_patch.patch"
             },
             "drupal/entity_reference_revisions": {
                 "3039442: Circular dependencies in EntityReferenceRevisionsFieldItemList::hasAffectingChanges()": "https://www.drupal.org/files/issues/2023-11-20/entity_reference_revisions-fix_infinite_loop-3039442-8.patch"
+            },
+            "drupal/facets": {
+                "DDFSAL-279: Fix infinite scroll with facet filters": "patches/facets-infinite-scroll-fix-custom.patch"
             },
             "drupal/field_inheritance": {
                 "3454350: Create seperate permission for adding field inheritance": "https://www.drupal.org/files/issues/2024-06-13/field_inheritance_permission.patch"
