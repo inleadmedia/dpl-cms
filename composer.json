@@ -43,7 +43,7 @@
                 "version": "0.0.0-dev",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.44.0%2Binlead.10.11.2025/dist-2025-44-0-inlead-10-11-2025-0d41241eb2149aa829055dc44d7bc86a791af313.zip",
+                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-development/dist-development.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -58,7 +58,7 @@
                 "type": "drupal-library",
                 "version": "0.0.0-dev",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.44.0%2Binlead.10.11.2025/dist-2025-44-0-inlead-10-11-2025-44c8a57d22fea308b722c72722c074e7fee8c8c9.zip",
+                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/branch-development/dist-development.zip",
                     "type": "zip"
                 }
             }
@@ -246,6 +246,9 @@
             "phpstan/extension-installer": true,
             "zaporylie/composer-drupal-optimizations": true,
             "drupal/core-project-message": true
+        },
+        "audit": {
+            "block-insecure": false
         }
     },
     "scripts": {
