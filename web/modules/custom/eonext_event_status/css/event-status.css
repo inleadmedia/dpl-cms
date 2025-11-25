@@ -164,19 +164,22 @@
 }
 
 
-.eventinstance-full .ribbon,
-.eventseries-full .ribbon {
-  width: 300px !important;
-  height: 300px !important;
-}
+/* Full event page - desktop only */
+@media (min-width: 769px) {
+  .eventinstance-full .ribbon,
+  .eventseries-full .ribbon {
+    width: 300px !important;
+    height: 300px !important;
+  }
 
-.eventinstance-full .ribbon-top-right span,
-.eventseries-full .ribbon-top-right span {
-  left: -50px;
-  top: 114px;
-}
+  .eventinstance-full .ribbon-top-right span,
+  .eventseries-full .ribbon-top-right span {
+    left: -50px;
+    top: 114px;
+  }
 
-.eventinstance-full .ribbon span,
-.eventseries-full .ribbon span {
-  width: 436px;
+  .eventinstance-full .ribbon span,
+  .eventseries-full .ribbon span {
+    width: 436px;
+  }
 }
