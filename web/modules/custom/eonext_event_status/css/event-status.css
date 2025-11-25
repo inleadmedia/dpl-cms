@@ -6,6 +6,26 @@
   position: relative;
 }
 
+/* Position relative for list views */
+.eonext-event-status .media-container {
+  position: relative;
+}
+
+/* Keep status tag on the left when ribbon is present */
+[data-ribbon-label] .status {
+  left: 10px !important;
+  right: auto !important;
+}
+
+/* Mobile adjustments - ensure status doesn't overlap with ribbon */
+@media (max-width: 768px) {
+  [data-ribbon-label] .status {
+    left: 5px !important;
+    right: auto !important;
+    max-width: calc(100% - 160px); /* Leave space for ribbon */
+  }
+}
+
 .ribbon {
   width: 150px;
   height: 150px;
