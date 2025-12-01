@@ -7,9 +7,11 @@ use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerAddress;
 use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerDateTime;
 use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerImage;
 use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerSeries;
+use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerTeaserImage;
 use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerTicketCategoriesInner;
 use DanskernesDigitaleBibliotek\CMS\Api\Model\EventsGET200ResponseInnerTicketCategoriesInnerPrice;
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\dpl_event\Entity\EventInstance;
@@ -17,6 +19,7 @@ use Drupal\dpl_event\Form\SettingsForm;
 use Drupal\dpl_event\Services\EventRestMapper as EventsRestMapperDefault;
 use Drupal\eonext_event_status\Model\EventsGET200ResponseInner;
 use Drupal\file\FileInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\media\MediaInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\recurring_events\Entity\EventSeries;
@@ -27,14 +30,22 @@ use Drupal\recurring_events\Entity\EventSeries;
 class EventRestMapper extends EventsRestMapperDefault {
 
   /**
+   * The event instance being mapped.
+   *
+   * @var \Drupal\dpl_event\Entity\EventInstance
+   */
+  private EventInstance $event;
+
+  /**
    * Constructor.
    */
   public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
     protected ConfigFactoryInterface $configFactory,
     protected RibbonService $ribbonService,
   ) {
-    parent::__construct($fileUrlGenerator, $configFactory);
+    parent::__construct($entityTypeManager, $fileUrlGenerator, $configFactory);
   }
 
   /**
@@ -52,14 +63,17 @@ class EventRestMapper extends EventsRestMapperDefault {
       'body' => $this->event->getDescription(),
       'state' => $this->event->getState()?->value,
       'image' => $this->getImage(),
+      'teaserImage' => $this->getTeaserImage(),
       'branches' => $this->getBranches(),
       'address' => $this->getAddress(),
       'tags' => $this->getTags(),
+      'categories' => $this->getCategories(),
       'partners' => $this->getMultiValue('event_partners'),
       'ticketCapacity' => $this->getValue('event_ticket_capacity'),
       'ticketCategories' => $this->getTicketCategories(),
       'createdAt' => $this->getDateField('created'),
       'updatedAt' => $this->event->getUpdatedDate(),
+      'allDay' => !empty($this->getValue('event_all_day')),
       'dateTime' => $this->getDate(),
       'externalData' => $this->getExternalData(),
       'screenNames' => $this->event->getScreenNames(),
@@ -115,8 +129,45 @@ class EventRestMapper extends EventsRestMapperDefault {
   /**
    * {@inheritDoc}
    */
+  private function getTeaserImage(): ?EventsGET200ResponseInnerTeaserImage {
+    $url = $this->getImageUrl('event_teaser_image', 'list_teaser_4_3');
+
+    if (empty($url)) {
+      return NULL;
+    }
+
+    return new EventsGET200ResponseInnerTeaserImage(['url' => $url]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   private function getImage(): ?EventsGET200ResponseInnerImage {
-    $media_field = $this->event->getField('event_image');
+    $url = $this->getImageUrl('event_image', 'paragraph_wide');
+
+    if (empty($url)) {
+      return NULL;
+    }
+
+    return new EventsGET200ResponseInnerImage(['url' => $url]);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  private function getImageUrl(string $field_name, string|null $image_style_name = NULL): ?string {
+    if (!($this->event->hasField($field_name))) {
+      return NULL;
+    }
+
+    $image_style = NULL;
+
+    if ($image_style_name) {
+      $image_style_storage = $this->entityTypeManager->getStorage('image_style');
+      $image_style = $image_style_storage->load($image_style_name);
+    }
+
+    $media_field = $this->event->getField($field_name);
 
     if (!($media_field instanceof FieldItemListInterface)) {
       return NULL;
@@ -138,9 +189,18 @@ class EventRestMapper extends EventsRestMapperDefault {
 
     $file_uri = $file->getFileUri();
 
-    $url = !empty($file_uri) ? $this->fileUrlGenerator->generateAbsoluteString($file_uri) : NULL;
+    if (empty($file_uri)) {
+      return NULL;
+    }
 
-    return new EventsGET200ResponseInnerImage(['url' => $url]);
+    if ($image_style instanceof ImageStyle) {
+      return $image_style->buildUrl($file_uri);
+    }
+
+    // If no image style is passed along, we'll return the original, full
+    // size, non-cropped image URL instead.
+    return $this->fileUrlGenerator->generateAbsoluteString($file_uri);
+
   }
 
   /**
@@ -193,17 +253,31 @@ class EventRestMapper extends EventsRestMapperDefault {
   /**
    * {@inheritDoc}
    */
-  private function getTags(): array {
+  private function getTaxonomyNames(string $field_key): array {
     $names = [];
 
-    /** @var \Drupal\taxonomy\TermInterface[] $tags */
-    $tags = $this->event->get('event_tags')->referencedEntities();
+    /** @var \Drupal\taxonomy\TermInterface[] $terms */
+    $terms = $this->event->get($field_key)->referencedEntities();
 
-    foreach ($tags as $tag) {
-      $names[] = $tag->getName();
+    foreach ($terms as $term) {
+      $names[] = $term->getName();
     }
 
     return $names;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  private function getTags(): array {
+    return $this->getTaxonomyNames('event_tags');
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  private function getCategories(): array {
+    return $this->getTaxonomyNames('event_categories');
   }
 
   /**
@@ -235,6 +309,7 @@ class EventRestMapper extends EventsRestMapperDefault {
       return $categories;
     }
 
+    /** @var \Drupal\paragraphs\ParagraphInterface[] $paragraphs */
     $paragraphs = $field->referencedEntities();
     foreach ($paragraphs as $paragraph) {
       if (!($paragraph instanceof ParagraphInterface)) {

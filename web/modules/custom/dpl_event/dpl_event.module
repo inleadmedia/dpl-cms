@@ -21,6 +21,62 @@ use Drupal\drupal_typed\DrupalTyped;
 use Drupal\recurring_events\Entity\EventSeries;
 
 /**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * If the eventinstance is set to be an all-day, we want to ignore any times
+ * set, and instead set them to 00:00 - 23:59.
+ */
+function dpl_event_eventinstance_presave(EventInstance $eventinstance): void {
+  if (!$eventinstance->hasField('event_all_day')) {
+    return;
+  }
+
+  $all_day = $eventinstance->get('event_all_day')->getString();
+
+  if (empty($all_day)) {
+    return;
+  }
+
+  $timezone = \Drupal::config('system.date')->get('timezone.default');
+  $timezone = new \DateTimeZone($timezone);
+  $timezone_utc = new \DateTimeZone('UTC');
+
+  $dates = $eventinstance->get('date')->getValue();
+
+  foreach ($dates as &$date) {
+    $start_date = $date['value'] ?? NULL;
+    $end_date = $date['end_value'] ?? NULL;
+
+    if (!($start_date) || (!($end_date))) {
+      continue;
+    }
+
+    // First, we need to tell Drupal that the times we're giving are in the
+    // default timezone, and not UTC.
+    // This mimics how Drupal also would interpret it, if we were setting the
+    // times in the interface.
+    $start_date = new DrupalDateTime($start_date);
+    $end_date = new DrupalDateTime($end_date);
+    $start_date->setTimezone($timezone);
+    $end_date->setTimezone($timezone);
+
+    $start_date->setTime(0, 0, 0);
+    $end_date->setTime(23, 59, 59);
+
+    // Drupal does not save the timezone information in the database - it will
+    // be saved as UTC. So, we need to convert this back to UTC first.
+    $start_date->setTimezone($timezone_utc);
+    $end_date->setTimezone($timezone_utc);
+
+    $date['value'] = $start_date->format('Y-m-d\TH:i:s');
+    $date['end_value'] = $end_date->format('Y-m-d\TH:i:s');
+
+  }
+
+  $eventinstance->set('date', $dates);
+}
+
+/**
  * Implements hook_entity_bundle_info_alter().
  *
  * @param mixed[] $bundles
@@ -196,23 +252,36 @@ function dpl_event_preprocess_eventseries(array &$variables): void {
   }
 
   $service = DrupalTyped::service(ReoccurringDateFormatter::class, 'dpl_event.reoccurring_date_formatter');
-  $upcoming_ids = $service->getUpcomingEventIds($event_series);
 
-  $variables['formatted_date'] = $service->getSeriesDateString($event_series);
-
-  if (count($upcoming_ids) < 2) {
-    return;
+  // Use different date formatters based on view mode.
+  $view_mode = $variables['view_mode'] ?? 'default';
+  if ($view_mode === 'list_teaser') {
+    // For list teaser view, use date without time.
+    $variables['formatted_date'] = $service->getSeriesDateString($event_series, FALSE);
+  }
+  else {
+    // For full view and other views, use date with time.
+    $variables['formatted_date'] = $service->getSeriesDateString($event_series);
   }
 
-  $instance_storage = \Drupal::entityTypeManager()->getStorage('eventinstance');
-  $event_instances = $instance_storage->loadMultiple($upcoming_ids);
-  $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder('eventinstance');
-  $variables['event_instances'] = [];
+  $upcoming_event_details = $service->getUpcomingEventDetails($event_series);
+  $upcoming_ids = $upcoming_event_details['upcoming_ids'] ?? [];
 
-  foreach ($event_instances as $index => $event_instance) {
-    $view_mode = $index === 0 ? 'list_teaser_stacked_parent' : 'stacked_event';
-    $renderable_instance = $viewBuilder->view($event_instance, $view_mode);
-    $variables['event_instances'][] = $renderable_instance;
+  if ($service->isAllDay($event_series)) {
+    $variables['start_time'] = t('All day');
+  }
+  else {
+    $start_date = $upcoming_event_details['start'] ?? NULL;
+    $end_date = $upcoming_event_details['end'] ?? NULL;
+
+    if ($start_date instanceof DrupalDateTime) {
+      $variables['start_time'] = $service->formatDate($start_date, 'H:i');
+      $variables['datetime_attribute'] = $service->formatDate($start_date, DATE_ATOM);
+    }
+
+    if ($end_date instanceof DrupalDateTime) {
+      $variables['end_time'] = $service->formatDate($end_date, 'H:i');
+    }
   }
 
   // Add cache tags and 12-hours max-age fallback.
@@ -220,6 +289,19 @@ function dpl_event_preprocess_eventseries(array &$variables): void {
     '#max-age' => (60 * 60 * 12),
     '#tags' => ['eventinstance_list', 'eventseries_list'],
   ];
+
+  if (count($upcoming_ids) < 2 || $view_mode !== 'full') {
+    return;
+  }
+
+  // Adding a list of upcoming eventinstances, displayed on the full series.
+  $event_instances = \Drupal::entityTypeManager()->getStorage('eventinstance')->loadMultiple($upcoming_ids);
+  $viewBuilder = \Drupal::entityTypeManager()->getViewBuilder('eventinstance');
+  $variables['event_instances'] = [];
+
+  foreach ($event_instances as $event_instance) {
+    $variables['event_instances'][] = $viewBuilder->view($event_instance, 'stacked_event');
+  }
 }
 
 /**
@@ -241,6 +323,12 @@ function dpl_event_preprocess_eventseries(array &$variables): void {
  */
 function dpl_event_preprocess_eventinstance(array &$variables): void {
   $eventInstance = $variables['eventinstance'];
+
+  $state = $eventInstance->getState();
+  if ($state instanceof EventState) {
+    $variables['status'] = $state->label();
+    $variables['status_value'] = $state->value;
+  }
 
   if ($eventInstance->hasField('event_ticket_categories')) {
     $ticket_categories = $eventInstance->get('event_ticket_categories')->referencedEntities();
@@ -275,6 +363,20 @@ function dpl_event_preprocess_eventinstance(array &$variables): void {
       $variables['expired'] = ($end_time->getTimestamp() < \Drupal::time()->getCurrentTime());
       $variables['end_time'] = $date_formatter->format($end_time->getTimestamp(), 'custom', 'H:i');
     }
+  }
+
+  if ($eventInstance->hasField('event_all_day') &&
+    !empty($eventInstance->get('event_all_day')->getString())) {
+    $variables['start_time'] = t('All day');
+    if (isset($variables['end_time'])) {
+      unset($variables['end_time']);
+    }
+  }
+
+  $variables['time_combined'] = $variables['start_time'];
+
+  if (!empty($variables['end_time'])) {
+    $variables['time_combined'] .= " - {$variables['end_time']}";
   }
 }
 
@@ -326,6 +428,21 @@ function dpl_event_form_alter(array &$form, FormStateInterface $form_state, stri
 
   if (!in_array($form_id, $forms)) {
     return;
+  }
+
+  if (isset($form['field_event_all_day'])) {
+    $form['field_event_all_day']['warning'] = [
+      '#type' => 'container',
+      '#attributes' => ['class' => ['dpl-form-warning']],
+      '#states' => [
+        'visible' => [
+          ':input[name="field_event_all_day[value]"]' => ['checked' => TRUE],
+        ],
+      ],
+      'message' => [
+        '#markup' => t('Any specific times below will be ignored when "All day" is enabled', [], ['context' => 'dpl_event']),
+      ],
+    ];
   }
 
   // Move the "Published" checkbox to the gin sticky action header.
