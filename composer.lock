@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d344c4304d2bfcf72cf1ba79df7258a",
+    "content-hash": "8c7eb68e5995a36cbbdfeb0f0acffc36",
     "packages": [
         {
             "name": "amazeeio/drupal_integrations",
@@ -10362,7 +10362,7 @@
             "version": "0.0.0-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.46.0%2Binlead.21.11.2025/dist-2025-46-0-inlead-21-11-2025-2fbdf086c1ae72fb62fea992ac70f84a128f3a0f.zip"
+                "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/branch-development/dist-development.zip"
             },
             "type": "drupal-library"
         },
@@ -10371,7 +10371,7 @@
             "version": "0.0.0-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.46.0%2Binlead.21.11.2025/dist-2025-46-0-inlead-21-11-2025-f4f1b0ea4f6c50cb94b9c1bc36e9dfd7f809288c.zip"
+                "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-development/dist-development.zip"
             },
             "require": {
                 "composer/installers": "^1.2.0"
