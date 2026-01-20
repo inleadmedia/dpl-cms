@@ -9,9 +9,29 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
 use Drupal\eonext_translation\TranslationService;
 use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function eonext_translation_page_attachments(array &$attachments): void {
+  $config = \Drupal::config('eonext_translation.settings');
+  $custom_locale_config = $config->get('custom_locale_config');
+
+  if (!empty($custom_locale_config)) {
+    $attachments['#attached']['html_head'][] = [
+      [
+        '#tag' => 'script',
+        '#value' => Markup::create($custom_locale_config),
+        '#weight' => -100,
+      ],
+      'eonext_translation_custom_locale',
+    ];
+  }
+}
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -77,6 +97,85 @@ function eonext_translation_footer_form_submit(array &$form, FormStateInterface 
 }
 
 /**
+ * Implements hook_preprocess_dpl_react_app().
+ */
+function eonext_translation_preprocess_dpl_react_app(array &$variables): void {
+  $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
+  // Fix branches-config links to use correct language.
+  if (isset($variables['attributes']['data-branches-config'])) {
+    $branches = json_decode($variables['attributes']['data-branches-config'], TRUE);
+    if ($branches !== NULL && is_array($branches)) {
+      // Load all branch nodes.
+      $branchNodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'branch']);
+
+      // Create a mapping of branch titles to nodes for quick lookup.
+      $nodesByTitle = [];
+      foreach ($branchNodes as $node) {
+        if ($node instanceof NodeInterface) {
+          $nodesByTitle[$node->getTitle()] = $node;
+        }
+      }
+
+      foreach ($branches as &$branch) {
+        // Try to find a matching branch node by title.
+        if (isset($branch['title']) && isset($nodesByTitle[$branch['title']])) {
+          $node = $nodesByTitle[$branch['title']];
+          // Add or update the link with the current language.
+          $url = $node->toUrl('canonical', ['language' => $current_language]);
+          $branch['link'] = $url->toString();
+        }
+      }
+      $variables['attributes']['data-branches-config'] = json_encode($branches);
+    }
+  }
+
+  // Fix menu-sign-up-url to use correct language prefix.
+  if (isset($variables['attributes']['data-menu-sign-up-url'])) {
+    $sign_up_url = $variables['attributes']['data-menu-sign-up-url'];
+    // Add language prefix if URL starts with / (internal URL).
+    if (!empty($sign_up_url) && substr($sign_up_url, 0, 1) === '/') {
+      $language_prefix = $current_language->getId();
+      // Check if the URL already starts with a language prefix.
+      $languages = \Drupal::languageManager()->getLanguages();
+      $has_prefix = FALSE;
+      foreach ($languages as $language) {
+        if (strpos($sign_up_url, '/' . $language->getId() . '/') === 0) {
+          $has_prefix = TRUE;
+          break;
+        }
+      }
+      // Add language prefix if it doesn't have one.
+      if (!$has_prefix) {
+        $variables['attributes']['data-menu-sign-up-url'] = '/' . $language_prefix . $sign_up_url;
+      }
+    }
+  }
+
+  // Fix view-fees-and-compensation-rates-url to use correct language prefix.
+  if (isset($variables['attributes']['data-view-fees-and-compensation-rates-url'])) {
+    $fees_url = $variables['attributes']['data-view-fees-and-compensation-rates-url'];
+    // Add language prefix if URL starts with / (internal URL).
+    if (!empty($fees_url) && substr($fees_url, 0, 1) === '/') {
+      $language_prefix = $current_language->getId();
+      // Check if the URL already starts with a language prefix.
+      $languages = \Drupal::languageManager()->getLanguages();
+      $has_prefix = FALSE;
+      foreach ($languages as $language) {
+        if (strpos($fees_url, '/' . $language->getId() . '/') === 0) {
+          $has_prefix = TRUE;
+          break;
+        }
+      }
+      // Add language prefix if it doesn't have one.
+      if (!$has_prefix) {
+        $variables['attributes']['data-view-fees-and-compensation-rates-url'] = '/' . $language_prefix . $fees_url;
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_page().
  */
 function eonext_translation_preprocess_page(array &$variables): void {
@@ -99,6 +198,36 @@ function eonext_translation_preprocess_page(array &$variables): void {
         if ($entity->hasTranslation($current_language->getId())) {
           $entity = $entity->getTranslation($current_language->getId());
           $link->setText($entity->label());
+        }
+      }
+    }
+  }
+
+  // Fix opening hours sidebar branches config links to use correct language.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage();
+
+  if (isset($variables['opening_hours_sidebar_large']['#data']['opening-hours-sidebar-branches-config'])) {
+    foreach ($variables['opening_hours_sidebar_large']['#data']['opening-hours-sidebar-branches-config'] as &$branch) {
+      // The branch_id here is the node ID.
+      if (isset($branch['branch_id'])) {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($branch['branch_id']);
+        if ($node instanceof NodeInterface) {
+          // Regenerate the URL with the current language.
+          $url = $node->toUrl('canonical', ['language' => $current_language]);
+          $branch['link'] = $url->toString();
+        }
+      }
+    }
+  }
+  if (isset($variables['opening_hours_sidebar_small']['#data']['opening-hours-sidebar-branches-config'])) {
+    foreach ($variables['opening_hours_sidebar_small']['#data']['opening-hours-sidebar-branches-config'] as &$branch) {
+      // The branch_id here is the node ID.
+      if (isset($branch['branch_id'])) {
+        $node = \Drupal::entityTypeManager()->getStorage('node')->load($branch['branch_id']);
+        if ($node instanceof NodeInterface) {
+          // Regenerate the URL with the current language.
+          $url = $node->toUrl('canonical', ['language' => $current_language]);
+          $branch['link'] = $url->toString();
         }
       }
     }

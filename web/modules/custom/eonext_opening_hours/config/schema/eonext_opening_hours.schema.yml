@@ -8,3 +8,14 @@ block.settings.eonext_opening_hours_per_branch:
       sequence:
         type: integer
         label: The branch id
+
+eonext_opening_hours.branch_expansion:
+  type: config_object
+  label: "EO Next Branch Expansion settings"
+  mapping:
+    expanded_branches:
+      type: sequence
+      label: "Expanded Branches"
+      sequence:
+        type: integer
+        label: "Branch Node ID"
