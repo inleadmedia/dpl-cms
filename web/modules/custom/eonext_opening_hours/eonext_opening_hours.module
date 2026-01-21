@@ -6,8 +6,10 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\eonext_opening_hours\Plugin\Block\PerBranchBlock;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 
 /**
  * Implements hook_theme().
@@ -162,4 +164,57 @@ function eonext_opening_hours_expanded_branches_form_submit(array &$form, FormSt
     ->getEditable('eonext_opening_hours.branch_expansion')
     ->set('expanded_branches', array_values($expanded_branches))
     ->save();
+}
+
+/**
+ * Implements hook_preprocess_dpl_react_app().
+ */
+function eonext_opening_hours_preprocess_dpl_react_app(array &$variables): void {
+
+  // Only process the opening-hours-editor app.
+  if ($variables['name'] !== 'opening-hours-editor') {
+    return;
+  }
+
+  // Check if categories config exists.
+  if (!isset($variables['data']['opening-hours-editor-categories-config'])) {
+    return;
+  }
+
+  // Get the current language from URL context.
+  $currentLanguage = \Drupal::languageManager()
+    ->getCurrentLanguage(LanguageInterface::TYPE_URL)->getId();
+
+  $categories = $variables['data']['opening-hours-editor-categories-config'];
+
+  $taxonomyStorage = \Drupal::entityTypeManager()
+    ->getStorage('taxonomy_term');
+
+  $translatedCategories = [];
+
+  // Translate each category.
+  foreach ($categories as $category) {
+    // Load the term by name to get its translations.
+    $terms = $taxonomyStorage->loadByProperties([
+      'name' => $category['title'],
+      'vid' => 'opening_hours_categories',
+    ]);
+
+    $term = reset($terms);
+
+    // Use the original if no translation exists.
+    $translatedCategories[] = $category;
+
+    if ($term instanceof ContentEntityInterface && $term->hasTranslation($currentLanguage)) {
+      $translatedTerm = $term->getTranslation($currentLanguage);
+      $translatedCategories[] = [
+        'title' => (string) $translatedTerm->label(),
+        'color' => $category['color'],
+      ];
+    }
+  }
+
+  // Update both the data array and the attributes.
+  $variables['data']['opening-hours-editor-categories-config'] = $translatedCategories;
+  $variables['attributes']['data-opening-hours-editor-categories-config'] = json_encode($translatedCategories);
 }
