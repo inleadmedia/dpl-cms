@@ -9,6 +9,7 @@ use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\eonext_translation\Form\TranslationSettingsForm;
 use Drupal\eonext_translation\TranslationService;
@@ -101,78 +102,100 @@ function eonext_translation_footer_form_submit(array &$form, FormStateInterface 
  */
 function eonext_translation_preprocess_dpl_react_app(array &$variables): void {
   $current_language = \Drupal::languageManager()->getCurrentLanguage();
+  $languages = \Drupal::languageManager()->getLanguages();
+  $language_prefix = $current_language->getId();
 
   // Fix branches-config links to use correct language.
-  if (isset($variables['attributes']['data-branches-config'])) {
-    $branches = json_decode($variables['attributes']['data-branches-config'], TRUE);
-    if ($branches !== NULL && is_array($branches)) {
-      // Load all branch nodes.
-      $branchNodes = \Drupal::entityTypeManager()->getStorage('node')->loadByProperties(['type' => 'branch']);
+  _eonext_translation_fix_branches_config($variables, $current_language);
 
-      // Create a mapping of branch titles to nodes for quick lookup.
-      $nodesByTitle = [];
-      foreach ($branchNodes as $node) {
-        if ($node instanceof NodeInterface) {
-          $nodesByTitle[$node->getTitle()] = $node;
-        }
-      }
+  // Fix internal URLs to use correct language prefix.
+  $url_attributes = [
+    'data-menu-sign-up-url',
+    'data-view-fees-and-compensation-rates-url',
+    'data-delete-patron-url',
+  ];
 
-      foreach ($branches as &$branch) {
-        // Try to find a matching branch node by title.
-        if (isset($branch['title']) && isset($nodesByTitle[$branch['title']])) {
-          $node = $nodesByTitle[$branch['title']];
-          // Add or update the link with the current language.
-          $url = $node->toUrl('canonical', ['language' => $current_language]);
-          $branch['link'] = $url->toString();
-        }
-      }
-      $variables['attributes']['data-branches-config'] = json_encode($branches);
+  foreach ($url_attributes as $attribute) {
+    if (isset($variables['attributes'][$attribute])) {
+      $variables['attributes'][$attribute] = _eonext_translation_add_language_prefix(
+        $variables['attributes'][$attribute],
+        $language_prefix,
+        $languages
+      );
+    }
+  }
+}
+
+/**
+ * Fixes branch configuration links to use the correct language.
+ *
+ * @param array &$variables
+ *   The variables array from the preprocess function.
+ * @param \Drupal\Core\Language\LanguageInterface $current_language
+ *   The current language.
+ */
+function _eonext_translation_fix_branches_config(array &$variables, LanguageInterface $current_language): void {
+  if (!isset($variables['attributes']['data-branches-config'])) {
+    return;
+  }
+
+  $branches = json_decode($variables['attributes']['data-branches-config'], TRUE);
+  if ($branches === NULL || !is_array($branches)) {
+    return;
+  }
+
+  // Load all branch nodes and index by title for quick lookup.
+  $branch_nodes = \Drupal::entityTypeManager()
+    ->getStorage('node')
+    ->loadByProperties(['type' => 'branch']);
+
+  $nodes_by_title = [];
+  foreach ($branch_nodes as $node) {
+    if ($node instanceof NodeInterface) {
+      $nodes_by_title[$node->getTitle()] = $node;
     }
   }
 
-  // Fix menu-sign-up-url to use correct language prefix.
-  if (isset($variables['attributes']['data-menu-sign-up-url'])) {
-    $sign_up_url = $variables['attributes']['data-menu-sign-up-url'];
-    // Add language prefix if URL starts with / (internal URL).
-    if (!empty($sign_up_url) && substr($sign_up_url, 0, 1) === '/') {
-      $language_prefix = $current_language->getId();
-      // Check if the URL already starts with a language prefix.
-      $languages = \Drupal::languageManager()->getLanguages();
-      $has_prefix = FALSE;
-      foreach ($languages as $language) {
-        if (strpos($sign_up_url, '/' . $language->getId() . '/') === 0) {
-          $has_prefix = TRUE;
-          break;
-        }
-      }
-      // Add language prefix if it doesn't have one.
-      if (!$has_prefix) {
-        $variables['attributes']['data-menu-sign-up-url'] = '/' . $language_prefix . $sign_up_url;
-      }
+  // Update branch links with current language.
+  foreach ($branches as &$branch) {
+    if (isset($branch['title'], $nodes_by_title[$branch['title']])) {
+      $node = $nodes_by_title[$branch['title']];
+      $url = $node->toUrl('canonical', ['language' => $current_language]);
+      $branch['link'] = $url->toString();
     }
   }
 
-  // Fix view-fees-and-compensation-rates-url to use correct language prefix.
-  if (isset($variables['attributes']['data-view-fees-and-compensation-rates-url'])) {
-    $fees_url = $variables['attributes']['data-view-fees-and-compensation-rates-url'];
-    // Add language prefix if URL starts with / (internal URL).
-    if (!empty($fees_url) && substr($fees_url, 0, 1) === '/') {
-      $language_prefix = $current_language->getId();
-      // Check if the URL already starts with a language prefix.
-      $languages = \Drupal::languageManager()->getLanguages();
-      $has_prefix = FALSE;
-      foreach ($languages as $language) {
-        if (strpos($fees_url, '/' . $language->getId() . '/') === 0) {
-          $has_prefix = TRUE;
-          break;
-        }
-      }
-      // Add language prefix if it doesn't have one.
-      if (!$has_prefix) {
-        $variables['attributes']['data-view-fees-and-compensation-rates-url'] = '/' . $language_prefix . $fees_url;
-      }
+  $variables['attributes']['data-branches-config'] = json_encode($branches);
+}
+
+/**
+ * Adds language prefix to an internal URL if not already present.
+ *
+ * @param string $url
+ *   The URL to process.
+ * @param string $language_prefix
+ *   The language prefix to add.
+ * @param array $languages
+ *   Array of available languages.
+ *
+ * @return string
+ *   The URL with language prefix if applicable.
+ */
+function _eonext_translation_add_language_prefix(string $url, string $language_prefix, array $languages): string {
+  // Only process internal URLs that start with /.
+  if (empty($url) || substr($url, 0, 1) !== '/') {
+    return $url;
+  }
+
+  // Check if URL already has a language prefix.
+  foreach ($languages as $language) {
+    if (strpos($url, '/' . $language->getId() . '/') === 0) {
+      return $url;
     }
   }
+
+  // Add language prefix.
+  return '/' . $language_prefix . $url;
 }
 
 /**
