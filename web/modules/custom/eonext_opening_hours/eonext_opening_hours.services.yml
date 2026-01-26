@@ -4,3 +4,9 @@ services:
     arguments: ["@datetime.time"]
     tags:
       - { name: cache.context, id: "day" }
+
+  eonext_opening_hours.response_subscriber:
+    class: Drupal\eonext_opening_hours\EventSubscriber\OpeningHoursResponseSubscriber
+    arguments: ['@language_manager', '@entity_type.manager']
+    tags:
+      - { name: event_subscriber }

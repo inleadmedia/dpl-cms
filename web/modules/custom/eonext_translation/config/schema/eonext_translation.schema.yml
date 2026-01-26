@@ -13,6 +13,9 @@ eonext_translation.settings:
       sequence:
         type: string
         label: "Language ID"
+    custom_locale_config:
+      type: text
+      label: "Custom Locale Configuration"
 
 eonext_translation.footer:
   type: config_object
