@@ -15,7 +15,16 @@ eonext_translation.settings:
         label: "Language ID"
     custom_locale_config:
       type: text
-      label: "Custom Locale Configuration"
+      label: "Custom Locale Configuration (deprecated - use language-specific configs)"
+    custom_locale_config_en:
+      type: text
+      label: "Custom Locale Configuration for English"
+    custom_locale_config_da:
+      type: text
+      label: "Custom Locale Configuration for Danish"
+    custom_locale_config_kl:
+      type: text
+      label: "Custom Locale Configuration for Kalaallisut"
 
 eonext_translation.footer:
   type: config_object

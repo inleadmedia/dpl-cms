@@ -132,15 +132,24 @@ final class TranslationSettingsForm extends ConfigFormBase {
       '#type' => 'details',
       '#title' => $this->t('Calendar and Date Locale Configuration'),
       '#open' => FALSE,
+      '#description' => $this->t('Configure calendar locale settings for each language. The code property should match the language code (e.g., "en" for English, "kl" for Kalaallisut).'),
     ];
 
-    $form['calendar_locale']['custom_locale_config'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Custom Locale JavaScript Configuration'),
-      '#description' => $this->t('Enter custom JavaScript configuration for FullCalendar (window.DPL_fullCalendarCustomLocale) and DayJS (window.DPL_dayjsCustomLocale). This will be injected into the page as inline JavaScript.'),
-      '#default_value' => $config->get('custom_locale_config') ?? '',
-      '#rows' => 20,
-    ];
+    // Create a separate textarea for each language.
+    foreach ($languages as $langcode => $language) {
+      $form['calendar_locale']['custom_locale_config_' . $langcode] = [
+        '#type' => 'textarea',
+        '#title' => $this->t('Custom Locale Configuration for @language (@langcode)', [
+          '@language' => $language->getName(),
+          '@langcode' => $langcode,
+        ]),
+        '#description' => $this->t('Enter custom JavaScript configuration for FullCalendar (window.DPL_fullCalendarCustomLocale) and DayJS (window.DPL_dayjsCustomLocale). Make sure the "code" property matches "@langcode".', [
+          '@langcode' => $langcode,
+        ]),
+        '#default_value' => $config->get('custom_locale_config_' . $langcode) ?? '',
+        '#rows' => 20,
+      ];
+    }
 
     return parent::buildForm($form, $form_state);
   }
@@ -182,11 +191,20 @@ final class TranslationSettingsForm extends ConfigFormBase {
       $languages = [];
     }
 
-    $this->config(static::SETTINGS)
-      ->set('translation_type', $translationType)
-      ->set('drupal_translation_available_languages', $languages)
-      ->set('custom_locale_config', $form_state->getValue('custom_locale_config'))
-      ->save();
+    $config = $this->config(static::SETTINGS);
+    $config->set('translation_type', $translationType);
+    $config->set('drupal_translation_available_languages', $languages);
+
+    // Save custom locale config for each language.
+    $allLanguages = $this->languageManager->getLanguages();
+    foreach ($allLanguages as $langcode => $language) {
+      $fieldName = 'custom_locale_config_' . $langcode;
+      if ($form_state->hasValue($fieldName)) {
+        $config->set($fieldName, $form_state->getValue($fieldName));
+      }
+    }
+
+    $config->save();
 
     parent::submitForm($form, $form_state);
   }
