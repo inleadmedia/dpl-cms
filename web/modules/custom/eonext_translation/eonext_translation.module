@@ -20,7 +20,12 @@ use Drupal\node\NodeInterface;
  */
 function eonext_translation_page_attachments(array &$attachments): void {
   $config = \Drupal::config('eonext_translation.settings');
-  $custom_locale_config = $config->get('custom_locale_config');
+
+  // Get current language code.
+  $current_language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  // Get language-specific custom locale config.
+  $custom_locale_config = $config->get('custom_locale_config_' . $current_language);
 
   if (!empty($custom_locale_config)) {
     $attachments['#attached']['html_head'][] = [
@@ -113,6 +118,7 @@ function eonext_translation_preprocess_dpl_react_app(array &$variables): void {
     'data-menu-sign-up-url',
     'data-view-fees-and-compensation-rates-url',
     'data-delete-patron-url',
+    'data-zero-hits-search-url',
   ];
 
   foreach ($url_attributes as $attribute) {

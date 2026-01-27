@@ -191,6 +191,7 @@ function eonext_opening_hours_preprocess_dpl_react_app(array &$variables): void 
     ->getStorage('taxonomy_term');
 
   $translatedCategories = [];
+  $processedTermIds = [];
 
   // Translate each category.
   foreach ($categories as $category) {
@@ -202,15 +203,30 @@ function eonext_opening_hours_preprocess_dpl_react_app(array &$variables): void 
 
     $term = reset($terms);
 
-    // Use the original if no translation exists.
-    $translatedCategories[] = $category;
+    if (!$term instanceof ContentEntityInterface) {
+      // If term doesn't exist, keep the original category.
+      $translatedCategories[] = $category;
+      continue;
+    }
 
-    if ($term instanceof ContentEntityInterface && $term->hasTranslation($currentLanguage)) {
+    // Skip if we've already processed this term (avoids duplicates from translations).
+    $termId = $term->id();
+    if (in_array($termId, $processedTermIds)) {
+      continue;
+    }
+    $processedTermIds[] = $termId;
+
+    // Add translated version if available, otherwise use original.
+    if ($term->hasTranslation($currentLanguage)) {
       $translatedTerm = $term->getTranslation($currentLanguage);
       $translatedCategories[] = [
         'title' => (string) $translatedTerm->label(),
         'color' => $category['color'],
       ];
+    }
+    else {
+      // Use the original if no translation exists.
+      $translatedCategories[] = $category;
     }
   }
 
