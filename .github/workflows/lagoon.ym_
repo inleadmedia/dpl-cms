@@ -4,6 +4,7 @@ on:
 name: Lagoon integration
 
 env:
+  LAGOON_DOMAIN: "dplplat02.dpl.reload.dk"
   LAGOON_ENVIRONMENT: "pr-${{github.event.number}}"
   GH_TOKEN: ${{ secrets.GH_DEPLOYMENT_TOKEN }}
   OWNER: ${{ github.repository_owner }}
@@ -14,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Ensure branch name length
         uses: lekterable/branchlint-action@2.1.0
         if: github.ref_type == 'branch' || github.ref_type == 'pull_request'
@@ -31,7 +32,7 @@ jobs:
     needs: [BranchNameLength]
     steps:
       - run: |
-          LAGOON_DEPLOYS_LOG_URL=$(echo "https://ui.lagoon.dplplat01.dpl.reload.dk/projects/dpl-cms/dpl-cms-${{ env.LAGOON_ENVIRONMENT }}/deployments")
+          LAGOON_DEPLOYS_LOG_URL=$(echo "https://ui.lagoon.${{ env.LAGOON_DOMAIN }}/projects/dpl-cms/dpl-cms-${{ env.LAGOON_ENVIRONMENT }}/deployments")
 
           DEPLOYMENT_ID=$(echo '{
             "ref": "${{ github.head_ref || github.ref_name }}",
@@ -52,7 +53,7 @@ jobs:
     needs: [BranchNameLength]
     steps:
       - run: |
-          LAGOON_DEPLOYS_LOG_URL=$(echo "https://ui.lagoon.dplplat01.dpl.reload.dk/projects/dpl-bnf/dpl-bnf-${{ env.LAGOON_ENVIRONMENT }}/deployments")
+          LAGOON_DEPLOYS_LOG_URL=$(echo "https://ui.lagoon.${{ env.LAGOON_DOMAIN }}/projects/dpl-bnf/dpl-bnf-${{ env.LAGOON_ENVIRONMENT }}/deployments")
 
           DEPLOYMENT_ID=$(echo '{
             "ref": "${{ github.head_ref || github.ref_name }}",

@@ -4,6 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.node.branch.field_address
+    - field.field.node.branch.field_address_dawa
+    - field.field.node.branch.field_address_gsearch
+    - field.field.node.branch.field_agency_branch_id
     - field.field.node.branch.field_email
     - field.field.node.branch.field_main_media
     - field.field.node.branch.field_paragraphs
@@ -12,25 +15,27 @@ dependencies:
     - node.type.branch
   module:
     - address
+    - address_dawa
     - field_group
+    - gsearch
     - media_library
     - media_library_edit
     - paragraphs
     - paragraphs_ee
     - paragraphs_features
     - path
+    - select2
     - telephone
 third_party_settings:
   field_group:
     group_contact_details:
       children:
-        - field_address
         - field_email
         - field_phone
       label: 'Contact details'
       region: content
       parent_name: ''
-      weight: 2
+      weight: 3
       format_type: details_sidebar
       format_settings:
         classes: ''
@@ -47,14 +52,37 @@ mode: default
 content:
   field_address:
     type: address_default
+    weight: 11
+    region: content
+    settings:
+      wrapper_type: fieldset
+    third_party_settings: {  }
+  field_address_dawa:
+    type: address_dawa
     weight: 10
     region: content
     settings:
-      wrapper_type: details
+      size: 120
+      placeholder: 'Search for address..'
+    third_party_settings: {  }
+  field_address_gsearch:
+    type: address_gsearch
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: 'Type to search..'
+    third_party_settings: {  }
+  field_agency_branch_id:
+    type: select2
+    weight: 0
+    region: content
+    settings:
+      width: 100%
     third_party_settings: {  }
   field_email:
     type: email_default
-    weight: 11
+    weight: 14
     region: content
     settings:
       placeholder: ''
@@ -62,16 +90,16 @@ content:
     third_party_settings: {  }
   field_main_media:
     type: media_library_widget
-    weight: 3
+    weight: 4
     region: content
     settings:
       media_types: {  }
     third_party_settings:
       media_library_edit:
-        show_edit: '1'
+        show_edit: true
   field_paragraphs:
     type: paragraphs
-    weight: 4
+    weight: 5
     region: content
     settings:
       title: Paragraph
@@ -102,41 +130,46 @@ content:
           drag_drop: true
   field_phone:
     type: telephone_default
-    weight: 12
+    weight: 16
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_promoted_on_lists:
     type: boolean_checkbox
-    weight: 1
+    weight: 2
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 7
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 5
+    weight: 6
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   url_redirects:
-    weight: 50
+    weight: 9
     region: content
     settings: {  }
     third_party_settings: {  }

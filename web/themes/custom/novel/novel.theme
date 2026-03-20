@@ -164,6 +164,30 @@ function novel_preprocess_page(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_field().
+ *
+ * Adds classes to field_paragraph items.
+ *
+ * @param mixed[] $variables
+ *   The variables for the theme hook.
+ */
+function novel_preprocess_field(&$variables): void {
+  $field_name = $variables['field_name'] ?? NULL;
+  $field_names = [
+    'field_paragraphs',
+    'field_event_paragraphs',
+    'event_paragraphs',
+  ];
+
+  if (in_array($field_name, $field_names)) {
+    foreach ($variables['items'] as &$item) {
+      $item['attributes']['class'][] = 'paragraphs__item paragraphs';
+      $item['attributes']['class'][] = 'paragraphs__item--' . $item['content']['#paragraph']->bundle();
+    }
+  }
+}
+
+/**
  * Implements hook_form_system_theme_settings_alter().
  *
  * Ensure form settings for logo are initialized and provide a UI for logo

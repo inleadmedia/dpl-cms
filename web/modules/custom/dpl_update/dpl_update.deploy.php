@@ -5,6 +5,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\dpl_update\Services\ConfigIgnore;
 use Drupal\drupal_typed\DrupalTyped;
 use Drupal\node\NodeInterface;
 use Drupal\recurring_events\Entity\EventInstance;
@@ -77,21 +78,21 @@ function _dpl_update_field_inheritance(string $field_inheritance_name): string {
     return 'No entities to update.';
   }
 
-  $entities =
-    \Drupal::entityTypeManager()->getStorage('eventinstance')->loadMultiple($ids);
-
+  $storage = \Drupal::entityTypeManager()->getStorage('eventinstance');
   $count = 0;
 
-  foreach ($entities as $entity) {
+  foreach ($ids as $id) {
     try {
+      $entity = $storage->load($id);
+
       if (!($entity instanceof EventInstance)) {
-        throw new Exception('Entity is not an expected EventInstance.');
+        throw new \Exception('Entity is not an expected EventInstance.');
       }
 
       $event_series = $entity->getEventSeries();
 
       if (!($event_series instanceof EventSeries)) {
-        throw new Exception('Entity parent is not an expected EventSeries.');
+        throw new \Exception('Entity parent is not an expected EventSeries.');
       }
 
       // This matches the key that is defined in field_inheritance.
@@ -107,15 +108,15 @@ function _dpl_update_field_inheritance(string $field_inheritance_name): string {
 
       \Drupal::keyValue('field_inheritance')->set($state_key, $field_inheritance);
 
-      $entity->save();
       $count++;
     }
     catch (\Throwable $e) {
       \Drupal::logger('dpl_update')->error('Could not update field_inheritance on eventinstance @id - Error: @message', [
         '@message' => $e->getMessage(),
-        '@id' => $entity->id(),
+        '@id' => $id,
       ]);
     }
+    $storage->resetCache([$id]);
   }
 
   return "Updated $count eventinstances, linking field  '$field_inheritance_name' to inherit from eventseries.";
@@ -445,4 +446,68 @@ function dpl_update_deploy_create_zero_hit_search_page(): string {
   $node->save();
 
   return "Created 0-hit search page with title 'Din søgning har 0 resultater' (node ID: {$node->id()}).";
+}
+
+/**
+ * Update config_ignore_auto to not affect drush cex.
+ */
+function dpl_update_deploy_set_config_settings(): string {
+  $config_ignore_auto_settings = \Drupal::configFactory()
+    ->getEditable('config_ignore_auto.settings');
+
+  $config_ignore_auto_settings->set('direction_operations', [
+    'import_create',
+    'import_update',
+    'import_delete',
+  ]);
+
+  $config_ignore_auto_settings->save();
+
+  return 'config_ignore_auto.settings.direction_operations updated to only ignore import.';
+}
+
+/**
+ * Remove any auto-ignored config that is identical to codebase.
+ */
+function dpl_update_deploy_clean_config(): string {
+  $service = DrupalTyped::service(ConfigIgnore::class, 'dpl_update.config_ignore');
+  return $service->cleanUnusedIgnores();
+}
+
+/**
+ * Disallow go_graphql_client to view unpublished content.
+ *
+ * This permission was added by mistake, and resulted in unpublished content
+ * showing up on the GO sites.
+ */
+function dpl_update_deploy_update_go_permissions_unpublished(): string {
+  _dpl_update_alter_permissions(['go_graphql_client'], ['view any unpublished content'], FALSE);
+
+  return 'Updated go_graphql_client role: removed "view any unpublished content".';
+}
+
+/**
+ * Link new field inheritances on eventinstances.
+ */
+function dpl_update_deploy_event_field_inheritance(): string {
+  $return = _dpl_update_field_inheritance('event_location');
+  $return .= _dpl_update_field_inheritance('event_location_type');
+  $return .= _dpl_update_field_inheritance('event_non_branch_location');
+
+  return $return;
+}
+
+/**
+ * Make sure editors have access to use GO Text Body WYSIWYG format.
+ *
+ * This permission was missing for administrators on Roskilde, and might be
+ * missing on other sites, so it must have been forgotten in the past.
+ */
+function dpl_update_deploy_go_text_body_wysiwyg(): string {
+  _dpl_update_alter_permissions(
+    ['administrator', 'local_administrator', 'editor', 'mediator'],
+    ['use text format go_text_body'],
+  TRUE);
+
+  return 'Allow editors to use GO Text Body WYSIWYG format';
 }

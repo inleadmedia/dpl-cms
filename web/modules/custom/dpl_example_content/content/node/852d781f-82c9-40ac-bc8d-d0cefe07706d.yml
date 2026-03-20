@@ -55,13 +55,24 @@ default:
       alias: /bronshoj-bibliotek
       langcode: und
       pathauto: 1
+  field_address_gsearch:
+    -
+      id: cc837fd3-6496-4225-8437-18a2d7c7eb2f
+      user_input: 'Suomisvej 2, kl., 1927 Frederiksberg C'
+      value: 'Suomisvej 2, kl., 1927 Frederiksberg C'
+      address: 'Suomisvej 2, kl.'
+      postal_code: '1927'
+      postal_name: 'Frederiksberg C'
+      latitude: '55.6794'
+      longitude: '12.5551'
+
   field_address:
     -
       langcode: da
       country_code: DK
-      locality: Brønshøj-Husum
-      postal_code: '2700'
-      address_line1: 'Krabbesholmvej 3'
+      locality: Frederiksberg
+      postal_code: '1927'
+      address_line1: 'Suomisvej 2, kl.'
       address_line2: ''
       address_line3: ''
   field_email:

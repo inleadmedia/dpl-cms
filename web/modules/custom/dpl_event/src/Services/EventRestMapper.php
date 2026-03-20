@@ -245,26 +245,38 @@ class EventRestMapper {
    * @see BranchAddressFormatter
    */
   private function getAddress(): EventsGET200ResponseInnerAddress {
+    $address = new EventsGET200ResponseInnerAddress();
+    $address->setLocation($this->getValue('event_place'));
+    $address->setLocationType($this->getValue('event_location_type'));
+    $address->setLocationAdditional($this->getValue('event_location'));
+
     // Loading the field, and rendering it, to let the BranchAddressFormatter
     // do the work of looking up a possible branch.
     $rendered = $this->event->get('event_address')->view('full');
+    $street = NULL;
 
-    $zip = $rendered[0]['postal_code']['#value'] ?? NULL;
-    $address_1 = $rendered[0]['address_line1']['#value'] ?? NULL;
-    $address_2 = $rendered[0]['address_line2']['#value'] ?? NULL;
+    if ($rendered['#field_type'] === 'address_gsearch') {
+      $zip = $rendered[0]['#content']['postal_code'] ?? NULL;
+      $city = $rendered[0]['#content']['postal_name'] ?? NULL;
+      $street = $rendered[0]['#content']['address'] ?? NULL;
+      $country = $rendered[0]['#content']['country'] ?? 'DK';
+    }
+    else {
+      $country = $rendered[0]['country_code']['#value'] ?? NULL;
+      $city = $rendered[0]['locality']['#value'] ?? NULL;
+      $zip = $rendered[0]['postal_code']['#value'] ?? NULL;
+      $address_1 = $rendered[0]['address_line1']['#value'] ?? NULL;
+      $address_2 = $rendered[0]['address_line2']['#value'] ?? NULL;
 
-    $street = "$address_1 $address_2";
-
-    if (empty($address_1) && empty($address_2)) {
-      $street = NULL;
+      if (!empty($address_1) || !empty($address_2)) {
+        $street = "$address_1 $address_2";
+      }
     }
 
-    $address = new EventsGET200ResponseInnerAddress();
-    $address->setLocation($this->getValue('event_place'));
     $address->setStreet($street);
     $address->setZipCode(!empty($zip) ? intval($zip) : NULL);
-    $address->setCity($rendered[0]['locality']['#value'] ?? NULL);
-    $address->setCountry($rendered[0]['country_code']['#value'] ?? NULL);
+    $address->setCity($city);
+    $address->setCountry($country);
 
     return $address;
   }
@@ -308,14 +320,19 @@ class EventRestMapper {
    * Get string value of a possible field (or fallback field).
    */
   private function getValue(string $field_name): ?string {
-
     $field = $this->event->getField($field_name);
 
     if (!($field instanceof FieldItemListInterface)) {
       return NULL;
     }
 
-    return $field->getString();
+    $value = $field->getString();
+
+    if (trim($value) == '') {
+      return NULL;
+    }
+
+    return $value;
   }
 
   /**
