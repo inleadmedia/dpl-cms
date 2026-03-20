@@ -1,8 +1,8 @@
-import { LoginPage } from '../pages/login-page';
-import { AdminModulesPage } from '../pages/admin-modules';
-import { AdminModulesUninstallPage } from '../pages/admin-modules-uninstall';
-import { InstallOrUpdatePage } from '../pages/install-or-update';
-import { TestModulePage } from '../pages/test-module-page';
+import { LoginPage } from '../../pages/login-page';
+import { AdminModulesPage } from '../../pages/admin-modules';
+import { AdminModulesUninstallPage } from '../../pages/admin-modules-uninstall';
+import { InstallOrUpdatePage } from '../../pages/install-or-update';
+import { TestModulePage } from '../../pages/test-module-page';
 
 describe('Webmaster', () => {
   beforeEach(() => {

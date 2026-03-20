@@ -1,33 +1,26 @@
 <article {{ attributes.addClass('event-page') }}>
-  <header class="event-header">
-    {{ include('@novel/components/hero.html.twig', {
-      attributes: create_attribute(),
-      title: label,
-      teaser_text: teaser_text,
-      categories: categories,
-      date: expired ? 'Expired'|t({}, {context: 'DPL event'}) : date,
-      media: image.0,
-      baseIconPath: baseIconPath,
-      cta: cta,
-    }, false) }}
-  </header>
+  {{ include('@novel/components/hero.html.twig', {
+    attributes: create_attribute(),
+    title: label,
+    categories: categories,
+    date: expired ? 'Expired'|t({}, {context: 'DPL event'}) : date,
+    media: image.0,
+    baseIconPath: baseIconPath,
+    cta: cta,
+    items: hero_items,
+    placeholder_text: teaser_text,
+  }, false) }}
 
-  <section class="event-description">
+  <div class="event-description">
     <div class="event-description__content">
       <div class="event-description__description">{{ description }}</div>
       <div class="event-description__links">
-        {% if tags.0 %}
-          {{ tags }}
-        {% endif %}
+        {{ tags }}
+        {{ branch }}
+        {{ partners }}
       </div>
     </div>
-
-    {{ include('@novel/components/list-description.html.twig', {
-      attributes: create_attribute(),
-      type: 'event',
-      items: description_items,
-    }, false) }}
-  </section>
+  </div>
 
   {% if event_instances %}
     <section class="event-list-stacked">
@@ -38,5 +31,5 @@
     </section>
   {% endif %}
 
-  {{ paragraphs }}
+    {{ paragraphs }}
 </article>
