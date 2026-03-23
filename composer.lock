@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ec2e3889991de2205f85da2dbf28571",
+    "content-hash": "34e74d6273994294437bbb6a88bb49db",
     "packages": [
         {
             "name": "amazeeio/drupal_integrations",
@@ -10436,10 +10436,10 @@
         },
         {
             "name": "inleadmedia/dpl-react",
-            "version": "2026.10.0",
+            "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/inleadmedia/dpl-react/releases/download/2026.10.0%2Binlead.19.03.2026/dist-2026-10-0-inlead-19-03-2026-1613e6c30c0e2dc9a2d1ced14e1f3ee3a697bf3f.zip"
+                "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-EONEXT-214/dist-eonext-214.zip"
             },
             "require": {
                 "composer/installers": "^1.2.0"
