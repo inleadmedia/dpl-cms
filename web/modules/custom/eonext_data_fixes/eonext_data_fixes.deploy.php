@@ -120,13 +120,26 @@ function eonext_data_fixes_deploy_fix_firstaccessiondate_in_cql(): string {
   $storage    = \Drupal::entityTypeManager()->getStorage('paragraph');
   $batch_size = 50;
 
-  $pids = array_values(
+  // Target paragraphs where firstaccessiondate is in the CQL string AND the
+  // dedicated filter value is empty — covers both cases:
+  //   (a) operator field is NULL (never set)
+  //   (b) operator field has a value but first_accession_date_value is empty
+  $pids_no_operator = array_values(
     $storage->getQuery()
       ->condition('field_cql_search.value', '%firstaccessiondate%', 'LIKE')
       ->notExists('field_cql_search.first_accession_date_operator')
       ->accessCheck(FALSE)
       ->execute()
   );
+  $pids_no_value = array_values(
+    $storage->getQuery()
+      ->condition('field_cql_search.value', '%firstaccessiondate%', 'LIKE')
+      ->exists('field_cql_search.first_accession_date_operator')
+      ->notExists('field_cql_search.first_accession_date_value')
+      ->accessCheck(FALSE)
+      ->execute()
+  );
+  $pids = array_values(array_unique(array_merge($pids_no_operator, $pids_no_value)));
 
   $changes = [];
   $skipped = [];
