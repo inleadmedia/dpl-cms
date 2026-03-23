@@ -136,7 +136,7 @@ class DplReactAppsController extends ControllerBase {
       'facet-access-types-text' => $this->t('Access types', [], ['context' => 'Search Result']),
       'facet-browser-modal-close-modal-aria-label-text' => $this->t('Close facet browser modal', [], ['context' => 'Search Result']),
       'facet-browser-modal-screen-reader-modal-description-text' => $this->t('Modal for facet browser', [], ['context' => 'Search Result']),
-      'facet-can-always-be-loaned-text' => $this->t('Can always be loaned', [], ['context' => 'Search Result']),
+      'search-can-always-be-loaned-text' => $this->t('Can always be loaned', [], ['context' => 'Search Result']),
       'facet-children-or-adults-text' => $this->t('Children or adults', [], ['context' => 'Search Result']),
       'facet-creators-text' => $this->t('Creators', [], ['context' => 'Search Result']),
       'facet-dk5-text' => $this->t('Dk5', [], ['context' => 'Search Result']),
