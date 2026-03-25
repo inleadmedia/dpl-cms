@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34e74d6273994294437bbb6a88bb49db",
+    "content-hash": "9f71c8b3b84043f6cd8255d1e4ecba5d",
     "packages": [
         {
             "name": "amazeeio/drupal_integrations",
@@ -10436,13 +10436,10 @@
         },
         {
             "name": "inleadmedia/dpl-react",
-            "version": "1.0.0",
+            "version": "dev-EONEXT-214",
             "dist": {
                 "type": "zip",
                 "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-EONEXT-214/dist-eonext-214.zip"
-            },
-            "require": {
-                "composer/installers": "^1.2.0"
             },
             "type": "drupal-library"
         },
@@ -22769,7 +22766,8 @@
         "drupal/openapi_rest": 5,
         "drupal/openid_connect": 15,
         "drupal/potion": 20,
-        "drupal/sparkpost": 15
+        "drupal/sparkpost": 15,
+        "inleadmedia/dpl-react": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -22777,6 +22775,6 @@
         "php": "8.3.*",
         "ext-dom": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
 }
