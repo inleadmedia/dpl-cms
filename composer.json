@@ -43,7 +43,7 @@
                 "version": "0.0.0-dev",
                 "type": "drupal-library",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/branch-development/dist-development.zip",
+                    "url": "https://github.com/inleadmedia/dpl-react/releases/download/2025.46.0%2Binlead.01.12.2025/dist-2025-46-0-inlead-01-12-2025-a8a9fc54c523f60e707597aba599f5a0151b2d1f.zip",
                     "type": "zip"
                 },
                 "require": {
@@ -58,7 +58,7 @@
                 "type": "drupal-library",
                 "version": "0.0.0-dev",
                 "dist": {
-                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/branch-development/dist-development.zip",
+                    "url": "https://github.com/inleadmedia/dpl-design-system/releases/download/2025.46.0%2Binlead.21.11.2025/dist-2025-46-0-inlead-21-11-2025-2fbdf086c1ae72fb62fea992ac70f84a128f3a0f.zip",
                     "type": "zip"
                 }
             }
