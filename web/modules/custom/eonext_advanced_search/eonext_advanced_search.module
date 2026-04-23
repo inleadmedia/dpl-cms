@@ -26,7 +26,7 @@ function eonext_advanced_search_preprocess_dpl_react_app(array &$variables): voi
     );
   }
 
-  if ('advanced-search' === $variables['name']) {
+  if ('advanced-search' === $variables['name'] || 'advanced-search-v2' === $variables['name']) {
     $disable_branch_filter = $advanced_search_config->get('disable_filter_by_branches');
     if ($disable_branch_filter) {
       $branches = \Drupal::service('dpl_library_agency.branch.repository.cache')->getBranches();
