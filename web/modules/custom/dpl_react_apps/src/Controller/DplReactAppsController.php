@@ -5,10 +5,10 @@ namespace Drupal\dpl_react_apps\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\dpl_fbi\Fbi;
+use Drupal\dpl_react_apps\Services\BranchService;
 use Drupal\dpl_fbi\FirstAccessionDateOperator;
 use Drupal\dpl_fbs\Form\FbsSettingsForm;
 use Drupal\dpl_instant_loan\DplInstantLoanSettings;
-use Drupal\dpl_library_agency\Branch\Branch;
 use Drupal\dpl_library_agency\Branch\BranchRepositoryInterface;
 use Drupal\dpl_library_agency\BranchSettings;
 use Drupal\dpl_library_agency\GeneralSettings;
@@ -35,6 +35,7 @@ class DplReactAppsController extends ControllerBase {
     protected GeneralSettings $generalSettings,
     protected Config $adgangsplatformenConfig,
     protected Fbi $fbi,
+    protected BranchService $branchService,
   ) {}
 
   /**
@@ -54,19 +55,41 @@ class DplReactAppsController extends ControllerBase {
    *
    * @param \Drupal\dpl_library_agency\Branch\Branch[] $branches
    *   The branches to build the string with.
+   * @param bool $includeAddress
+   *   If the branch data should include editor-fed addresses from Drupal.
    *
    * @todo This should be moved into an service to make it more sharable
    *       between modules.
    *
    * @throws \Safe\Exceptions\JsonException
    */
-  public static function buildBranchesJsonProp(array $branches) : string {
-    return json_encode(array_map(function (Branch $branch) {
-      return [
+  public static function buildBranchesJsonProp(array $branches, bool $includeAddress = FALSE) : string {
+    $output = [];
+
+    foreach ($branches as $branch) {
+      $branch_output = [
         'branchId' => $branch->id,
         'title' => $branch->title,
       ];
-    }, $branches));
+
+      if ($includeAddress) {
+        $location = $branch->getAddressData();
+
+        if (!empty($location)) {
+          $branch_output['location'] = [
+            'city' => $location->getPostalName(),
+            'value' => $location->getValue(),
+            'address' => $location->getValue(),
+            'lat' => $location->getLatitude(),
+            'lng' => $location->getLongitude(),
+          ];
+        }
+      }
+
+      $output[] = $branch_output;
+    }
+
+    return (json_encode($output));
   }
 
   /**
@@ -110,6 +133,7 @@ class DplReactAppsController extends ControllerBase {
       // Texts.
       'add-more-filters-text' => $this->t('+ more filters', [], ['context' => 'Search Result']),
       'clear-all-text' => $this->t('Clear all', [], ['context' => 'Search Result']),
+      'et-al-text' => $this->t('et al.', [], ['context' => 'Search Result']),
       'facet-access-types-text' => $this->t('Access types', [], ['context' => 'Search Result']),
       'facet-browser-modal-close-modal-aria-label-text' => $this->t('Close facet browser modal', [], ['context' => 'Search Result']),
       'facet-browser-modal-screen-reader-modal-description-text' => $this->t('Modal for facet browser', [], ['context' => 'Search Result']),
@@ -120,7 +144,9 @@ class DplReactAppsController extends ControllerBase {
       'facet-fiction-nonfiction-text' => $this->t('Fiction or non-fiction', [], ['context' => 'Search Result']),
       'facet-fictional-characters-text' => $this->t('Fictional characters', [], ['context' => 'Search Result']),
       'facet-game-platform-text' => $this->t('Game platform', [], ['context' => 'Search Result']),
+      'facet-general-audience-text' => $this->t('General audience', [], ['context' => 'Search Result']),
       'facet-genre-and-form-text' => $this->t('Genre and form', [], ['context' => 'Search Result']),
+      'facet-library-recommendation-text' => $this->t('Library recommendation', [], ['context' => 'Search Result']),
       'facet-main-languages-text' => $this->t('Main languages', [], ['context' => 'Search Result']),
       'facet-material-types-text' => $this->t('Material types', [], ['context' => 'Search Result']),
       'facet-material-types-general-text' => $this->t('Material types general', [], ['context' => 'Search Result']),
@@ -128,18 +154,36 @@ class DplReactAppsController extends ControllerBase {
       'facet-subjects-text' => $this->t('Subjects', [], ['context' => 'Search Result']),
       'facet-work-types-text' => $this->t('Work types', [], ['context' => 'Search Result']),
       'facet-year-text' => $this->t('Year', [], ['context' => 'Search Result']),
+      'facet-age-text' => $this->t('Age', [], ['context' => 'Search Result']),
+      'facet-lix-text' => $this->t('Lix', [], ['context' => 'Search Result']),
+      'facet-let-text' => $this->t('Let', [], ['context' => 'Search Result']),
       'filter-list-text' => $this->t('Filter list', [], ['context' => 'Search Result']),
+      'number-description-text' => $this->t('@count', [], ['context' => 'Search Result']),
       'intelligent-filters-accessible-headline-text' => $this->t('Available filters', [], ['context' => 'Search Result']),
       'intelligent-filters-selected-accessible-headline-text' => $this->t('Selected filters', [], ['context' => 'Search Result']),
       'invalid-search-text' => $this->t('Invalid search', [], ['context' => 'Search Result']),
       'invalid-search-description-text' => $this->t('Your search is invalid. Please try again. In order to perform a valid search, you need to include at least three letters.', [], ['context' => 'Search Result']),
       'results-text' => $this->t('results', [], ['context' => 'Search Result']),
       'show-results-text' => $this->t('Show results', [], ['context' => 'Search Result']),
+      'showing-all-materials-text' => $this->t('Showing all materials', [], ['context' => 'Search Result']),
       'showing-results-for-text' => $this->t('Showing results for "@query"', [], ['context' => 'Search Result']),
       'showing-text' => $this->t('Showing', [], ['context' => 'Search Result']),
       'web-search-link-text' => $this->t('Switch to the results for the library content.', [], ['context' => 'Search Result']),
       'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
       'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
+      'search-show-all-text' => $this->t('Show all', [], ['context' => 'Search Result']),
+      'search-show-less-text' => $this->t('Show less', [], ['context' => 'Search Result']),
+      'search-on-shelf-text' => $this->t('On shelf', [], ['context' => 'Search Result']),
+      'search-on-shelf-description-text' => $this->t('Only show results available at the library now.', [], ['context' => 'Search Result']),
+      'search-can-always-be-loaned-text' => $this->t('Can always be loaned', [], ['context' => 'Search Result']),
+      'search-can-always-be-loaned-description-text' => $this->t('Only show results that can always be loaned.', [], ['context' => 'Search Result']),
+      'search-show-results-text' => $this->t('Show results', [], ['context' => 'Search Result']),
+      'search-showing-materials-text' => $this->t('@hitcount results', [], ['context' => 'Search Result']),
+      'search-showing-all-materials-text' => $this->t('Showing all materials', [], ['context' => 'Search Result']),
+      'search-showing-results-for-text' => $this->t('Showing results for', [], ['context' => 'Search Result']),
+      'search-dialog-filter-materials-text' => $this->t('Filter materials (@hitcount)', [], ['context' => 'Search Result']),
+      'search-sorting-option-text' => $this->t('Sorting', [], ['context' => 'Search Result']),
+      'showing-all-materials-text' => $this->t('Showing all materials', [], ['context' => 'Search Result']),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -218,7 +262,7 @@ class DplReactAppsController extends ControllerBase {
       'cql-search-external-help-link-text' => $this->t('CQL search external help link text', [], ['context' => 'advanced search']),
       'cql-search-title-text' => $this->t('CQL search', [], ['context' => 'advanced search']),
       'loading-results-text' => $this->t('Loading results...', [], ['context' => 'advanced search']),
-      'showing-materials-text' => $this->t('showing materials', [], ['context' => 'advanced search']),
+      'search-showing-materials-text' => $this->t('showing materials', [], ['context' => 'advanced search']),
       'to-advanced-search-button-text' => $this->t('Back to advanced search', [], ['context' => 'advanced search']),
       'advanced-search-filter-location-text' => $this->t('location', [], ['context' => 'advanced search']),
       'advanced-search-filter-location-description-text' => $this->t('Add a comma separated list for multiple locations', [], ['context' => 'advanced search']),
@@ -254,6 +298,133 @@ class DplReactAppsController extends ControllerBase {
     $app = [
       '#theme' => 'dpl_react_app',
       "#name" => 'advanced-search',
+      '#data' => $data,
+    ];
+
+    $this->renderer->addCacheableDependency($app, $this->branchSettings);
+
+    return $app;
+  }
+
+  /**
+   * Render advanced search app v2.
+   *
+   * @return mixed[]
+   *   Render array.
+   */
+  public function advancedSearchV2(): array {
+    $data = [
+    // Cql link (Should maybe be removed later).
+      'advanced-search-v2-cql-search-url' => '/advanced-search',
+      'advanced-search-v2-to-cql-search-button-text' => $this->t('CQL search', [], ['context' => 'advanced search 2']),
+
+      // Config.
+      'blacklisted-availability-branches-config' => $this->buildBranchesListProp($this->branchSettings->getExcludedAvailabilityBranches()),
+      'blacklisted-search-branches-config' => $this->buildBranchesListProp($this->branchSettings->getExcludedSearchBranches()),
+      'branches-config' => $this->buildBranchesJsonProp($this->branchRepository->getBranches()),
+
+      // Texts - AdvancedSearchEntryTextProps.
+      'by-author-text' => $this->t('By', [], ['context' => 'advanced search 2']),
+      'in-series-text' => $this->t('Part of series', [], ['context' => 'advanced search 2']),
+      'loading-text' => $this->t('Loading...', [], ['context' => 'advanced search 2']),
+      'result-pager-status-text' => $this->t('Showing @itemsShown of @hitcount results', [], ['context' => 'advanced search 2']),
+      'show-more-text' => $this->t('Show more', [], ['context' => 'advanced search 2']),
+      'loading-results-text' => $this->t('Loading results...', [], ['context' => 'advanced search 2']),
+      'showing-materials-text' => $this->t('showing materials (@hitcount)', [], ['context' => 'advanced search 2']),
+      'add-more-filters-text' => $this->t('More filters', [], ['context' => 'advanced search 2']),
+      'copy-link-success-text' => $this->t('Link copied to clipboard', [], ['context' => 'advanced search 2']),
+
+      // Texts - AdvancedSearchV2Args.
+      'advanced-search-add-row-text' => $this->t('Add row', [], ['context' => 'advanced search 2']),
+      'advanced-search-search-button-text' => $this->t('Search', [], ['context' => 'advanced search 2']),
+      'clause-and-text' => $this->t('AND', [], ['context' => 'advanced search 2']),
+      'clause-or-text' => $this->t('OR', [], ['context' => 'advanced search 2']),
+      'clause-not-text' => $this->t('NOT', [], ['context' => 'advanced search 2']),
+      'advanced-search-remove-row-text' => $this->t('Remove row @inputNumber', [], ['context' => 'advanced search 2']),
+      'advanced-search-selected-text' => $this->t('Selected', [], ['context' => 'advanced search 2']),
+      'advanced-search-all-text' => $this->t('All', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-default-text' => $this->t('Search in all material…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-title-text' => $this->t('Enter title…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-creator-text' => $this->t('Enter author or creator…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-subject-text' => $this->t('Enter subject…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-publisher-text' => $this->t('Enter publisher…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-dk5-text' => $this->t('Enter DK5 number…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-isbn-text' => $this->t('Enter ISBN number…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-series-text' => $this->t('Enter series title…', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-default-text' => $this->t('Free text search', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-title-text' => $this->t('Title', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-creator-text' => $this->t('Author / Creator', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-subject-text' => $this->t('Subject', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-publisher-text' => $this->t('Publisher', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-dk5-text' => $this->t('DK5', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-isbn-text' => $this->t('ISBN', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-series-text' => $this->t('Series title', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-fictional-character-text' => $this->t('Fictional character', [], ['context' => 'advanced search 2']),
+      'advanced-search-label-host-publication-text' => $this->t('Host publication', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-fictional-character-text' => $this->t('Enter fictional character…', [], ['context' => 'advanced search 2']),
+      'advanced-search-placeholder-host-publication-text' => $this->t('Enter host publication…', [], ['context' => 'advanced search 2']),
+      'advanced-search-edit-search-text' => $this->t('Edit search', [], ['context' => 'advanced search 2']),
+      'search-on-shelf-text' => $this->t('On shelf', [], ['context' => 'advanced search 2']),
+      'search-on-shelf-description-text' => $this->t('Only show results available at the library now.', [], ['context' => 'advanced search 2']),
+      'search-only-extra-titles-text' => $this->t('Only "Extra Titles"', [], ['context' => 'advanced search 2']),
+      'search-only-extra-titles-description-text' => $this->t('Only show results not limited by digital loan quotas.', [], ['context' => 'advanced search 2']),
+      'search-show-all-text' => $this->t('Show all', [], ['context' => 'advanced search 2']),
+      'search-show-less-text' => $this->t('Show less', [], ['context' => 'advanced search 2']),
+      'advanced-search-reset-text' => $this->t('Reset', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-access-type-text' => $this->t('Access Type', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-age-text' => $this->t('Age', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-audience-text' => $this->t('Audience', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-chamber-music-text' => $this->t('Chamber Music', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-choir-text' => $this->t('Choir', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-contributor-text' => $this->t('Contributor', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-creator-text' => $this->t('Creator', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-fictional-character-text' => $this->t('Fictional Character', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-format-text' => $this->t('Format', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-genre-and-form-text' => $this->t('Genre and form', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-host-publication-text' => $this->t('Host Publication', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-instrument-text' => $this->t('Instrument', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-language-text' => $this->t('Language', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-let-text' => $this->t('Let', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-level-text' => $this->t('Level', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-lix-text' => $this->t('Lix', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-material-type-text' => $this->t('Materialetype', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-score-type-text' => $this->t('Score Type', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-source-text' => $this->t('Source', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-subject-text' => $this->t('Subject', [], ['context' => 'advanced search 2']),
+      'advanced-search-facet-year-text' => $this->t('Year', [], ['context' => 'advanced search 2']),
+      'advanced-search-limit-search-text' => $this->t('Refine your search', [], ['context' => 'advanced search 2']),
+      'advanced-search-multiselect-search-placeholder-text' => $this->t('Search...', [], ['context' => 'advanced search 2']),
+      'advanced-search-range-from-text' => $this->t('From', [], ['context' => 'advanced search 2']),
+      'advanced-search-range-to-text' => $this->t('To', [], ['context' => 'advanced search 2']),
+      'advanced-search-title-text' => $this->t('Advanced search', [], ['context' => 'advanced search 2']),
+      'advanced-search-age-badge-open-ended-text' => $this->t('@age+ year olds', [], ['context' => 'advanced search 2']),
+      'advanced-search-age-badge-single-text' => $this->t('@age year olds', [], ['context' => 'advanced search 2']),
+      'advanced-search-age-badge-range-text' => $this->t('@from-@to year olds', [], ['context' => 'advanced search 2']),
+      'advanced-search-filter-materials-text' => $this->t('Filter materials (@hitcount)', [], ['context' => 'advanced search 2']),
+      'search-show-results-text' => $this->t('Show results', [], ['context' => 'advanced search 2']),
+      'search-showing-materials-text' => $this->t('@hitcount results', [], ['context' => 'advanced search 2']),
+
+      // Sort.
+      'advanced-search-sort-label-text' => $this->t('Sort by', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-relevance-text' => $this->t('Relevance', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-latest-pub-date-text' => $this->t('Publication date', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-latest-pub-date-desc-text' => $this->t('Newest first', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-latest-pub-date-asc-text' => $this->t('Oldest first', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-creator-text' => $this->t('Author', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-title-text' => $this->t('Title', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-asc-text' => $this->t('A-Z', [], ['context' => 'advanced search 2']),
+      'advanced-search-sort-desc-text' => $this->t('Z-A', [], ['context' => 'advanced search 2']),
+
+      // Mapp.
+      'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
+      'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
+
+      // Add external API base urls.
+    ] + self::externalApiBaseUrls();
+
+    $app = [
+      '#theme' => 'dpl_react_app',
+      "#name" => 'advanced-search-v2',
       '#data' => $data,
     ];
 
@@ -307,6 +478,7 @@ class DplReactAppsController extends ControllerBase {
       'find-on-shelf-disclosures-default-open-config' => (int) $this->generalSettings->getFindOnShelfDisclosuresDefaultOpen(),
       'find-on-shelf-hide-unavailable-holdings-config' => (int) $this->generalSettings->getFindOnShelfHideUnavailableHoldings(),
       'agency-id-config' => $this->adgangsplatformenConfig->getAgencyId(),
+      'local-subjects-agency-ids-config' => $this->generalSettings->getLocalSubjectsAgencyIds(),
       'mapp-domain-config' => $this->config('dpl_mapp.settings')->get('domain'),
       'mapp-id-config' => $this->config('dpl_mapp.settings')->get('id'),
 
@@ -538,6 +710,8 @@ class DplReactAppsController extends ControllerBase {
       'edition-switch-modal-description-text' => $this->t('Select which edition you would like to reserve from the available options below.', [], ['context' => 'Work Page']),
       'edition-switch-modal-screen-reader-description-text' => $this->t('Edition switch modal', [], ['context' => 'Work Page']),
       'edition-switch-modal-title-text' => $this->t('Choose Edition', [], ['context' => 'Work Page']),
+      'material-contents-show-less-text' => $this->t('Show less', [], ['context' => 'Work Page']),
+      'material-contents-show-all-text' => $this->t('Show all (@count)', [], ['context' => 'Work Page']),
       // Add external API base urls.
     ] + self::externalApiBaseUrls();
 
@@ -552,6 +726,38 @@ class DplReactAppsController extends ControllerBase {
     $this->renderer->addCacheableDependency($app, $this->instantLoanSettings);
 
     return $app;
+  }
+
+  /**
+   * Render branch list app.
+   *
+   * @return mixed[]
+   *   Render array.
+   *
+   * @throws \Safe\Exceptions\JsonException
+   */
+  public function branches(): array {
+    $data = [
+      'branches-config' => json_encode($this->branchService->getBranchListData()),
+      'branch-address-search-enabled-config' => (int) $this->config('dpl_library_agency.general_settings')->get('enable_address_search_branch'),
+      'dataforsyningen-token-config' => $this->config('gsearch.settings')->get('token') ?: '',
+      'branch-list-title-text' => $this->t('Branches', [], ['context' => 'Branch List']),
+      'address-search-label-text' => $this->t('See libraries near an address', [], ['context' => 'Branch List']),
+      'address-search-placeholder-text' => $this->t('Enter an address e.g. Torvegade 1, 1401 København K', [], ['context' => 'Branch List']),
+      'address-search-geo-location-button-text' => $this->t('See libraries close to you', [], ['context' => 'Branch List']),
+      'geo-location-error-not-supported-text' => $this->t('Geolocation is not supported by your browser.', [], ['context' => 'Branch List']),
+      'geo-location-error-permission-denied-text' => $this->t('You have denied access to your location.', [], ['context' => 'Branch List']),
+      'geo-location-error-position-unavailable-text' => $this->t('Your location is not available at the moment.', [], ['context' => 'Branch List']),
+      'geo-location-error-timeout-text' => $this->t('The request for your location timed out. Please try again.', [], ['context' => 'Branch List']),
+      'geo-location-error-default-text' => $this->t('An error occurred while fetching your location.', [], ['context' => 'Branch List']),
+      'reverse-geocode-error-default-text' => $this->t('Could not find address for your location.', [], ['context' => 'Branch List']),
+    ];
+
+    return [
+      '#theme' => 'dpl_react_app',
+      '#name' => 'branch-list',
+      '#data' => $data,
+    ];
   }
 
   /**

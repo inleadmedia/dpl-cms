@@ -408,6 +408,11 @@
                     "type": "integer",
                     "description": "The id for the branch the instance belongs to"
                   },
+                  "branch_isil_id": {
+                    "type": "string",
+                    "description": "External branch id (ISIL)",
+                    "example": "DK-710100"
+                  },
                   "repetition": {
                     "type": "object",
                     "properties": {
@@ -987,9 +992,18 @@
                     "type": "object",
                     "description": "Where the event occurs.",
                     "properties": {
+                      "locationType": {
+                        "type": "string",
+                        "description": "If an event is physical or not.",
+                        "enum": ["physical", "online"]
+                      },
                       "location": {
                         "type": "string",
                         "description": "Name of the location where the event occurs. This could be the name of a library branch."
+                      },
+                      "locationAdditional": {
+                        "type": "string",
+                        "description": "Expanded description of location."
                       },
                       "street": {
                         "type": "string",
