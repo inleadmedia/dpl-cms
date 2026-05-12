@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for EO Next Branch Opening Hours.
+ */
+
+/**
+ * Add optional logo file ID to settings.
+ */
+function eonext_branch_opening_hours_update_8001(): void {
+  $config = \Drupal::configFactory()->getEditable('eonext_branch_opening_hours.settings');
+  if (!$config->has('logo')) {
+    $config->set('logo', NULL)->save();
+  }
+}

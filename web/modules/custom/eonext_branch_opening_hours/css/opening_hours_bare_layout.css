@@ -1,0 +1,19 @@
+/* Mirror the .opening-hours container constraints so the logo's left edge
+   aligns exactly with the React app's content (max-width:1056px, 16px gutters). */
+.opening-hours-bare-layout__logo {
+  box-sizing: border-box;
+  max-width: 1056px;
+  margin: 0 auto 1.5rem;
+  padding-left: 16px;
+  padding-right: 16px;
+  text-align: left;
+}
+
+.opening-hours-bare-layout__logo img {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 120px;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+}

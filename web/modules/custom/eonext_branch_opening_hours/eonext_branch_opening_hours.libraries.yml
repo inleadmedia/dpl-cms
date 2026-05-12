@@ -1,0 +1,10 @@
+bare_layout:
+  version: 1.x
+  js:
+    js/opening_hours_bare_layout.js: {}
+  css:
+    theme:
+      css/opening_hours_bare_layout.css: {}
+  dependencies:
+    - core/drupal
+    - core/once

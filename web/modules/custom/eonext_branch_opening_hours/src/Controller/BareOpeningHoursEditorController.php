@@ -1,22 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\eonext_branch_opening_hours\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\dpl_react_apps\Controller\DplReactAppsController;
+use Drupal\file\FileInterface;
 use Drupal\node\NodeInterface;
 
 /**
  * Defines OpeningHoursEditorController class.
  */
-class BareOpeningHoursEditorController extends ControllerBase {
+final class BareOpeningHoursEditorController extends ControllerBase {
 
   /**
    * Display the opening hours app.
    *
    * @param \Drupal\node\NodeInterface $node
-   *   The node ID.
+   *   The branch node.
    *
    * @return mixed[]
    *   The app render array.
@@ -26,7 +29,7 @@ class BareOpeningHoursEditorController extends ControllerBase {
       return [];
     }
 
-    return [
+    $build = [
       '#theme' => 'dpl_react_app',
       '#name' => 'opening-hours',
       '#data' => [
@@ -42,7 +45,21 @@ class BareOpeningHoursEditorController extends ControllerBase {
       '#attributes' => [
         'class' => ['opening-hours--bare'],
       ],
+      '#cache' => [
+        'tags' => ['config:eonext_branch_opening_hours.settings'],
+        'contexts' => ['url.site'],
+      ],
     ];
+
+    $fid = $this->config('eonext_branch_opening_hours.settings')->get('logo');
+    if (!empty($fid)) {
+      $file = $this->entityTypeManager()->getStorage('file')->load($fid);
+      if ($file instanceof FileInterface && _eonext_branch_opening_hours_file_uri_exists($file)) {
+        $build['#cache']['tags'][] = 'file:' . $file->id();
+      }
+    }
+
+    return $build;
   }
 
   /**

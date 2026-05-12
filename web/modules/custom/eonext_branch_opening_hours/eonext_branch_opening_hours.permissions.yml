@@ -1,0 +1,4 @@
+administer eonext branch opening hours:
+  title: 'Administer EO Next branch opening hours'
+  description: 'Configure branch opening hours integration and bare layout branding.'
+  restrict access: true

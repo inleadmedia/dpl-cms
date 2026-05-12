@@ -1,1 +1,14 @@
-{{ page.content }}
+{#
+/**
+ * @file
+ * Bare opening hours page: optional branding above the React app.
+ */
+#}
+<div class="opening-hours-bare-layout">
+  {% if opening_hours_bare_logo_url %}
+    <div class="opening-hours-bare-layout__logo" role="presentation">
+      <img src="{{ opening_hours_bare_logo_url }}" alt="" width="auto" height="auto" loading="lazy" />
+    </div>
+  {% endif %}
+  {{ page.content }}
+</div>

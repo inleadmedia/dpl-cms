@@ -1,0 +1,16 @@
+eonext_branch_opening_hours.settings:
+  type: config_object
+  label: 'EO Next branch opening hours settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Push opening hours to external service'
+    domain:
+      type: string
+      label: 'External domain'
+    consumer_hash:
+      type: string
+      label: 'Consumer hash'
+    logo:
+      type: integer
+      label: 'Logo file ID'

@@ -1,12 +1,13 @@
 <?php
 
-use Drupal\node\NodeInterface;
-use Drupal\Core\Entity\EntityInterface;
-
 /**
  * @file
  * Branch Opening Hours logic.
  */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\file\FileInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_theme().
@@ -53,11 +54,13 @@ function eonext_branch_opening_hours_theme_suggestions_page(array $variables): a
 }
 
 /**
- * Implements hook_preprocess_HOOK().
+ * Implements hook_preprocess_HOOK() for html__node__opening_hours_bare.
  */
-function template_preprocess_html__node__opening_hours_bare(array &$variables): void {
-  /** @var \Drupal\node\NodeInterface $branch_node */
+function eonext_branch_opening_hours_preprocess_html__node__opening_hours_bare(array &$variables): void {
   $branch_node = \Drupal::routeMatch()->getParameter('node');
+  if (!$branch_node instanceof NodeInterface) {
+    return;
+  }
 
   $variables['attributes']['class'][] = 'opening-hours--bare';
   $variables['head_title'] = t(
@@ -68,12 +71,65 @@ function template_preprocess_html__node__opening_hours_bare(array &$variables): 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for page__node__opening_hours_bare.
+ */
+function eonext_branch_opening_hours_preprocess_page__node__opening_hours_bare(array &$variables): void {
+  $logo_url = _eonext_branch_opening_hours_get_logo_url();
+  $variables['opening_hours_bare_logo_url'] = $logo_url;
+
+  $variables['#attached']['library'][] = 'eonext_branch_opening_hours/bare_layout';
+
+  $variables['#cache']['tags'][] = 'config:eonext_branch_opening_hours.settings';
+  $fid = \Drupal::config('eonext_branch_opening_hours.settings')->get('logo');
+  if (!empty($fid)) {
+    $variables['#cache']['tags'][] = 'file:' . $fid;
+  }
+}
+
+/**
+ * Checks whether a managed file's URI resolves to an existing file.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The file entity.
+ *
+ * @return bool
+ *   TRUE when the stream wrapper reports a readable path on disk.
+ */
+function _eonext_branch_opening_hours_file_uri_exists(FileInterface $file): bool {
+  $uri = $file->getFileUri();
+  if ($uri === '' || $uri === NULL) {
+    return FALSE;
+  }
+  $wrapper = \Drupal::service('stream_wrapper_manager')->getViaUri($uri);
+  if ($wrapper === FALSE) {
+    return FALSE;
+  }
+  $path = $wrapper->realpath();
+  return $path !== FALSE && is_file($path);
+}
+
+/**
+ * Returns the absolute public URL for the configured logo, if any.
+ *
+ * @return string|null
+ *   Absolute URL, or NULL when no usable logo is configured.
+ */
+function _eonext_branch_opening_hours_get_logo_url(): ?string {
+  $fid = \Drupal::config('eonext_branch_opening_hours.settings')->get('logo');
+  if (empty($fid)) {
+    return NULL;
+  }
+  $file = \Drupal::entityTypeManager()->getStorage('file')->load($fid);
+  if (!$file instanceof FileInterface || !_eonext_branch_opening_hours_file_uri_exists($file)) {
+    return NULL;
+  }
+  return \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+}
+
+/**
  * Implements hook_entity_insert().
  *
  * Triggers on creation of a 'branch' node.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The inserted entity.
  */
 function eonext_branch_opening_hours_entity_insert(EntityInterface $entity): void {
   if ($entity instanceof NodeInterface && $entity->bundle() === 'branch') {
@@ -85,9 +141,6 @@ function eonext_branch_opening_hours_entity_insert(EntityInterface $entity): voi
  * Implements hook_entity_update().
  *
  * Triggers on update of a 'branch' node.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The updated entity.
  */
 function eonext_branch_opening_hours_entity_update(EntityInterface $entity): void {
   if ($entity instanceof NodeInterface && $entity->bundle() === 'branch') {
